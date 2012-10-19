@@ -67,10 +67,10 @@ module Mutations
       
       def input_filters
         @input_filters ||= begin
-          if Command === self.superclass
-            self.superclass.input_filters.dup
-          else
+          if Command == self.superclass
             HashFilter.new
+          else
+            self.superclass.input_filters.dup
           end
         end
       end
@@ -87,7 +87,7 @@ module Mutations
       @success = nil # Did the command successfully execute?
       @errors = nil  # nil, symbol, or hash of the validation error
       
-      @filtered_input, @errors = self.inputs_filters.filter(input)
+      @filtered_input, @errors = self.input_filters.filter(input)
     end
     
     def input_filters

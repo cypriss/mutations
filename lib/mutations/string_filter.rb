@@ -10,8 +10,7 @@ module Mutations
     }
     
     def filter(data)
-      puts data.inspect
-      puts "that was it"
+      
       # Handle nil case
       if data.nil?
         return [nil, nil] if options[:nils]
