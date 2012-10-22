@@ -10,6 +10,6 @@ class SimpleCommand < Mutations::Command
   end
   
   def execute
-    @filtered_input
+    inputs
   end
 end
