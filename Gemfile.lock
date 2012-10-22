@@ -1,10 +1,16 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    activesupport (3.2.8)
+      i18n (~> 0.6)
+      multi_json (~> 1.0)
+    i18n (0.6.1)
     minitest (4.1.0)
+    multi_json (1.3.6)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  activesupport
   minitest (~> 4.0)

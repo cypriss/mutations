@@ -1,6 +1,9 @@
+require 'active_support'
+require 'active_support/core_ext/hash/indifferent_access'
+require 'active_support/core_ext/string/inflections'
+
 require 'mutations/version'
 require 'mutations/exception'
-require 'mutations/hash_with_indifferent_access'
 require 'mutations/errors'
 require 'mutations/input_filter'
 require 'mutations/string_filter'
