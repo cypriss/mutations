@@ -1,25 +1,102 @@
 module Mutations  
-  class Errors < HashWithIndifferentAccess
-    ERROR_STRINGS = {
-      nils: "can't be nil",
-      empty: "can't be blank",
-      matches: "doesn't match the regexp",
-      length: "isn't the right length",
-      in: "isn't an allowed value"
-      #length: ""
-    }
-    
-    # strip: true,       # true calls data.strip if data is a string
-    # nils: false,       # true allows an explicit nil to be valid. Overrides any other options
-    # empty: false,      # false disallows "".  true allows "" and overrides any other validations (b/c they couldn't be true if it's empty)
-    # length: nil,       # Can be a number like 5, for max length, or a range, like 3..10
-    # matches: nil,      # Can be a regexp
-    # in: nil            # Can be an array like %w(red blue green)
-    
-    # Returns a 
-    def messages
-      
+  class DefaultErrorMessageCreator
+    def initialize
     end
-    
+
+    def message(key, error_symbol)
+    end
+  end
+
+  # mutation = Foo.run(blah: 2)
+  # mutation.errors.list
+  # mutation.errors.symbolic
+  # mutation.errors.message
+  
+  class ErrorAtom
+
+    # NOTE: in the future, could also pass in:
+    #  - error type
+    #  - value (eg, string :name, length: 5 # value=5)
+
+    # ErrorAtom.new(:name, :too_short)
+    # ErrorAtom.new(:name, :too_short, message: "is too short")
+    def initialize(key, error_symbol, options = {})
+      @key = key
+      @symbol = error_symbol
+      @message = options[:message]
+    end
+
+    def symbolic
+      @symbol
+    end
+
+    def message
+      @message ||= Mutations.error_message_creator.message(@key, @symbol)
+    end
+
+    def messeage_list
+      Array(message)
+    end
+  end
+
+  # mutation.errors is an ErrorHash instance like this:
+  # {
+  #   email: ErrorAtom(:matches),
+  #   name: ErrorAtom(:too_weird, message: "is too weird"),
+  #   adddress: { # Nested ErrorHash object
+  #     city: ErrorAtom(:not_found, message: "That's not a city, silly!"),
+  #     state: ErrorAtom(:in)
+  #   }
+  # }
+  class ErrorHash < HashWithIndifferentAccess
+
+    # Returns a nested HashWithIndifferentAccess where the values are symbols.  Eg:
+    # {
+    #   email: :matches,
+    #   name: :too_weird,
+    #   adddress: {
+    #     city: :not_found,
+    #     state: :in
+    #   }
+    # }
+    def symbolic
+      HashWithIndifferentAccess.new.tap do |hash|
+        each do |k, v|
+          hash[k] = v.symbolic
+        end
+      end
+    end
+
+    # Returns a nested HashWithIndifferentAccess where the values are messages. Eg:
+    # {
+    #   email: "isn't in the right format",
+    #   name: "is too weird",
+    #   adddress: {
+    #     city: "is not a city",
+    #     state: "isn't a valid option"
+    #   }
+    # }
+    def message
+      HashWithIndifferentAccess.new.tap do |hash|
+        each do |k, v|
+          hash[k] = v.message
+        end
+      end
+    end
+
+    # Returns a flat array where each element is a full sentence. Eg:
+    # [
+    #   "Email isn't in the right format.",
+    #   "Name is too weird",
+    #   "That's not a city, silly!",
+    #   "State isn't a valid option."
+    # ]
+    def messeage_list
+      list = []
+      each do |k, v|
+        list.concat(v.message_list)
+      end
+      list
+    end
   end
 end

@@ -77,10 +77,6 @@ module Mutations
       @current_inputs[name.to_sym] = ArrayFilter.new(options, &block)
     end
     
-    def lookup_attribute(name)
-      @required_inputs[name.to_sym] || @optional_inputs[name.to_sym]
-    end
-    
     def filter(data)
       
       # Handle nil case
@@ -97,7 +93,7 @@ module Mutations
         data = data.with_indifferent_access
       end
       
-      errors = {}
+      errors = ErrorHash.new
       filtered_data = HashWithIndifferentAccess.new
       
       [[@required_inputs, true], [@optional_inputs, false]].each do |(inputs, is_required)|
@@ -115,10 +111,11 @@ module Mutations
             if sub_error.nil?
               filtered_data[key] = sub_data
             else
+              sub_error = ErrorAtom.new(key, sub_error) if sub_error.is_a?(Symbol)
               errors[key] = sub_error
             end
           elsif is_required
-            errors[key] = :required
+            errors[key] = ErrorAtom.new(key, :required)
           end
         end
       end

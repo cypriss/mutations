@@ -53,15 +53,15 @@ module Mutations
       end
       
       def run(*args)
-        c = new(*args).execute!
+        new(*args).execute!
       end
       
       def run!(*args)
-        c = run(*args)
-        if c.success?
-          c.result
+        m = run(*args)
+        if m.success?
+          m.result
         else
-          raise ValidationException.new(c.errors)
+          raise ValidationException.new(m.errors)
         end
       end
       
@@ -79,15 +79,14 @@ module Mutations
   
     # Instance methods
     def initialize(*args)
-      input = args.shift
+      @original_hash = args.shift
+      raise ArgumentError.new("All arguments must be hashes") unless @original_hash.is_a?(Hash)
+      @original_hash = @original_hash.with_indifferent_access
+      
       args.each do |a|
-        input = input.merge(a) if input.is_a?(Hash) && a.is_a?(Hash)
+        raise ArgumentError.new("All arguments must be hashes") unless a.is_a?(Hash)
+        @original_hash.merge!(a)
       end
-      
-      @success = nil # Did the command successfully execute?
-      @errors = nil  # nil, symbol, or hash of the validation error
-      
-      @filtered_input, @errors = self.input_filters.filter(input)
     end
     
     def input_filters
@@ -95,19 +94,17 @@ module Mutations
     end
     
     def execute!
-      @success = nil
+      @filtered_input, @errors = self.input_filters.filter(@original_hash)
+      return Outcome.new(false, nil, @errors) if @errors
       
-      if valid?
-        r = execute
-        if valid? # Execute can add errors
-          @result = r
-          @success = true
-        else
-          @result = nil
-          @success = false
-        end
+      # IDEA/TODO: run validate block
+      
+      r = execute
+      if @errors # Execute can add errors
+        return Outcome.new(false, nil, @errors)
+      else
+        return Outcome.new(true, r, nil)
       end
-      self
     end
     
     # add_error("name", :too_short)
@@ -135,7 +132,7 @@ module Mutations
       @errors
     end
     
-    def add_errors(hash)
+    def merge_errors(hash)
       @errors ||= {}
       @errors.merge!(hash)
     end
@@ -146,22 +143,6 @@ module Mutations
     
     def execute
       # Meant to be overridden
-    end
-    
-    def valid?
-      @errors.nil?
-    end
-    
-    def success?
-      @success
-    end
-    
-    def result
-      @result
-    end
-    
-    def errors
-      Errors.new(@errors, self.input_filters) unless valid?
     end
   end
 end
