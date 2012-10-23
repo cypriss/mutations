@@ -112,7 +112,9 @@ module Mutations
     
     # add_error("name", :too_short)
     # add_error("colors.foreground", :not_a_color) # => to create errors = {colors: {foreground: :not_a_color}}
-    def add_error(key, kind)
+    # or, supply a custom message:
+    # add_error("name", :too_short, "The name 'blahblahblah' is too short!")
+    def add_error(key, kind, message = nil)
       raise "Invalid kind" unless kind.is_a?(Symbol)
       @errors ||= {}
       cur_errors = @errors
@@ -123,7 +125,11 @@ module Mutations
           cur_errors[part] = {} unless cur_errors[part].is_a?(Hash)
           cur_errors = cur_errors[part]
         else
-          cur_errors[part] = kind
+          if message
+            cur_errors[part] = [kind, message]
+          else
+            cur_errors[part] = kind
+          end
         end
       end
       @errors

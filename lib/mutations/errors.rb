@@ -1,90 +1,25 @@
-module Mutations
-  
+module Mutations  
   class Errors < HashWithIndifferentAccess
-    ActiveRecordValidationErrorMap = {
-      in: :inclusion,
-      matches: :invalid,
-      length: :wrong_length,
-      empty: :empty,
-      required: :blank,
-      nils: :blank,
-      min: :greater_than_or_equal_to,
-      max: :less_than_or_equal_to,
-      confirmation: :confirmation,
-      taken: :taken
+    ERROR_STRINGS = {
+      nils: "can't be nil",
+      empty: "can't be blank",
+      matches: "doesn't match the regexp",
+      length: "isn't the right length",
+      in: "isn't an allowed value"
+      #length: ""
     }
-    # messages:
-    #   inclusion: "is not included in the list"
-    #   exclusion: "is reserved"
-    #   invalid: "is invalid"
-    #   confirmation: "doesn't match confirmation"
-    #   accepted: "must be accepted"
-    #   empty: "can't be empty"
-    #   blank: "can't be blank"
-    #   too_long: "is too long (maximum is %{count} characters)"
-    #   too_short: "is too short (minimum is %{count} characters)"
-    #   wrong_length: "is the wrong length (should be %{count} characters)"
-    #   taken: "has already been taken"
-    #   not_a_number: "is not a number"
-    #   greater_than: "must be greater than %{count}"
-    #   greater_than_or_equal_to: "must be greater than or equal to %{count}"
-    #   equal_to: "must be equal to %{count}"
-    #   less_than: "must be less than %{count}"
-    #   less_than_or_equal_to: "must be less than or equal to %{count}"
-    #   odd: "must be odd"
-    #   even: "must be even"
-    #   record_invalid: "Validation failed: %{errors}"
     
-    def initialize(errors, filters)
-      super(errors)
-      @filters = filters
-    end
+    # strip: true,       # true calls data.strip if data is a string
+    # nils: false,       # true allows an explicit nil to be valid. Overrides any other options
+    # empty: false,      # false disallows "".  true allows "" and overrides any other validations (b/c they couldn't be true if it's empty)
+    # length: nil,       # Can be a number like 5, for max length, or a range, like 3..10
+    # matches: nil,      # Can be a regexp
+    # in: nil            # Can be an array like %w(red blue green)
     
-    def full_messages
-      [].tap do |full_messages|
-        messages.each do |k, v|
-          if v.is_a?(Hash)
-            full_messages << Errors.new(v, @filters).full_messages
-          else
-            full_messages << generate_full_message(k, v)
-          end
-        end
-        
-        full_messages.flatten!
-      end
-    end
-    
+    # Returns a 
     def messages
-      HashWithIndifferentAccess.new.tap do |messages|
-        each do |k, v|
-          if v.is_a?(Hash)
-            messages[k] = Errors.new(v, @filters).messages
-          else
-            messages[k] = generate_message(v, message_options(k, v))
-          end
-        end
-      end
+      
     end
     
-    private
-    
-    def generate_full_message(attribute, message)      
-      I18n.translate("activerecord.errors.full_messages.format", { 
-        attribute: attribute, 
-        message: message
-      })
-    end
-    
-    def generate_message(key, options = {})
-      I18n.translate("activerecord.errors.messages.#{activerecord_keymap(key)}", options)
-    end
-    
-    def message_options(attribute, key)      
-      { count: @filters.lookup_attribute(attribute).options[key] }
-    end
-    
-    def activerecord_keymap(key)
-      ActiveRecordValidationErrorMap[key] || :invalid
-    end
   end
 end

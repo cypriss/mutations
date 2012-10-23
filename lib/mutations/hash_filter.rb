@@ -77,9 +77,6 @@ module Mutations
       @current_inputs[name.to_sym] = ArrayFilter.new(options, &block)
     end
     
-    def attribute_array(name, options = {}, &block)
-    end
-    
     def lookup_attribute(name)
       @required_inputs[name.to_sym] || @optional_inputs[name.to_sym]
     end

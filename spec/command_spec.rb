@@ -19,6 +19,13 @@ describe "Command" do
       assert_equal ({name: "John", email: "john@gmail.com", amount: 5}).stringify_keys, mutation.result
       assert_equal nil, mutation.errors
     end
+    
+    it "should discover errors in inputs" do
+      mutation = SimpleCommand.run(name: "JohnTooLong", email: "john@gmail.com")
+      
+      assert !mutation.success?
+      assert :length, mutation.errors[:email]
+    end
   end
   
   describe "EigenCommand" do
