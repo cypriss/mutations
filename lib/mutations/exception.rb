@@ -7,7 +7,7 @@ module Mutations
     end
     
     def to_s
-      "Mutations::ValidationException: #{self.errors.to_s}"
+      "Mutations::ValidationException: #{self.errors.messeage_list.join('; ')}"
     end
   end
 end

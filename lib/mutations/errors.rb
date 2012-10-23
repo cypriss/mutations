@@ -4,6 +4,7 @@ module Mutations
     end
 
     def message(key, error_symbol)
+      error_symbol.to_s
     end
   end
 
@@ -34,7 +35,7 @@ module Mutations
       @message ||= Mutations.error_message_creator.message(@key, @symbol)
     end
 
-    def messeage_list
+    def message_list
       Array(message)
     end
   end

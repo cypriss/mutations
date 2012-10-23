@@ -1,49 +1,69 @@
 require_relative 'spec_helper'
 require 'simple_command'
 
-# External API:
-# Class.run(...)
-# Class.run!(...)
-
-# result API:
-# mutation.success?
-# mutation.result
-# mutation.errors
-
-# internal API:
-# def execute; end # what you define
-# self.inputs
-# self.name # accessors
-# self.name = "bob" # setter
-# self.name_present? # test to see if a key was passed
-# self.add_error(:name, :too_long, "That name is too long")
-# self.merge_errors(ErrorHash instance)
-
-
 describe "Command" do
   
   describe "SimpleCommand" do
     it "should allow valid in put in" do
-      mutation = SimpleCommand.run(name: "John", email: "john@gmail.com", amount: 5)
+      outcome = SimpleCommand.run(name: "John", email: "john@gmail.com", amount: 5)
 
-      assert mutation.success?
-      assert_equal ({name: "John", email: "john@gmail.com", amount: 5}).stringify_keys, mutation.result
-      assert_equal nil, mutation.errors
+      assert outcome.success?
+      assert_equal ({name: "John", email: "john@gmail.com", amount: 5}).stringify_keys, outcome.result
+      assert_equal nil, outcome.errors
     end
     
     it "should filter out spurious params" do
-      mutation = SimpleCommand.run(name: "John", email: "john@gmail.com", amount: 5, buggers: true)
+      outcome = SimpleCommand.run(name: "John", email: "john@gmail.com", amount: 5, buggers: true)
       
-      assert mutation.success?
-      assert_equal ({name: "John", email: "john@gmail.com", amount: 5}).stringify_keys, mutation.result
-      assert_equal nil, mutation.errors
+      assert outcome.success?
+      assert_equal ({name: "John", email: "john@gmail.com", amount: 5}).stringify_keys, outcome.result
+      assert_equal nil, outcome.errors
     end
     
     it "should discover errors in inputs" do
-      mutation = SimpleCommand.run(name: "JohnTooLong", email: "john@gmail.com")
+      outcome = SimpleCommand.run(name: "JohnTooLong", email: "john@gmail.com")
       
-      assert !mutation.success?
-      assert :length, mutation.errors.symbolic[:name]
+      assert !outcome.success?
+      assert :length, outcome.errors.symbolic[:name]
+    end
+    
+    it "shouldn't throw an exception with run!" do
+      result = SimpleCommand.run!(name: "John", email: "john@gmail.com", amount: 5)
+      assert_equal ({name: "John", email: "john@gmail.com", amount: 5}).stringify_keys, result
+    end
+    
+    it "should throw an exception with run!" do
+      assert_raises Mutations::ValidationException do
+        result = SimpleCommand.run!(name: "John", email: "john@gmail.com", amount: "bob")
+      end
+    end
+    
+    it "should merge multiple hashes" do
+      outcome = SimpleCommand.run({name: "John", email: "john@gmail.com"}, {email: "bob@jones.com", amount: 5})
+      
+      assert outcome.success?
+      assert_equal ({name: "John", email: "bob@jones.com", amount: 5}).stringify_keys, outcome.result
+    end
+    
+    it "should merge hashes indifferently" do
+      outcome = SimpleCommand.run({name: "John", email: "john@gmail.com"}, {"email" => "bob@jones.com", "amount" => 5})
+      
+      assert outcome.success?
+      assert_equal ({name: "John", email: "bob@jones.com", amount: 5}).stringify_keys, outcome.result
+    end
+    
+    it "shouldn't accept non-hashes" do
+      assert_raises ArgumentError do
+        outcome = SimpleCommand.run(nil)
+      end
+      
+      assert_raises ArgumentError do
+        outcome = SimpleCommand.run(1)
+      end
+    end
+    
+    it "should accept nothing at all" do
+      SimpleCommand.run # make sure nothing is raised
     end
   end
   
@@ -81,4 +101,28 @@ describe "Command" do
       assert_equal ({name: "bob", email: "bob@jones.com"}), mutation.result
     end
   end
+  
+  describe "ErrorfulCommand" do
+    class ErrorfulCommand < Mutations::Command
+  
+      required { string :name }
+      optional { string :email }
+  
+      def execute
+        add_error("bob", :is_a_bob)
+        
+        1
+      end
+    end
+  
+    it "should let you add errors" do
+      outcome = ErrorfulCommand.run(name: "John", email: "john@gmail.com")
+      
+      assert !outcome.success?
+      assert_nil outcome.result
+      assert :is_a_bob, outcome.errors.symbolic[:bob]
+    end
+  end
+  
+  # TODO: test _present, add_error, merge_errors
 end

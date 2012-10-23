@@ -14,3 +14,11 @@ require 'mutations/array_filter'
 require 'mutations/hash_filter'
 require 'mutations/outcome'
 require 'mutations/command'
+
+module Mutations
+  class << self
+    def error_message_creator
+      @error_message_creator ||= DefaultErrorMessageCreator.new
+    end
+  end
+end

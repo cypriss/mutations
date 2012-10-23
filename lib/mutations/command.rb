@@ -79,9 +79,13 @@ module Mutations
   
     # Instance methods
     def initialize(*args)
-      @original_hash = args.shift
-      raise ArgumentError.new("All arguments must be hashes") unless @original_hash.is_a?(Hash)
-      @original_hash = @original_hash.with_indifferent_access
+      if args.length == 0
+        @original_hash = {}
+      else
+        @original_hash = args.shift
+        raise ArgumentError.new("All arguments must be hashes") unless @original_hash.is_a?(Hash)
+        @original_hash = @original_hash.with_indifferent_access
+      end
       
       args.each do |a|
         raise ArgumentError.new("All arguments must be hashes") unless a.is_a?(Hash)
@@ -112,21 +116,17 @@ module Mutations
     # or, supply a custom message:
     # add_error("name", :too_short, "The name 'blahblahblah' is too short!")
     def add_error(key, kind, message = nil)
-      raise "Invalid kind" unless kind.is_a?(Symbol)
-      @errors ||= {}
+      raise ArgumentError.new("Invalid kind") unless kind.is_a?(Symbol)
+      @errors ||= ErrorHash.new
       cur_errors = @errors
       parts = key.to_s.split(".")
       while part = parts.shift
         part = part.to_sym
         if parts.length > 0
-          cur_errors[part] = {} unless cur_errors[part].is_a?(Hash)
+          cur_errors[part] = ErrorHash.new unless cur_errors[part].is_a?(ErrorHash)
           cur_errors = cur_errors[part]
         else
-          if message
-            cur_errors[part] = [kind, message]
-          else
-            cur_errors[part] = kind
-          end
+          cur_errors[part] = ErrorAtom.new(key, kind, message: message)
         end
       end
       @errors
