@@ -133,7 +133,7 @@ module Mutations
     end
     
     def merge_errors(hash)
-      @errors ||= {}
+      @errors ||= ErrorHash.new
       @errors.merge!(hash)
     end
     

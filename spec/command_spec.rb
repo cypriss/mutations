@@ -124,5 +124,32 @@ describe "Command" do
     end
   end
   
-  # TODO: test _present, add_error, merge_errors
+  describe "MultiErrorCommand" do
+    class ErrorfulCommand < Mutations::Command
+  
+      required { string :name }
+      optional { string :email }
+  
+      def execute
+        moar_errors = Mutations::ErrorHash.new
+        moar_errors[:bob] = Mutations::ErrorAtom.new(:bob, :is_short)
+        moar_errors[:sally] = Mutations::ErrorAtom.new(:sally, :is_fat)
+        
+        merge_errors(moar_errors)
+        
+        1
+      end
+    end
+  
+    it "should let you merge errors" do
+      outcome = ErrorfulCommand.run(name: "John", email: "john@gmail.com")
+      
+      assert !outcome.success?
+      assert_nil outcome.result
+      assert :is_short, outcome.errors.symbolic[:bob]
+      assert :is_fat, outcome.errors.symbolic[:sally]
+    end
+  end
+  
+  # TODO: test _present
 end
