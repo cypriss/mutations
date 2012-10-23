@@ -117,6 +117,7 @@ module Mutations
     # add_error("name", :too_short, "The name 'blahblahblah' is too short!")
     def add_error(key, kind, message = nil)
       raise ArgumentError.new("Invalid kind") unless kind.is_a?(Symbol)
+      
       @errors ||= ErrorHash.new
       cur_errors = @errors
       parts = key.to_s.split(".")

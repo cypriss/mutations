@@ -151,5 +151,33 @@ describe "Command" do
     end
   end
   
-  # TODO: test _present
+  describe "PresentCommand" do
+    class PresentCommand < Mutations::Command
+  
+      optional do
+        string :email
+        string :name
+      end
+  
+      def execute
+        if name_present? && email_present?
+          1
+        elsif !name_present? && email_present?
+          2
+        elsif name_present? && !email_present?
+          3
+        else
+          4
+        end
+      end
+    end
+  
+    it "should handle *_present? methods" do
+      assert_equal 1, PresentCommand.run!(name: "John", email: "john@gmail.com")
+      assert_equal 2, PresentCommand.run!(email: "john@gmail.com")
+      assert_equal 3, PresentCommand.run!(name: "John")
+      assert_equal 4, PresentCommand.run!
+    end
+  end
+  
 end
