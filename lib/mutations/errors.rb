@@ -1,6 +1,6 @@
 module Mutations
   
-  # Offers a non-localized 
+  # Offers a non-localized, english only, non configurable way to get error messages.  This probably isnt good enough for users as-is.
   class DefaultErrorMessageCreator
     
     MESSAGES = Hash.new("is invalid").tap do |h|
@@ -24,6 +24,9 @@ module Mutations
         matches: "isn't in the right format",
         in: "isn't an option",
         
+        # Array
+        class: "isn't the right class",
+        
         # Integer
         min: "is too small",
         max: "is too big",
@@ -35,7 +38,7 @@ module Mutations
     
     # Key is either a symbol or a fixnum
     def message(key, error_symbol)
-      MESSAGES[error_symbol]
+      "#{key} #{MESSAGES[error_symbol]}".capitalize
     end
   end
 

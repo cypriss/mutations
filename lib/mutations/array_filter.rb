@@ -15,7 +15,7 @@ module Mutations
         instance_eval &block
       end
       
-      raise "Can't supply both a class and a filter" if @element_filter && self.options[:class]
+      raise ArgumentError.new("Can't supply both a class and a filter") if @element_filter && self.options[:class]
     end
     
     def string(options = {})
