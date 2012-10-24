@@ -71,13 +71,13 @@ describe "Mutations - errors" do
     end
     
     it "gives messages" do
-      expected = {"str1"=>"Str1 can't be blank", "str2"=>"Str2 isn't an option", "int1"=>"Int1 isn't an integer", "hash1"=>{"bool1"=>"Bool1 isn't a boolean", "bool2"=>"Bool2 is required"}, "arr1"=>["0 isn't an integer", nil, "2 isn't an integer"]}
+      expected = {"str1"=>"Str1 can't be blank", "str2"=>"Str2 isn't an option", "int1"=>"Int1 isn't an integer", "hash1"=>{"bool1"=>"Bool1 isn't a boolean", "bool2"=>"Bool2 is required"}, "arr1"=>["Arr1[0] isn't an integer", nil, "Arr1[2] isn't an integer"]}
 
       assert_equal expected, @outcome.errors.message
     end
     
     it "can flatten those messages" do
-      expected = ["Str1 can't be blank", "Str2 isn't an option", "Int1 isn't an integer", "Bool1 isn't a boolean", "Bool2 is required", "0 isn't an integer", "2 isn't an integer"]
+      expected = ["Str1 can't be blank", "Str2 isn't an option", "Int1 isn't an integer", "Bool1 isn't a boolean", "Bool2 is required", "Arr1[0] isn't an integer", "Arr1[2] isn't an integer"]
       
       assert_equal expected, @outcome.errors.message_list
     end

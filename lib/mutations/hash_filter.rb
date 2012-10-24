@@ -74,7 +74,8 @@ module Mutations
     end
     
     def array(name, options = {}, &block)
-      @current_inputs[name.to_sym] = ArrayFilter.new(options, &block)
+      name_sym = name.to_sym
+      @current_inputs[name.to_sym] = ArrayFilter.new(name_sym, options, &block)
     end
     
     def filter(data)

@@ -37,8 +37,12 @@ module Mutations
     end
     
     # Key is either a symbol or a fixnum
-    def message(key, error_symbol)
-      "#{key} #{MESSAGES[error_symbol]}".capitalize
+    def message(key, error_symbol, options = {})
+      if options[:index]
+        "#{key || 'array'}[#{options[:index]}] #{MESSAGES[error_symbol]}".capitalize
+      else
+        "#{key} #{MESSAGES[error_symbol]}".capitalize
+      end
     end
   end
 
@@ -55,6 +59,7 @@ module Mutations
       @key = key
       @symbol = error_symbol
       @message = options[:message]
+      @index = options[:index]
     end
 
     def symbolic
@@ -62,7 +67,7 @@ module Mutations
     end
 
     def message
-      @message ||= Mutations.error_message_creator.message(@key, @symbol)
+      @message ||= Mutations.error_message_creator.message(@key, @symbol, index: @index)
     end
 
     def message_list

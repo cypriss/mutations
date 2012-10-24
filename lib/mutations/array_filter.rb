@@ -6,9 +6,10 @@ module Mutations
       arrayize: false         # true will convert "hi" to ["hi"]. "" converts to []
     }
     
-    def initialize(opts = {}, &block)
+    def initialize(name, opts = {}, &block)
       super(opts)
       
+      @name = name
       @element_filter = nil
       
       if block_given?
@@ -40,7 +41,7 @@ module Mutations
     end
     
     def array(options = {}, &block)
-      @element_filter = ArrayFilter.new(options, &block)
+      @element_filter = ArrayFilter.new(nil, options, &block)
     end
     
     def filter(data)
@@ -61,7 +62,7 @@ module Mutations
         found_error = false
         data.each_with_index do |el, i|
           el_filtered, el_error = filter_element(el)
-          el_error = ErrorAtom.new(i, el_error) if el_error.is_a?(Symbol)
+          el_error = ErrorAtom.new(@name, el_error, index: i) if el_error.is_a?(Symbol)
           
           errors << el_error
           found_error = true if el_error
