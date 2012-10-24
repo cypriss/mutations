@@ -101,8 +101,6 @@ describe "Mutations::ArrayFilter" do
     assert_equal ({"bar"=>:required}), errors[2].symbolic
   end
   
-  # test arrays in arrays
-  
   it "lets you pass arrays of arrays" do
     f = Mutations::ArrayFilter.new(:arr) do
       array do
