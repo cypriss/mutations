@@ -55,14 +55,28 @@ describe "Mutations - errors" do
     assert o.errors[:arr1][2].is_a?(Mutations::ErrorAtom)
   end
   
-  it "gives symbolic errors" do
-    o = GivesErrors.run(str1: "", str2: "opt9", int1: "zero", hash1: {bool1: "bob"}, arr1: ["bob", 1, "sally"])
-    expected = {"str1"=>:empty,
-     "str2"=>:in,
-     "int1"=>:integer,
-     "hash1"=>{"bool1"=>:boolean, "bool2"=>:required},
-     "arr1"=>[:integer, nil, :integer]}
-     
-    assert_equal expected, o.errors.symbolic
+  describe "Bunch o errors" do
+    before do 
+      @outcome = GivesErrors.run(str1: "", str2: "opt9", int1: "zero", hash1: {bool1: "bob"}, arr1: ["bob", 1, "sally"])
+    end
+    
+    it "gives symbolic errors" do
+      expected = {"str1"=>:empty,
+       "str2"=>:in,
+       "int1"=>:integer,
+       "hash1"=>{"bool1"=>:boolean, "bool2"=>:required},
+       "arr1"=>[:integer, nil, :integer]}
+
+      assert_equal expected, @outcome.errors.symbolic
+    end
+    
+    it "gives messages" do
+      expected = {"str1"=>"can't be blank", "str2"=>"isn't an option", "int1"=>"isn't an integer", "hash1"=>{"bool1"=>"isn't a boolean", "bool2"=>"is required"}, "arr1"=>["isn't an integer", nil, "isn't an integer"]}
+
+      assert_equal expected, @outcome.errors.message
+    end
   end
+  
+  
+  
 end

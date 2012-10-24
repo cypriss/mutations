@@ -80,15 +80,29 @@ describe "Mutations::StringFilter" do
     assert_equal :empty, errors
   end
   
-  it "considers lengthy strings to be invalid" do
-    sf = Mutations::StringFilter.new(length: 5)
+  it "considers long strings to be invalid" do
+    sf = Mutations::StringFilter.new(max_length: 5)
     filtered, errors = sf.filter("123456")
     assert_equal "123456", filtered
-    assert_equal :length, errors
+    assert_equal :max_length, errors
   end
   
-  it "considers unlengthy to be valid" do
-    sf = Mutations::StringFilter.new(length: 5)
+  it "considers long strings to be valid" do
+    sf = Mutations::StringFilter.new(max_length: 5)
+    filtered, errors = sf.filter("12345")
+    assert_equal "12345", filtered
+    assert_equal nil, errors
+  end
+  
+  it "considers short strings to be invalid" do
+    sf = Mutations::StringFilter.new(min_length: 5)
+    filtered, errors = sf.filter("1234")
+    assert_equal "1234", filtered
+    assert_equal :min_length, errors
+  end
+  
+  it "considers short strings to be valid" do
+    sf = Mutations::StringFilter.new(min_length: 5)
     filtered, errors = sf.filter("12345")
     assert_equal "12345", filtered
     assert_equal nil, errors
