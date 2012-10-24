@@ -119,7 +119,7 @@ module Mutations
     #   "That's not a city, silly!",
     #   "State isn't a valid option."
     # ]
-    def messeage_list
+    def message_list
       list = []
       each do |k, v|
         list.concat(v.message_list)

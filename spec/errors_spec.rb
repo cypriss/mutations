@@ -75,6 +75,18 @@ describe "Mutations - errors" do
 
       assert_equal expected, @outcome.errors.message
     end
+    
+    it "can flatten those messages" do
+      expected = ["can't be blank",
+       "isn't an option",
+       "isn't an integer",
+       "isn't a boolean",
+       "is required",
+       "isn't an integer",
+       "isn't an integer"]
+      
+      assert_equal expected, @outcome.errors.message_list
+    end
   end
   
   
