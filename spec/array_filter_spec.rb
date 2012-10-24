@@ -55,11 +55,52 @@ describe "Mutations::ArrayFilter" do
     assert_nil errors
   end
   
-  # test strings in arrays
-  # test integers in arrays
-  # test booleans in arrays
-  # test models in arrays
-  # test hashes in arrays
+  it "lets you pass integers in arrays" do
+    f = Mutations::ArrayFilter.new(:arr) { integer min: 4 }
+    
+    filtered, errors = f.filter([5,6,1,"bob"])
+    assert_equal [5,6,1,"bob"], filtered
+    assert_equal [nil, nil, :min, :integer], errors.symbolic
+  end
+  
+  it "lets you pass booleans in arrays" do
+    f = Mutations::ArrayFilter.new(:arr) { boolean }
+    
+    filtered, errors = f.filter([true, false, "1"])
+    assert_equal [true, false, true], filtered
+    assert_equal nil, errors
+  end
+  
+  it "lets you pass model in arrays" do
+    f = Mutations::ArrayFilter.new(:arr) { model :string }
+    
+    filtered, errors = f.filter(["hey"])
+    assert_equal ["hey"], filtered
+    assert_equal nil, errors
+  end
+  
+  it "lets you pass hashes in arrays" do
+    f = Mutations::ArrayFilter.new(:arr) do
+      hash do
+        required do
+          string :foo
+          integer :bar
+        end
+        
+        optional do
+          boolean :baz
+        end
+      end
+    end
+    
+    filtered, errors = f.filter([{foo: "f", bar: 3, baz: true}, {foo: "f", bar: 3}, {foo: "f"}])
+    assert_equal [{:foo=>"f", :bar=>3, :baz=>true}, {:foo=>"f", :bar=>3}, {:foo=>"f"}], filtered
+    
+    assert_equal nil, errors[0]
+    assert_equal nil, errors[1]
+    assert_equal ({"bar"=>:required}), errors[2].symbolic
+  end
+  
   # test arrays in arrays
   
   it "lets you pass arrays of arrays" do
