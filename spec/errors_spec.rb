@@ -55,7 +55,14 @@ describe "Mutations - errors" do
     assert o.errors[:arr1][2].is_a?(Mutations::ErrorAtom)
   end
   
-  # it "gives symbolic errors" do
-  #   
-  # end
+  it "gives symbolic errors" do
+    o = GivesErrors.run(str1: "", str2: "opt9", int1: "zero", hash1: {bool1: "bob"}, arr1: ["bob", 1, "sally"])
+    expected = {"str1"=>:empty,
+     "str2"=>:in,
+     "int1"=>:integer,
+     "hash1"=>{"bool1"=>:boolean, "bool2"=>:required},
+     "arr1"=>[:integer, nil, :integer]}
+     
+    assert_equal expected, o.errors.symbolic
+  end
 end
