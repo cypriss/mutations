@@ -22,7 +22,7 @@ describe "Mutations - errors" do
     end
   end
   
-  it "returns an ErrorHash as the top level error object" do
+  it "returns an ErrorHash as the top level error object, and ErrorAtom's inside" do
     o = GivesErrors.run(hash1: 1, arr1: "bob")
     
     assert !o.success?

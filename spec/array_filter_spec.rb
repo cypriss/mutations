@@ -35,7 +35,8 @@ describe "Mutations::ArrayFilter" do
     f = Mutations::ArrayFilter.new { string }
     
     filtered, errors = f.filter(["hi", {stuff: "ok"}])
-    assert_equal [nil, :string], errors
+    assert_nil errors[0]
+    assert_equal :string, errors[1].symbolic
   end
   
 end

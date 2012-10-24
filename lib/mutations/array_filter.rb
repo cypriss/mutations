@@ -59,8 +59,9 @@ module Mutations
         errors = ErrorArray.new
         filtered_data = []
         found_error = false
-        data.each do |el|
+        data.each_with_index do |el, i|
           el_filtered, el_error = filter_element(el)
+          el_error = ErrorAtom.new(i, el_error) if el_error.is_a?(Symbol)
           
           errors << el_error
           found_error = true if el_error
