@@ -39,8 +39,21 @@ describe "Mutations::ArrayFilter" do
     assert_equal :string, errors[1].symbolic
   end
   
-  # test arrayize
-  # test arrayize with ""
+  it "lets you array-ize everything" do
+    f = Mutations::ArrayFilter.new(:arr, arrayize: true) { string }
+    
+    filtered, errors = f.filter("foo")
+    assert_equal ["foo"], filtered
+    assert_nil errors
+  end
+  
+  it "lets you array-ize an empty string" do
+    f = Mutations::ArrayFilter.new(:arr, arrayize: true) { string }
+    
+    filtered, errors = f.filter("")
+    assert_equal [], filtered
+    assert_nil errors
+  end
   
   # test strings in arrays
   # test integers in arrays
