@@ -71,6 +71,7 @@ describe "Mutations::ArrayFilter" do
     filtered, errors = f.filter([["h", "e", {}], ["l"], [], [""]])
     assert_equal [[nil, nil, :string], nil, nil, [:empty]], errors.symbolic
     assert_equal [[nil, nil, "Array[2] isn't a string"], nil, nil, ["Array[0] can't be blank"]], errors.message
+    assert_equal ["Array[2] isn't a string", "Array[0] can't be blank"], errors.message_list
   end
   
 end
