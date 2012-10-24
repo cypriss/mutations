@@ -8,10 +8,10 @@ module Mutations
     end
   end
 
-  # mutation = Foo.run(blah: 2)
-  # mutation.errors.list
-  # mutation.errors.symbolic
-  # mutation.errors.message
+  # outcome = Foo.run(blah: 2)
+  # outcome.errors.list
+  # outcome.errors.symbolic
+  # outcome.errors.message
   
   class ErrorAtom
 
@@ -98,6 +98,20 @@ module Mutations
         list.concat(v.message_list)
       end
       list
+    end
+  end
+  
+  class ErrorArray < Array
+    def symbolic
+      map {|e| e && e.symbolic }
+    end
+
+    def message
+      map {|e| e && e.message }
+    end
+
+    def message_list
+      compact.map {|e| e && e.message_list }.flatten
     end
   end
 end

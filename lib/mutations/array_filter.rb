@@ -56,7 +56,7 @@ module Mutations
       end
       
       if data.is_a?(Array)
-        errors = []
+        errors = ErrorArray.new
         filtered_data = []
         found_error = false
         data.each do |el|
