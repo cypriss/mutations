@@ -39,4 +39,38 @@ describe "Mutations::ArrayFilter" do
     assert_equal :string, errors[1].symbolic
   end
   
+  # test arrayize
+  # test arrayize with ""
+  
+  # test strings in arrays
+  # test integers in arrays
+  # test booleans in arrays
+  # test models in arrays
+  # test hashes in arrays
+  # test arrays in arrays
+  
+  it "lets you pass arrays of arrays" do
+    f = Mutations::ArrayFilter.new(:arr) do
+      array do
+        string
+      end
+    end
+    
+    filtered, errors = f.filter([["h", "e"], ["l"], [], ["lo"]])
+    assert_equal filtered, [["h", "e"], ["l"], [], ["lo"]]
+    assert_equal nil, errors
+  end
+  
+  it "handles errors for arrays of arrays" do
+    f = Mutations::ArrayFilter.new(:arr) do
+      array do
+        string
+      end
+    end
+    
+    filtered, errors = f.filter([["h", "e", {}], ["l"], [], [""]])
+    assert_equal [[nil, nil, :string], nil, nil, [:empty]], errors.symbolic
+    assert_equal [[nil, nil, "Array[2] isn't a string"], nil, nil, ["Array[0] can't be blank"]], errors.message
+  end
+  
 end
