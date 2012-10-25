@@ -155,25 +155,25 @@ Here, we pass two hashes to CreateComment. Even if the params[:comment] hash has
 
 3. Define your optional inputs and their validations:
 
-```ruby
-optional do
-  array :tags, class: String
-  hash :prefs do
-    boolean :smoking
-    boolean :view
-  end
-end
-```
+    ```ruby
+    optional do
+      array :tags, class: String
+      hash :prefs do
+        boolean :smoking
+        boolean :view
+      end
+    end
+    ```
 
 4. Define your execute method. It can return a value:
 
-```ruby
-def execute
-  record = do_thing(inputs)
-  # ...
-  record
-end
-```
+    ```ruby
+    def execute
+      record = do_thing(inputs)
+      # ...
+      record
+    end
+    ```
 
 ## How do I write an execute method?
 
