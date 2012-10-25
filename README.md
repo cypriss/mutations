@@ -5,6 +5,10 @@ Mutations validate and sanitize input, then pass it to your function.  You can u
 ## Installation
 
     gem install mutations
+    
+Or add it to your Gemfile:
+
+   gem 'mutations'
 
 ## Example
 
@@ -46,7 +50,7 @@ Mutations validate and sanitize input, then pass it to your function.  You can u
 Some things to note about the example:
 
 * We don't need attr_accessible or strong_attributes to protect against mass assignment attacks
-* We're guaranteed that within execute, the inputs will be the correct data types, even if they needed some coercion (all strings are stripped by default, and strings like "1"/"0" are converted to true/false for newsletter_subscribe) 
+* We're guaranteed that within execute, the inputs will be the correct data types, even if they needed some coercion (all strings are stripped by default, and strings like "1" / "0" are converted to true/false for newsletter_subscribe) 
 * We don't need ActiveRecord/ActiveModel validations
 * We don't need Callbacks on our models -- everything is in the execute method (helper methods are also encouraged).
 * We don't use accepts_nested_attributes_for, even though multiple AR models are created.
@@ -99,23 +103,23 @@ Mutations only accept hashes as arguments to #run and #run!
 
 That being said, you can pass multiple hashes to run, and they are merged together. Later hashes take precedence. This give you safety in situations where you want to pass unsafe user inputs and safe server inputs into a single mutation. For instance:
 
-  # A user comments on an article
-  class CreateComment < Mutations::Command
-    requried do
-      model :user
-      model :article
-      string :comment, max_length: 500
+    # A user comments on an article
+    class CreateComment < Mutations::Command
+      requried do
+        model :user
+        model :article
+        string :comment, max_length: 500
+      end
+      
+      def execute; ...; end
     end
     
-    def execute; ...; end
-  end
-  
-  def somewhere
-    outcome = CreateComment.run(params[:comment],
-      user: current_user,
-      article: Article.find(params[:article_id])
-    )
-  end
+    def somewhere
+      outcome = CreateComment.run(params[:comment],
+        user: current_user,
+        article: Article.find(params[:article_id])
+      )
+    end
 
 Here, we pass two hashes to CreateComment. Even if the params[:comment] hash has a user or article field, they're overwritten by the second hash. (Also note: even if they weren't, they couldn't be of the correct data type in this particular case.)
 
