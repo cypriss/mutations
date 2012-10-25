@@ -53,9 +53,9 @@ Some things to note about the example:
 
 * We don't need attr_accessible or strong_attributes to protect against mass assignment attacks
 * We're guaranteed that within execute, the inputs will be the correct data types, even if they needed some coercion (all strings are stripped by default, and strings like "1" / "0" are converted to true/false for newsletter_subscribe) 
-* We don't need ActiveRecord/ActiveModel validations
-* We don't need Callbacks on our models -- everything is in the execute method (helper methods are also encouraged).
-* We don't use accepts_nested_attributes_for, even though multiple AR models are created.
+* We don't need ActiveRecord validations
+* We don't need callbacks on our models -- everything is in the execute method (helper methods are also encouraged).
+* We don't use accepts_nested_attributes_for, even though multiple ActiveRecord models are created.
 * This code is completely re-usable in other contexts (need an API?)
 * The inputs to this 'function' are documented by default -- the bare minimum to use it (name and email) are documented, as are 'extras' (newsletter_subscribe).
 
@@ -82,7 +82,7 @@ And inside, you had a library of business operations that you can do against you
 
 Each of these _mutations_ takes your application from one state to the next.
 
-That being said, you can easily use the input validation/specification capabilities for things that don't mutate your database.
+That being said, you can create commands for things that don't mutate your database.
 
 ## How do I call mutations?
 
