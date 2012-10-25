@@ -12,40 +12,41 @@ Or add it to your Gemfile:
 
 ## Example
 
-    # Define a command that signs up a user.
-    class UserSignup < Mutations::Command
-    
-      # These inputs are required
-      required do
-        string :email, matches: EMAIL_REGEX
-        string :name
-      end
-      
-      # These inputs are optional
-      optional do
-        boolean :newsletter_subscribe
-      end
-      
-      # The execute method is called only if the inputs validate. It does your business action.
-      def execute
-        user = User.create!(inputs)
-        NewsletterSubscriptions.create(email: email, user_id: user.id) if newsletter_subscribe
-        UserMailer.async(:deliver_welcome, user.id)
-        user
-      end
-    end
-    
-    # In a controller action (for instance), you can run it:
-    def create
-      outcome = UserSignup.run(params[:user])
-    
-      # Then check to see if it worked:
-      if outcome.success?
-        render json: {message: "Great success, #{outcome.result.name}!"}
-      else
-        render json: outcome.errors.symbolic
-      end
-    end
+```# Define a command that signs up a user.
+class UserSignup < Mutations::Command
+
+  # These inputs are required
+  required do
+    string :email, matches: EMAIL_REGEX
+    string :name
+  end
+  
+  # These inputs are optional
+  optional do
+    boolean :newsletter_subscribe
+  end
+  
+  # The execute method is called only if the inputs validate. It does your business action.
+  def execute
+    user = User.create!(inputs)
+    NewsletterSubscriptions.create(email: email, user_id: user.id) if newsletter_subscribe
+    UserMailer.async(:deliver_welcome, user.id)
+    user
+  end
+end
+
+# In a controller action (for instance), you can run it:
+def create
+  outcome = UserSignup.run(params[:user])
+
+  # Then check to see if it worked:
+  if outcome.success?
+    render json: {message: "Great success, #{outcome.result.name}!"}
+  else
+    render json: outcome.errors.symbolic
+  end
+end
+```
 
 Some things to note about the example:
 
