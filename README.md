@@ -12,7 +12,8 @@ Or add it to your Gemfile:
 
 ## Example
 
-```# Define a command that signs up a user.
+```ruby
+# Define a command that signs up a user.
 class UserSignup < Mutations::Command
 
   # These inputs are required
