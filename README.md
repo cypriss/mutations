@@ -267,5 +267,5 @@ Yes, but I don't think it's a very good idea. Better to compose.
 
 ### Can I use this with Rails forms helpers?
 
-Somewhat. This works great with any forms, but there's no built-in way to bake the errors into the HTML with Rails form tag helpers. Right now this is really designed to support a JSON API.  You'd probably have to write an adapter of some kind.
+Somewhat. Any form can submit to your server, and mutations will happily accept that input. However, if there are errors, there's no built-in way to bake the errors into the HTML with Rails form tag helpers. Right now this is really designed to support a JSON API.  You'd probably have to write an adapter of some kind.
 
