@@ -175,6 +175,8 @@ Here, we pass two hashes to CreateComment. Even if the params[:comment] hash has
     end
     ```
 
+See a full list of options here: TODO
+
 ## How do I write an execute method?
 
 Your execute method has access to the inputs passed into it:
@@ -215,7 +217,34 @@ outcome.result # => "WIN!"
 
 ## What about validation errors?
 
-- your 
+If things don't pan out, you'll get back an Mutations::ErrorHash object that maps invalid inputs to either symbols or messages. Example:
+
+```ruby
+outcome = UserSignup.run(name: "Bob") # Didn't pass required field 'email'
+
+unless outcome.success?
+  outcome.errors.symbolic # => {email: :required}
+  outcome.errors.message # => {email: "Email is required"}
+  outcome.errors.message_list # => ["Email is required"]
+end
+```
+
+You can add errors within execute if the default validations are insufficient:
+
+```ruby
+#...
+def execute
+  if password != password_confirmation
+    add_error(:password_confirmation, :doesnt_match, "Your passwords don't match")
+    return
+  end
+end
+# ...
+
+# That error would show up in the errors hash:
+outcome.errors.symbolic # => {password_confirmation: :doesnt_match}
+outcome.errors.message # => {password_confirmation: "Your passwords don't match"}
+```
 
 ## FAQs
 
@@ -228,6 +257,10 @@ That being said, there's a whole slew of patterns that are available to experien
 ### How do I share code between mutations?
 
 ### Can I subclass my mutations?
+
+### How do I use this with Rails forms helpers?
+
+There is no built-in way to do that right now. Right now this is really designed to support a JSON API.  You'd probably have to write an adapter of some kind.
 
 ### What's left to do?
 
