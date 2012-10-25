@@ -1,5 +1,7 @@
 # Mutations
 
+[![Build Status](https://travis-ci.org/cypriss/mutations.png)](https://travis-ci.org/cypriss/mutations)
+
 Compose your business logic into commands that sanitize and validate input. Write safe, reusable, and maintainable code for Ruby and Rails apps.
 
 ## Installation
