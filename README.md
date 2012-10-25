@@ -1,6 +1,6 @@
 # Mutations
 
-Mutations validate and sanitize input, then pass it to your function.  You can use this to write safe, re-usable, maintainable code for Ruby and Rails apps.
+Compose your business logic into commands that sanitize and validate input. Write safe, reusable, and maintainable code for Ruby and Rails apps.
 
 ## Installation
 
@@ -246,6 +246,8 @@ end
 outcome.errors.symbolic # => {password_confirmation: :doesnt_match}
 outcome.errors.message # => {password_confirmation: "Your passwords don't match"}
 ```
+
+If you want to tie the validation messages into your I18n system, you'll need to write a custom error message generator. TODO: See docs.
 
 ## FAQs
 
