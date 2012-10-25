@@ -220,7 +220,8 @@ outcome.result # => "WIN!"
 If things don't pan out, you'll get back an Mutations::ErrorHash object that maps invalid inputs to either symbols or messages. Example:
 
 ```ruby
-outcome = UserSignup.run(name: "Bob", newsletter_subscribe: "Wat") # Didn't pass required field 'email', and newsletter_subscribe is the wrong format.
+# Didn't pass required field 'email', and newsletter_subscribe is the wrong format:
+outcome = UserSignup.run(name: "Bob", newsletter_subscribe: "Wat")
 
 unless outcome.success?
   outcome.errors.symbolic # => {email: :required, newsletter_subscribe: :boolean}
