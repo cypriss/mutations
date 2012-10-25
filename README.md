@@ -88,16 +88,20 @@ That being said, you can easily use the input validation/specification capabilit
 
 You have two choices. Given a mutation UserSignup, you can do this:
 
-    outcome = UserSignup.run(params)
-    if outcome.success?
-      user = outcome.result
-    else
-      render outcome.errors
-    end
+```ruby
+outcome = UserSignup.run(params)
+if outcome.success?
+  user = outcome.result
+else
+  render outcome.errors
+end
+```
 
 Or, you can do this:
 
-    user = UserSignup.run!(params) # returns the result of execute, or raises Mutations::ValidationException
+```ruby
+user = UserSignup.run!(params) # returns the result of execute, or raises Mutations::ValidationException
+```
 
 ## What can I pass to mutations?
 
@@ -105,23 +109,25 @@ Mutations only accept hashes as arguments to #run and #run!
 
 That being said, you can pass multiple hashes to run, and they are merged together. Later hashes take precedence. This give you safety in situations where you want to pass unsafe user inputs and safe server inputs into a single mutation. For instance:
 
-    # A user comments on an article
-    class CreateComment < Mutations::Command
-      requried do
-        model :user
-        model :article
-        string :comment, max_length: 500
-      end
-      
-      def execute; ...; end
-    end
-    
-    def somewhere
-      outcome = CreateComment.run(params[:comment],
-        user: current_user,
-        article: Article.find(params[:article_id])
-      )
-    end
+```ruby
+# A user comments on an article
+class CreateComment < Mutations::Command
+  requried do
+    model :user
+    model :article
+    string :comment, max_length: 500
+  end
+  
+  def execute; ...; end
+end
+
+def somewhere
+  outcome = CreateComment.run(params[:comment],
+    user: current_user,
+    article: Article.find(params[:article_id])
+  )
+end
+```
 
 Here, we pass two hashes to CreateComment. Even if the params[:comment] hash has a user or article field, they're overwritten by the second hash. (Also note: even if they weren't, they couldn't be of the correct data type in this particular case.)
 
@@ -129,67 +135,83 @@ Here, we pass two hashes to CreateComment. Even if the params[:comment] hash has
 
 1. Subclass Mutations::Command
 
-    class YourMutation < Mutatons::Command
-      ...
-    end
+```ruby
+class YourMutation < Mutatons::Command
+  # ...
+end
+```
 
 2. Define your required inputs and their validations:
 
-    required do
-      string :name, max_length: 10
-      string :state, in: %w(AL AK AR ... WY)
-      integer :age
-      boolean :is_special, default: true
-      model :account
-    end
+```ruby
+required do
+  string :name, max_length: 10
+  string :state, in: %w(AL AK AR ... WY)
+  integer :age
+  boolean :is_special, default: true
+  model :account
+end
+```ruby
 
 3. Define your optional inputs and their validations:
 
-    optional do
-      array :tags, class: String
-      hash :prefs do
-        boolean :smoking
-        boolean :view
-      end
-    end
+```ruby
+optional do
+  array :tags, class: String
+  hash :prefs do
+    boolean :smoking
+    boolean :view
+  end
+end
+```ruby
 
 4. Define your execute method. It can return a value:
 
-    def execute
-      record = do_thing(...)
-      ...
-      record
-    end
+```ruby
+def execute
+  record = do_thing(inputs)
+  # ...
+  record
+end
+```
 
 ## How do I write an execute method?
 
 Your execute method has access to the inputs passed into it:
 
-    self.inputs # white-listed hash of all inputs passed to run.  Hash has indifferent access.
+```ruby
+self.inputs # white-listed hash of all inputs passed to run.  Hash has indifferent access.
+```
     
 If you define an input called _email_, then you'll have these three methods:
 
-    self.email           # Email value passed in
-    self.email=(val)     # You can set the email value in execute. Rare, but useful at times.
-    self.email_present?  # Was an email value passed in? Useful for optional inputs.
+```ruby
+self.email           # Email value passed in
+self.email=(val)     # You can set the email value in execute. Rare, but useful at times.
+self.email_present?  # Was an email value passed in? Useful for optional inputs.
+```
 
 You can do extra validation inside of execute:
 
-    if email =~ /aol.com/
-      add_error(:email, :old_school, "Wow, you still use AOL?")
-      return
-    end
+```ruby
+if email =~ /aol.com/
+  add_error(:email, :old_school, "Wow, you still use AOL?")
+  return
+end
+```
 
 You can return a value as the result of the command:
 
-    def execute
-      # ...
-      "WIN!"
-    end
-    
-    # Get result:
-    outcome = YourMutuation.run(...)
-    outcome.result # => "WIN!"
+```ruby
+def execute
+  # ...
+  "WIN!"
+end
+
+# Get result:
+outcome = YourMutuation.run(...)
+outcome.result # => "WIN!"
+```
 
 ## What about validation errors?
 
