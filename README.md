@@ -135,23 +135,23 @@ Here, we pass two hashes to CreateComment. Even if the params[:comment] hash has
 
 1. Subclass Mutations::Command
 
-```ruby
-class YourMutation < Mutatons::Command
-  # ...
-end
-```
+    ```ruby
+    class YourMutation < Mutatons::Command
+      # ...
+    end
+    ```
 
 2. Define your required inputs and their validations:
 
-```ruby
-required do
-  string :name, max_length: 10
-  string :state, in: %w(AL AK AR ... WY)
-  integer :age
-  boolean :is_special, default: true
-  model :account
-end
-```
+    ```ruby
+    required do
+      string :name, max_length: 10
+      string :state, in: %w(AL AK AR ... WY)
+      integer :age
+      boolean :is_special, default: true
+      model :account
+    end
+    ```
 
 3. Define your optional inputs and their validations:
 
