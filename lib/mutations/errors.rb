@@ -39,9 +39,9 @@ module Mutations
     # Key is either a symbol or a fixnum
     def message(key, error_symbol, options = {})
       if options[:index]
-        "#{key || 'array'}[#{options[:index]}] #{MESSAGES[error_symbol]}".capitalize
+        "#{(key || 'array').to_s.titleize}[#{options[:index]}] #{MESSAGES[error_symbol]}"
       else
-        "#{key} #{MESSAGES[error_symbol]}".capitalize
+        "#{key.to_s.titleize} #{MESSAGES[error_symbol]}"
       end
     end
   end

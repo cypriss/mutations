@@ -55,6 +55,11 @@ describe "Mutations - errors" do
     assert o.errors[:arr1][2].is_a?(Mutations::ErrorAtom)
   end
   
+  it "titleizes keys" do
+    atom = Mutations::ErrorAtom.new(:newsletter_subscription, :boolean)
+    assert_equal "Newsletter Subscription isn't a boolean", atom.message
+  end
+  
   describe "Bunch o errors" do
     before do 
       @outcome = GivesErrors.run(str1: "", str2: "opt9", int1: "zero", hash1: {bool1: "bob"}, arr1: ["bob", 1, "sally"])

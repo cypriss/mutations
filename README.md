@@ -220,12 +220,12 @@ outcome.result # => "WIN!"
 If things don't pan out, you'll get back an Mutations::ErrorHash object that maps invalid inputs to either symbols or messages. Example:
 
 ```ruby
-outcome = UserSignup.run(name: "Bob") # Didn't pass required field 'email'
+outcome = UserSignup.run(name: "Bob", newsletter_subscribe: "Wat") # Didn't pass required field 'email', and newsletter_subscribe is the wrong format.
 
 unless outcome.success?
-  outcome.errors.symbolic # => {email: :required}
-  outcome.errors.message # => {email: "Email is required"}
-  outcome.errors.message_list # => ["Email is required"]
+  outcome.errors.symbolic # => {email: :required, newsletter_subscribe: :boolean}
+  outcome.errors.message # => {email: "Email is required", newsletter_subscribe: "Newsletter Subscription isn't a boolean"}
+  outcome.errors.message_list # => ["Email is required", "Newsletter Subscription isn't a boolean"]
 end
 ```
 
@@ -256,17 +256,13 @@ That being said, there's a whole slew of patterns that are available to experien
 
 ### How do I share code between mutations?
 
+Write some modules that you include into multiple mutations.
+
 ### Can I subclass my mutations?
 
-### How do I use this with Rails forms helpers?
+Yes, but I don't think it's a very good idea. Better to compose.
 
-There is no built-in way to do that right now. Right now this is really designed to support a JSON API.  You'd probably have to write an adapter of some kind.
+### Can I use this with Rails forms helpers?
 
-### What's left to do?
-
-
-
-
-
-
+Somewhat. This works great with any forms, but there's no built-in way to bake the errors into the HTML with Rails form tag helpers. Right now this is really designed to support a JSON API.  You'd probably have to write an adapter of some kind.
 
