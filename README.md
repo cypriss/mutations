@@ -44,7 +44,7 @@ def create
   if outcome.success?
     render json: {message: "Great success, #{outcome.result.name}!"}
   else
-    render json: outcome.errors.symbolic
+    render json: outcome.errors.symbolic, status: 422
   end
 end
 ```
