@@ -8,7 +8,7 @@ Mutations validate and sanitize input, then pass it to your function.  You can u
     
 Or add it to your Gemfile:
 
-   gem 'mutations'
+    gem 'mutations'
 
 ## Example
 
