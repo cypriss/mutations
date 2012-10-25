@@ -151,7 +151,7 @@ required do
   boolean :is_special, default: true
   model :account
 end
-```ruby
+```
 
 3. Define your optional inputs and their validations:
 
@@ -163,7 +163,7 @@ optional do
     boolean :view
   end
 end
-```ruby
+```
 
 4. Define your execute method. It can return a value:
 
