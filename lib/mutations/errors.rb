@@ -36,7 +36,10 @@ module Mutations
       )
     end
     
-    # Key is either a symbol or a fixnum
+    # key: the name of the field, eg, :email. Could be nil if it's an array element
+    # error_symbol: the validation symbol, eg, :matches or :required
+    # options:
+    #  :index -- index of error if it's in an array
     def message(key, error_symbol, options = {})
       if options[:index]
         "#{(key || 'array').to_s.titleize}[#{options[:index]}] #{MESSAGES[error_symbol]}"

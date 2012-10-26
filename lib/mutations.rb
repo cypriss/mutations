@@ -20,5 +20,9 @@ module Mutations
     def error_message_creator
       @error_message_creator ||= DefaultErrorMessageCreator.new
     end
+    
+    def error_message_creator=(creator)
+      @error_message_creator = creator
+    end
   end
 end
