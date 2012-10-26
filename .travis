@@ -5,7 +5,3 @@ rvm:
 branches:
   only:
     - master
-notifications:
-  email:
-    recipients:
-      - jonathan@uservoice.com 
