@@ -177,7 +177,7 @@ Here, we pass two hashes to CreateComment. Even if the params[:comment] hash has
     end
     ```
 
-See a full list of options here: TODO
+See a full list of options [here](https://github.com/cypriss/mutations/wiki/Filtering-Input).
 
 ## How do I write an execute method?
 
