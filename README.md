@@ -249,7 +249,7 @@ outcome.errors.symbolic # => {password_confirmation: :doesnt_match}
 outcome.errors.message # => {password_confirmation: "Your passwords don't match"}
 ```
 
-If you want to tie the validation messages into your I18n system, you'll need to write a custom error message generator. TODO: See docs.
+If you want to tie the validation messages into your I18n system, you'll need to [write a custom error message generator](https://github.com/cypriss/mutations/wiki/Custom-Error-Messages).
 
 ## FAQs
 
