@@ -24,7 +24,7 @@ describe "Command" do
       outcome = SimpleCommand.run(name: "JohnTooLong", email: "john@gmail.com")
       
       assert !outcome.success?
-      assert :length, outcome.errors.symbolic[:name]
+      assert_equal :max_length, outcome.errors.symbolic[:name]
     end
     
     it "shouldn't throw an exception with run!" do
@@ -36,6 +36,18 @@ describe "Command" do
       assert_raises Mutations::ValidationException do
         result = SimpleCommand.run!(name: "John", email: "john@gmail.com", amount: "bob")
       end
+    end
+    
+    it "should do standalone validation" do
+      outcome = SimpleCommand.validate(name: "JohnLong", email: "john@gmail.com")
+      assert outcome.success?
+      assert_nil outcome.result
+      assert_nil outcome.errors
+      
+      outcome = SimpleCommand.validate(name: "JohnTooLong", email: "john@gmail.com")
+      assert !outcome.success?
+      assert_nil outcome.result
+      assert_equal :max_length, outcome.errors.symbolic[:name]
     end
     
     it "should merge multiple hashes" do

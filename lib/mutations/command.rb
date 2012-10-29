@@ -65,6 +65,11 @@ module Mutations
         end
       end
       
+      # Validates input, but doesn't call execute. Returns an Outcome with errors anyway.
+      def validate(*args)
+        new(*args).validation_outcome
+      end
+      
       def input_filters
         @input_filters ||= begin
           if Command == self.superclass
@@ -91,6 +96,8 @@ module Mutations
         raise ArgumentError.new("All arguments must be hashes") unless a.is_a?(Hash)
         @original_hash.merge!(a)
       end
+      
+      @filtered_input, @errors = self.input_filters.filter(@original_hash)
     end
     
     def input_filters
@@ -98,7 +105,6 @@ module Mutations
     end
     
     def execute!
-      @filtered_input, @errors = self.input_filters.filter(@original_hash)
       return Outcome.new(false, nil, @errors) if @errors
       
       # IDEA/TODO: run validate block
@@ -108,6 +114,15 @@ module Mutations
         return Outcome.new(false, nil, @errors)
       else
         return Outcome.new(true, r, nil)
+      end
+    end
+    
+    # Runs input thru the filter and sets @filtered_input and @errors
+    def validation_outcome
+      if @errors
+        Outcome.new(false, nil, @errors)
+      else
+        Outcome.new(true, nil,  nil)
       end
     end
     
