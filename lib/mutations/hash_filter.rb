@@ -96,9 +96,17 @@ module Mutations
       
       errors = ErrorHash.new
       filtered_data = HashWithIndifferentAccess.new
+      wildcard_filterer = nil
       
       [[@required_inputs, true], [@optional_inputs, false]].each do |(inputs, is_required)|
         inputs.each_pair do |key, filterer|
+          
+          # If we are doing wildcards, then record so and move on
+          if key == :*
+            wildcard_filterer = filterer
+            next
+          end
+          
           data_element = data[key]
           default_used = false
           if !data.has_key?(key) && filterer.has_default?
@@ -117,6 +125,21 @@ module Mutations
             end
           elsif is_required
             errors[key] = ErrorAtom.new(key, :required)
+          end
+        end
+      end
+      
+      if wildcard_filterer
+        filtered_keys = data.keys - filtered_data.keys
+        
+        filtered_keys.each do |key|
+          data_element = data[key]
+          sub_data, sub_error = wildcard_filterer.filter(data_element)
+          if sub_error.nil?
+            filtered_data[key] = sub_data
+          else
+            sub_error = ErrorAtom.new(key, sub_error) if sub_error.is_a?(Symbol)
+            errors[key] = sub_error
           end
         end
       end
