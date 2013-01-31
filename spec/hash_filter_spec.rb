@@ -80,7 +80,7 @@ describe "Mutations::HashFilter" do
     end
     
     it "bar is optional -- errors if nils not allowed" do
-      hf2 = Mutations::HashFilter.new do
+      hf = Mutations::HashFilter.new do
         required do
           string :foo
         end
@@ -89,8 +89,37 @@ describe "Mutations::HashFilter" do
         end
       end
       
-      filtered, errors = hf2.filter(foo: "bar", bar: nil)
+      filtered, errors = hf.filter(foo: "bar", bar: nil)
       assert_equal ({"bar" => :nils}), errors.symbolic
+    end
+    
+    it "bar is optional -- discards empty" do
+      hf = Mutations::HashFilter.new do
+        required do
+          string :foo
+        end
+        optional do
+          string :bar, discard_empty: true
+        end
+      end
+      
+      filtered, errors = hf.filter(foo: "bar", bar: "")
+      assert_equal ({"foo" => "bar"}), filtered
+      assert_equal nil, errors
+    end
+    
+    it "bar is optional -- errors if discard_empty is false and value is blank" do
+      hf = Mutations::HashFilter.new do
+        required do
+          string :foo
+        end
+        optional do
+          string :bar, discard_empty: false
+        end
+      end
+      
+      filtered, errors = hf.filter(foo: "bar", bar: "")
+      assert_equal ({"bar" => :empty}), errors.symbolic
     end
   end
   

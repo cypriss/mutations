@@ -1,0 +1,2 @@
+ - Document default behavior discarding of nils for optional params
+ - document string.discard_empty

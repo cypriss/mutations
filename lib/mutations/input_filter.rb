@@ -19,16 +19,20 @@ module Mutations
     end
     
     def has_default?
-      self.options.has_key?(:default)
+      options.has_key?(:default)
     end
     
     def default
-      self.options[:default]
+      options[:default]
     end
     
     # Only relevant for optional params
     def discard_nils?
-      self.options[:discard_nils] != false
+      options[:discard_nils] != false
+    end
+    
+    def discard_empty?
+      options[:discard_empty]
     end
   end
 end
