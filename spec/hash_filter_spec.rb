@@ -55,9 +55,9 @@ describe "Mutations::HashFilter" do
     assert_equal ({"baz" => :integer}), errors.symbolic
   end
   
-  describe "a hash filter with optional params" do
-    before do
-      @hf = Mutations::HashFilter.new do
+  describe "optional params and nils" do
+    it "bar is optional -- it works if not passed" do
+      hf = Mutations::HashFilter.new do
         required do
           string :foo
         end
@@ -65,34 +65,44 @@ describe "Mutations::HashFilter" do
           string :bar
         end
       end
-    end
-    
-    it "bar is optional -- it works if not passed" do
-      filtered, errors = @hf.filter(foo: "bar")
+      
+      filtered, errors = hf.filter(foo: "bar")
       assert_equal ({"foo" => "bar"}), filtered
       assert_equal nil, errors
     end
     
     it "bar is optional -- it works if nil is passed" do
-      filtered, errors = @hf.filter(foo: "bar", bar: nil)
-      assert_equal ({"foo" => "bar"}), filtered
-      assert_equal nil, errors
-    end
-    
-    it "bar is optional -- errors if nils not allowed" do
       hf = Mutations::HashFilter.new do
         required do
           string :foo
         end
         optional do
-          string :bar, discard_nils: false
+          string :bar
         end
       end
       
       filtered, errors = hf.filter(foo: "bar", bar: nil)
-      assert_equal ({"bar" => :nils}), errors.symbolic
+      assert_equal ({"foo" => "bar"}), filtered
+      assert_equal nil, errors
     end
     
+    it "bar is optional -- it works if nil is passed and nils are allowed" do
+      hf = Mutations::HashFilter.new do
+        required do
+          string :foo
+        end
+        optional do
+          string :bar, nils: true
+        end
+      end
+      
+      filtered, errors = hf.filter(foo: "bar", bar: nil)
+      assert_equal ({"foo" => "bar", "bar" => nil}), filtered
+      assert_equal nil, errors
+    end
+  end
+  
+  describe "optional params and empty values" do
     it "bar is optional -- discards empty" do
       hf = Mutations::HashFilter.new do
         required do

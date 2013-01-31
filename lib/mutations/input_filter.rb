@@ -28,7 +28,7 @@ module Mutations
     
     # Only relevant for optional params
     def discard_nils?
-      options[:discard_nils] != false
+      !options[:nils]
     end
     
     def discard_empty?
