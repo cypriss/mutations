@@ -139,6 +139,11 @@ module Mutations
         
         filtered_keys.each do |key|
           data_element = data[key]
+          
+          # First, discard optional nils/empty params
+          next if data.has_key?(key) && wildcard_filterer.discard_nils? && data_element.nil?
+          next if data.has_key?(key) && wildcard_filterer.discard_empty? && data_element == ""
+          
           sub_data, sub_error = wildcard_filterer.filter(data_element)
           if sub_error.nil?
             filtered_data[key] = sub_data

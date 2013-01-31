@@ -32,8 +32,8 @@ describe "Mutations::HashFilter" do
     hf = Mutations::HashFilter.new do
       string :*
     end
-    filtered, errors = hf.filter(foo: nil)
-    assert_equal ({"foo" => :nils}), errors.symbolic
+    filtered, errors = hf.filter(foo: [])
+    assert_equal ({"foo" => :string}), errors.symbolic
   end
   
   it "allows a mix of specific keys and then wildcards" do
@@ -120,6 +120,21 @@ describe "Mutations::HashFilter" do
       
       filtered, errors = hf.filter(foo: "bar", bar: "")
       assert_equal ({"bar" => :empty}), errors.symbolic
+    end
+    
+    it "bar is optional -- discards empty -- now with wildcards" do
+      hf = Mutations::HashFilter.new do
+        required do
+          string :foo
+        end
+        optional do
+          string :*, discard_empty: true
+        end
+      end
+      
+      filtered, errors = hf.filter(foo: "bar", bar: "")
+      assert_equal ({"foo" => "bar"}), filtered
+      assert_equal nil, errors
     end
   end
   

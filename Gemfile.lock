@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    mutations (0.5.6)
+    mutations (0.5.7)
       activesupport
 
 GEM
