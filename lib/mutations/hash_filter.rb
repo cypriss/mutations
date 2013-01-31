@@ -108,6 +108,10 @@ module Mutations
           end
           
           data_element = data[key]
+          
+          # First, discard optional nils unless discard_nils is false
+          data.delete(key) if !is_required && data.has_key?(key) && data_element.nil? && filterer.discard_nils?
+          
           default_used = false
           if !data.has_key?(key) && filterer.has_default?
             data_element = filterer.default

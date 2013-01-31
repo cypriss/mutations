@@ -25,5 +25,10 @@ module Mutations
     def default
       self.options[:default]
     end
+    
+    # Only relevant for optional params
+    def discard_nils?
+      self.options[:discard_nils] != false
+    end
   end
 end
