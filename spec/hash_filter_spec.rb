@@ -28,6 +28,15 @@ describe "Mutations::HashFilter" do
     assert_equal nil, errors
   end
 
+  it "allow floats in hashes" do
+    hf = Mutations::HashFilter.new do
+      float :foo
+    end
+    filtered, errors = hf.filter(foo: 3.14)
+    assert_equal ({"foo" => 3.14}), filtered
+    assert_equal nil, errors
+  end
+
   it "doesn't allow wildcards in hashes" do
     hf = Mutations::HashFilter.new do
       string :*

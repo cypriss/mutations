@@ -59,6 +59,10 @@ module Mutations
       @current_inputs[name.to_sym] = IntegerFilter.new(options)
     end
 
+    def float(name, options = {})
+      @current_inputs[name.to_sym] = FloatFilter.new(options)
+    end
+
     def boolean(name, options = {})
       @current_inputs[name.to_sym] = BooleanFilter.new(options)
     end

@@ -27,6 +27,10 @@ module Mutations
       @element_filter = IntegerFilter.new(options)
     end
 
+    def float(options = {})
+      @element_filter = FloatFilter.new(options)
+    end
+
     def boolean(options = {})
       @element_filter = BooleanFilter.new(options)
     end

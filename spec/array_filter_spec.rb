@@ -84,6 +84,14 @@ describe "Mutations::ArrayFilter" do
     assert_equal [nil, nil, :min, :integer], errors.symbolic
   end
 
+  it "lets you pass floats in arrays" do
+    f = Mutations::ArrayFilter.new(:float) { float min: 4.0 }
+
+    filtered, errors = f.filter([5.0,6.0,1.0,"bob"])
+    assert_equal [5.0,6.0,1.0,"bob"], filtered
+    assert_equal [nil, nil, :min, :float], errors.symbolic
+  end
+
   it "lets you pass booleans in arrays" do
     f = Mutations::ArrayFilter.new(:arr) { boolean }
 
