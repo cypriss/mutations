@@ -100,21 +100,16 @@ module Mutations
     end
 
     def execute!
-      return Outcome.new(false, nil, @errors) if has_errors?
+      return validation_outcome if has_errors?
 
       # IDEA/TODO: run validate block
 
-      r = execute
-      if has_errors? # Execute can add errors
-        return Outcome.new(false, nil, @errors)
-      else
-        return Outcome.new(true, r, nil)
-      end
+      validation_outcome(execute)
     end
 
     # Runs input thru the filter and sets @filtered_input and @errors
-    def validation_outcome
-      Outcome.new(!has_errors?, nil, @errors)
+    def validation_outcome(r = nil)
+      Outcome.new(!has_errors?, has_errors? ? nil : r, @errors)
     end
 
     # add_error("name", :too_short)
