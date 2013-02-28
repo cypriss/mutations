@@ -87,7 +87,11 @@ module Mutations
     end
 
     def run
-      execute!
+      return validation_outcome if has_errors?
+
+      # IDEA/TODO: run validate block
+
+      validation_outcome(execute)
     end
 
     def run!
@@ -102,24 +106,16 @@ module Mutations
       validation_outcome
     end
 
-    def execute!
-      return validation_outcome if has_errors?
-
-      # IDEA/TODO: run validate block
-
-      validation_outcome(execute)
-    end
-
     # Runs input thru the filter and sets @filtered_input and @errors
     def validation_outcome(r = nil)
       Outcome.new(!has_errors?, has_errors? ? nil : r, @errors)
     end
 
+  protected
+
     def execute
       # Meant to be overridden
     end
-
-  protected
 
     # add_error("name", :too_short)
     # add_error("colors.foreground", :not_a_color) # => to create errors = {colors: {foreground: :not_a_color}}
