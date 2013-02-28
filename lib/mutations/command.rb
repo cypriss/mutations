@@ -16,10 +16,11 @@ module Mutations
     ##
     ##
     class << self
-      def required(&block)
-        self.input_filters.required(&block)
 
-        self.input_filters.required_keys.each do |key|
+      def create_attr_methods(meth, &block)
+        self.input_filters.send(meth, &block)
+        keys = self.input_filters.send("#{meth}_keys")
+        keys.each do |key|
           define_method(key) do
             @filtered_input[key]
           end
@@ -34,22 +35,12 @@ module Mutations
         end
       end
 
+      def required(&block)
+        create_attr_methods(:required, &block)
+      end
+
       def optional(&block)
-        self.input_filters.optional(&block)
-
-        self.input_filters.optional_keys.each do |key|
-          define_method(key) do
-            @filtered_input[key]
-          end
-
-          define_method("#{key}_present?") do
-            @filtered_input.has_key?(key)
-          end
-
-          define_method("#{key}=") do |v|
-            @filtered_input[key] = v
-          end
-        end
+        create_attr_methods(:optional, &block)
       end
 
       def run(*args)
