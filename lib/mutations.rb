@@ -8,6 +8,7 @@ require 'mutations/errors'
 require 'mutations/input_filter'
 require 'mutations/string_filter'
 require 'mutations/integer_filter'
+require 'mutations/float_filter'
 require 'mutations/boolean_filter'
 require 'mutations/model_filter'
 require 'mutations/array_filter'
@@ -20,7 +21,7 @@ module Mutations
     def error_message_creator
       @error_message_creator ||= DefaultErrorMessageCreator.new
     end
-    
+
     def error_message_creator=(creator)
       @error_message_creator = creator
     end
