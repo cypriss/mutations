@@ -45,21 +45,16 @@ module Mutations
       end
 
       def run(*args)
-        new(*args).execute!
+        new(*args).run
       end
 
       def run!(*args)
-        m = run(*args)
-        if m.success?
-          m.result
-        else
-          raise ValidationException.new(m.errors)
-        end
+        new(*args).run!
       end
 
       # Validates input, but doesn't call execute. Returns an Outcome with errors anyway.
       def validate(*args)
-        new(*args).validation_outcome
+        new(*args).validate
       end
 
       def input_filters
@@ -89,6 +84,22 @@ module Mutations
 
     def has_errors?
       not(@errors.nil?)
+    end
+
+    def run
+      execute!
+    end
+
+    def run!
+      if (m = run).success?
+        m.result
+      else
+        raise ValidationException.new(m.errors)
+      end
+    end
+
+    def validate
+      validation_outcome
     end
 
     def execute!
