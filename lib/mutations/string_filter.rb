@@ -11,24 +11,24 @@ module Mutations
       in: nil,              # Can be an array like %w(red blue green)
       discard_empty: false  # If the param is optional, discard_empty: true drops empty fields.
     }
-    
+
     def filter(data)
-      
+
       # Handle nil case
       if data.nil?
         return [nil, nil] if options[:nils]
         return [nil, :nils]
       end
-      
+
       # At this point, data is not nil. If it's not a string, convert it to a string for some standard classes
       data = data.to_s if !options[:strict] && [TrueClass, FalseClass, Fixnum, Symbol].include?(data.class)
-      
+
       # Now ensure it's a string:
       return [data, :string] unless data.is_a?(String)
-      
+
       # At this point, data is a string.  Now transform it using strip:
       data = data.strip if options[:strip]
-      
+
       # Now check if it's blank:
       if data == ""
         if options[:empty]
@@ -37,17 +37,17 @@ module Mutations
           return [data, :empty]
         end
       end
-      
+
       # Now check to see if it's the correct size:
       return [data, :min_length] if options[:min_length] && data.length < options[:min_length]
       return [data, :max_length] if options[:max_length] && data.length > options[:max_length]
-      
+
       # Ensure it match
       return [data, :in] if options[:in] && !options[:in].include?(data)
-      
+
       # Ensure it matches the regexp
       return [data, :matches] if options[:matches] && (options[:matches] !~ data)
-      
+
       # We win, it's valid!
       [data, nil]
     end

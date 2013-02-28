@@ -3,23 +3,23 @@ module Mutations
     @default_options = {
       nils: false   # true allows an explicit nil to be valid. Overrides any other options
     }
-    
+
     BOOL_MAP = {"true" => true, "1" => true, "false" => false, "0" => false}
-    
+
     def filter(data)
-      
+
       # Handle nil case
       if data.nil?
         return [nil, nil] if options[:nils]
         return [nil, :nils]
       end
-      
+
       # If data is true or false, we win.
       return [data, nil] if data == true || data == false
-      
+
       # If data is a Fixnum, like 1, let's convert it to a string first
       data = data.to_s if data.is_a?(Fixnum)
-      
+
       # If data's a string, try to convert it to a boolean. If we can't, it's invalid.
       if data.is_a?(String)
         res = BOOL_MAP[data.downcase]
