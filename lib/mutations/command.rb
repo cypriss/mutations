@@ -95,13 +95,17 @@ module Mutations
       self.class.input_filters
     end
 
+    def has_errors?
+      not(@errors.nil?)
+    end
+
     def execute!
-      return Outcome.new(false, nil, @errors) if @errors
+      return Outcome.new(false, nil, @errors) if has_errors?
 
       # IDEA/TODO: run validate block
 
       r = execute
-      if @errors # Execute can add errors
+      if has_errors? # Execute can add errors
         return Outcome.new(false, nil, @errors)
       else
         return Outcome.new(true, r, nil)
@@ -110,11 +114,7 @@ module Mutations
 
     # Runs input thru the filter and sets @filtered_input and @errors
     def validation_outcome
-      if @errors
-        Outcome.new(false, nil, @errors)
-      else
-        Outcome.new(true, nil,  nil)
-      end
+      Outcome.new(!has_errors?, nil, @errors)
     end
 
     # add_error("name", :too_short)
