@@ -7,7 +7,7 @@ Compose your business logic into commands that sanitize and validate input. Writ
 ## Installation
 
     gem install mutations
-    
+
 Or add it to your Gemfile:
 
     gem 'mutations'
@@ -23,12 +23,12 @@ class UserSignup < Mutations::Command
     string :email, matches: EMAIL_REGEX
     string :name
   end
-  
+
   # These inputs are optional
   optional do
     boolean :newsletter_subscribe
   end
-  
+
   # The execute method is called only if the inputs validate. It does your business action.
   def execute
     user = User.create!(inputs)
@@ -54,7 +54,7 @@ end
 Some things to note about the example:
 
 * We don't need attr_accessible or strong_attributes to protect against mass assignment attacks
-* We're guaranteed that within execute, the inputs will be the correct data types, even if they needed some coercion (all strings are stripped by default, and strings like "1" / "0" are converted to true/false for newsletter_subscribe) 
+* We're guaranteed that within execute, the inputs will be the correct data types, even if they needed some coercion (all strings are stripped by default, and strings like "1" / "0" are converted to true/false for newsletter_subscribe)
 * We don't need ActiveRecord validations
 * We don't need callbacks on our models -- everything is in the execute method (helper methods are also encouraged)
 * We don't use accepts_nested_attributes_for, even though multiple ActiveRecord models are created
@@ -119,7 +119,7 @@ class CreateComment < Mutations::Command
     model :article
     string :comment, max_length: 500
   end
-  
+
   def execute; ...; end
 end
 
@@ -186,7 +186,7 @@ Your execute method has access to the inputs passed into it:
 ```ruby
 self.inputs # white-listed hash of all inputs passed to run.  Hash has indifferent access.
 ```
-    
+
 If you define an input called _email_, then you'll have these three methods:
 
 ```ruby

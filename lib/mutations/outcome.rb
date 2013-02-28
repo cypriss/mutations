@@ -3,7 +3,7 @@ module Mutations
     def initialize(is_success, result, errors)
       @success, @result, @errors = is_success, result, errors
     end
-    
+
     def success?
       @success
     end

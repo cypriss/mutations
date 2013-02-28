@@ -11,51 +11,51 @@
 
 module Mutations
   class Command
-    
+
     ##
-    ## 
+    ##
     ##
     class << self
       def required(&block)
         self.input_filters.required(&block)
-        
+
         self.input_filters.required_keys.each do |key|
-          define_method(key) do 
+          define_method(key) do
             @filtered_input[key]
           end
-          
-          define_method("#{key}_present?") do 
+
+          define_method("#{key}_present?") do
             @filtered_input.has_key?(key)
           end
-          
+
           define_method("#{key}=") do |v|
             @filtered_input[key] = v
           end
         end
       end
-      
+
       def optional(&block)
         self.input_filters.optional(&block)
-        
+
         self.input_filters.optional_keys.each do |key|
-          define_method(key) do 
+          define_method(key) do
             @filtered_input[key]
           end
-          
-          define_method("#{key}_present?") do 
+
+          define_method("#{key}_present?") do
             @filtered_input.has_key?(key)
           end
-          
+
           define_method("#{key}=") do |v|
             @filtered_input[key] = v
           end
         end
       end
-      
+
       def run(*args)
         new(*args).execute!
       end
-      
+
       def run!(*args)
         m = run(*args)
         if m.success?
@@ -64,12 +64,12 @@ module Mutations
           raise ValidationException.new(m.errors)
         end
       end
-      
+
       # Validates input, but doesn't call execute. Returns an Outcome with errors anyway.
       def validate(*args)
         new(*args).validation_outcome
       end
-      
+
       def input_filters
         @input_filters ||= begin
           if Command == self.superclass
@@ -79,9 +79,9 @@ module Mutations
           end
         end
       end
-      
+
     end
-  
+
     # Instance methods
     def initialize(*args)
       if args.length == 0
@@ -91,24 +91,24 @@ module Mutations
         raise ArgumentError.new("All arguments must be hashes") unless @original_hash.is_a?(Hash)
         @original_hash = @original_hash.with_indifferent_access
       end
-      
+
       args.each do |a|
         raise ArgumentError.new("All arguments must be hashes") unless a.is_a?(Hash)
         @original_hash.merge!(a)
       end
-      
+
       @filtered_input, @errors = self.input_filters.filter(@original_hash)
     end
-    
+
     def input_filters
       self.class.input_filters
     end
-    
+
     def execute!
       return Outcome.new(false, nil, @errors) if @errors
-      
+
       # IDEA/TODO: run validate block
-      
+
       r = execute
       if @errors # Execute can add errors
         return Outcome.new(false, nil, @errors)
@@ -116,7 +116,7 @@ module Mutations
         return Outcome.new(true, r, nil)
       end
     end
-    
+
     # Runs input thru the filter and sets @filtered_input and @errors
     def validation_outcome
       if @errors
@@ -125,14 +125,14 @@ module Mutations
         Outcome.new(true, nil,  nil)
       end
     end
-    
+
     # add_error("name", :too_short)
     # add_error("colors.foreground", :not_a_color) # => to create errors = {colors: {foreground: :not_a_color}}
     # or, supply a custom message:
     # add_error("name", :too_short, "The name 'blahblahblah' is too short!")
     def add_error(key, kind, message = nil)
       raise ArgumentError.new("Invalid kind") unless kind.is_a?(Symbol)
-      
+
       @errors ||= ErrorHash.new
       cur_errors = @errors
       parts = key.to_s.split(".")
@@ -147,16 +147,16 @@ module Mutations
       end
       @errors
     end
-    
+
     def merge_errors(hash)
       @errors ||= ErrorHash.new
       @errors.merge!(hash)
     end
-    
+
     def inputs
       @filtered_input
     end
-    
+
     def execute
       # Meant to be overridden
     end

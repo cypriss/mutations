@@ -1,14 +1,14 @@
 module Mutations
-  
+
   # Offers a non-localized, english only, non configurable way to get error messages.  This probably isnt good enough for users as-is.
   class DefaultErrorMessageCreator
-    
+
     MESSAGES = Hash.new("is invalid").tap do |h|
       h.merge!(
         # General
         nils: "can't be nil",
         required: "is required",
-      
+
         # Datatypes
         string: "isn't a string",
         integer: "isn't an integer",
@@ -16,26 +16,26 @@ module Mutations
         hash: "isn't a hash",
         array: "isn't an array",
         model: "isn't the right class",
-        
+
         # String
         empty: "can't be blank",
         max_length: "is too long",
         min_length: "is too short",
         matches: "isn't in the right format",
         in: "isn't an option",
-        
+
         # Array
         class: "isn't the right class",
-        
+
         # Integer
         min: "is too small",
         max: "is too big",
-        
+
         # Model
         new_records: "isn't a saved model"
       )
     end
-    
+
     # key: the name of the field, eg, :email. Could be nil if it's an array element
     # error_symbol: the validation symbol, eg, :matches or :required
     # options:
@@ -49,7 +49,7 @@ module Mutations
     end
   end
 
-  
+
   class ErrorAtom
 
     # NOTE: in the future, could also pass in:
@@ -138,7 +138,7 @@ module Mutations
       list
     end
   end
-  
+
   class ErrorArray < Array
     def symbolic
       map {|e| e && e.symbolic }
