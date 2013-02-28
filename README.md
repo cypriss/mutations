@@ -114,7 +114,7 @@ That being said, you can pass multiple hashes to run, and they are merged togeth
 ```ruby
 # A user comments on an article
 class CreateComment < Mutations::Command
-  requried do
+  required do
     model :user
     model :article
     string :comment, max_length: 500
@@ -138,7 +138,7 @@ Here, we pass two hashes to CreateComment. Even if the params[:comment] hash has
 1. Subclass Mutations::Command
 
     ```ruby
-    class YourMutation < Mutatons::Command
+    class YourMutation < Mutations::Command
       # ...
     end
     ```
