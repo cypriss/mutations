@@ -84,19 +84,10 @@ module Mutations
 
     # Instance methods
     def initialize(*args)
-      if args.length == 0
-        @original_hash = {}
-      else
-        @original_hash = args.shift
-        raise ArgumentError.new("All arguments must be hashes") unless @original_hash.is_a?(Hash)
-        @original_hash = @original_hash.with_indifferent_access
+      @original_hash = args.each_with_object({}.with_indifferent_access) do |arg, h|
+        raise ArgumentError.new("All arguments must be hashes") unless arg.is_a?(Hash)
+        h.merge!(arg)
       end
-
-      args.each do |a|
-        raise ArgumentError.new("All arguments must be hashes") unless a.is_a?(Hash)
-        @original_hash.merge!(a)
-      end
-
       @filtered_input, @errors = self.input_filters.filter(@original_hash)
     end
 

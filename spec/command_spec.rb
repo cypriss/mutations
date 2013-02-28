@@ -72,6 +72,10 @@ describe "Command" do
       assert_raises ArgumentError do
         outcome = SimpleCommand.run(1)
       end
+
+      assert_raises ArgumentError do
+        outcome = SimpleCommand.run({name: "John"}, 1)
+      end
     end
 
     it "should accept nothing at all" do
