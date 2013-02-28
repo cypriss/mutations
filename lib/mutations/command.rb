@@ -34,6 +34,7 @@ module Mutations
           end
         end
       end
+      private :create_attr_methods
 
       def required(&block)
         create_attr_methods(:required, &block)
@@ -103,6 +104,12 @@ module Mutations
       Outcome.new(!has_errors?, has_errors? ? nil : r, @errors)
     end
 
+    def execute
+      # Meant to be overridden
+    end
+
+  protected
+
     # add_error("name", :too_short)
     # add_error("colors.foreground", :not_a_color) # => to create errors = {colors: {foreground: :not_a_color}}
     # or, supply a custom message:
@@ -126,10 +133,6 @@ module Mutations
 
     def inputs
       @filtered_input
-    end
-
-    def execute
-      # Meant to be overridden
     end
   end
 end
