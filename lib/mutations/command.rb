@@ -1,14 +1,3 @@
-# IDEA i just had (protected parameters):
-# optional do
-#   boolean :skip_confirmation, protected: true
-# end
-# Given the above, skip_confirmation is only accepted as a parameter if it's passed in a later hash, eg this would make it take:
-# User::ChangeEmail.run!(params, user: current_user, skip_confirmation: true)
-# But this would not:
-# params = {user: current_user, skip_confirmation: true}
-# User::ChangeEmail.run!(params)
-
-
 module Mutations
   class Command
     class << self
