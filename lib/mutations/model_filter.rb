@@ -10,20 +10,26 @@ module Mutations
     def initialize(name, opts = {})
       super(opts)
       @name = name
+    end
+    
+    # Initialize the model class and builder
+    def initialize_constants!
+      @initialize_constants ||= begin
+        class_const = options[:class] || @name.to_s.camelize
+        class_const = class_const.constantize if class_const.is_a?(String)
+        self.options[:class] = class_const
 
+        if options[:builder]
+          options[:builder] = options[:builder].constantize if options[:builder].is_a?(String)
+        end
+        
+        true
+      end
     end
 
     def filter(data)
-
-      # Initialize the model class and builder
-      class_const = options[:class] || @name.to_s.camelize
-      class_const = class_const.constantize if class_const.is_a?(String)
-      self.options[:class] = class_const
-
-      if options[:builder]
-        options[:builder] = options[:builder].constantize if options[:builder].is_a?(String)
-      end
-
+      initialize_constants!
+      
       # Handle nil case
       if data.nil?
         return [nil, nil] if options[:nils]

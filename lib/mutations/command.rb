@@ -11,12 +11,7 @@
 
 module Mutations
   class Command
-
-    ##
-    ##
-    ##
     class << self
-
       def create_attr_methods(meth, &block)
         self.input_filters.send(meth, &block)
         keys = self.input_filters.send("#{meth}_keys")
