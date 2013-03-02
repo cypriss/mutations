@@ -59,6 +59,7 @@ module Mutations
         raise ArgumentError.new("All arguments must be hashes") unless arg.is_a?(Hash)
         h.merge!(arg)
       end
+      
       @filtered_input, @errors = self.input_filters.filter(@original_hash)
     end
 
@@ -88,7 +89,6 @@ module Mutations
       validation_outcome
     end
 
-    # Runs input thru the filter and sets @filtered_input and @errors
     def validation_outcome(result = nil)
       Outcome.new(!has_errors?, has_errors? ? nil : result, @errors, @filtered_input)
     end
