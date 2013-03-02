@@ -27,21 +27,24 @@ describe "Mutations::ModelFilter" do
   # it "disallows different types of models" do
   # end
 
-  it "raises an exception during initialization if constantization fails" do
+  it "raises an exception during filtering if constantization fails" do
+    f = Mutations::ModelFilter.new(:complex_model)
     assert_raises NameError do
-      Mutations::ModelFilter.new(:complex_model)
+      f.filter(nil)
     end
   end
 
-  it "raises an exception during initialization if constantization of class fails" do
+  it "raises an exception during filtering if constantization of class fails" do
+    f = Mutations::ModelFilter.new(:simple_model, class: "ComplexModel")
     assert_raises NameError do
-      Mutations::ModelFilter.new(:simple_model, class: "ComplexModel")
+      f.filter(nil)
     end
   end
 
-  it "raises an exception during initialization if constantization of builder fails" do
+  it "raises an exception during filtering if constantization of builder fails" do
+    f = Mutations::ModelFilter.new(:simple_model, builder: "ComplexModel")
     assert_raises NameError do
-      Mutations::ModelFilter.new(:simple_model, builder: "ComplexModel")
+      f.filter(nil)
     end
   end
 
