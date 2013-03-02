@@ -9,15 +9,21 @@ module Mutations
       max_length: nil,      # Can be a number like 10, meaning that at most 10 codepoints are permitted
       matches: nil,         # Can be a regexp
       in: nil,              # Can be an array like %w(red blue green)
-      discard_empty: false  # If the param is optional, discard_empty: true drops empty fields.
+      discard_empty: false, # If the param is optional, discard_empty: true drops empty fields.
+      #default: "some default string"
     }
 
     def filter(data)
 
       # Handle nil case
       if data.nil?
-        return [nil, nil] if options[:nils]
-        return [nil, :nils]
+        if has_default?
+          return [default, nil]
+        elsif options[:nils]
+          return [nil, nil]
+        else
+          return [nil, :nils]
+        end
       end
 
       # At this point, data is not nil. If it's not a string, convert it to a string for some standard classes

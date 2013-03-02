@@ -135,4 +135,11 @@ describe "Mutations::StringFilter" do
     assert_equal "red", filtered
     assert_equal nil, errors
   end
+
+  it "uses the default value when nil" do
+    sf = Mutations::StringFilter.new(default: "red")
+    filtered, errors = sf.filter(nil)
+    assert_equal "red", filtered
+    assert_equal nil, errors
+  end
 end
