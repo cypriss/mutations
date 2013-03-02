@@ -11,6 +11,11 @@ module Mutations
       super(opts)
       @name = name
 
+    end
+
+    def filter(data)
+
+      # Initialize the model class and builder
       class_const = options[:class] || @name.to_s.camelize
       class_const = class_const.constantize if class_const.is_a?(String)
       self.options[:class] = class_const
@@ -18,9 +23,6 @@ module Mutations
       if options[:builder]
         options[:builder] = options[:builder].constantize if options[:builder].is_a?(String)
       end
-    end
-
-    def filter(data)
 
       # Handle nil case
       if data.nil?
