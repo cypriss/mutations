@@ -31,13 +31,11 @@ module Mutations
     end
 
     def required(&block)
-      # TODO: raise if nesting is wrong
       @current_inputs = @required_inputs
       instance_eval &block
     end
 
     def optional(&block)
-      # TODO: raise if nesting is wrong
       @current_inputs = @optional_inputs
       instance_eval &block
     end
