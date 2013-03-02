@@ -90,7 +90,7 @@ module Mutations
 
     # Runs input thru the filter and sets @filtered_input and @errors
     def validation_outcome(result = nil)
-      Outcome.new(!has_errors?, has_errors? ? nil : result, @errors)
+      Outcome.new(!has_errors?, has_errors? ? nil : result, @errors, @filtered_input)
     end
 
   protected

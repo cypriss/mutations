@@ -1,7 +1,7 @@
 module Mutations
   class Outcome
-    def initialize(is_success, result, errors)
-      @success, @result, @errors = is_success, result, errors
+    def initialize(is_success, result, errors, inputs)
+      @success, @result, @errors, @inputs = is_success, result, errors, inputs
     end
 
     def success?
@@ -14,6 +14,10 @@ module Mutations
 
     def errors
       @errors
+    end
+    
+    def inputs
+      @inputs
     end
   end
 end
