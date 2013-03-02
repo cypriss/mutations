@@ -83,22 +83,20 @@ module Mutations
     end
 
     def has_errors?
-      not(@errors.nil?)
+      !@errors.nil?
     end
 
     def run
       return validation_outcome if has_errors?
-
-      # IDEA/TODO: run validate block
-
       validation_outcome(execute)
     end
 
     def run!
-      if (m = run).success?
-        m.result
+      outcome = run
+      if outcome.success?
+        outcome.result
       else
-        raise ValidationException.new(m.errors)
+        raise ValidationException.new(outcome.errors)
       end
     end
 
@@ -107,8 +105,8 @@ module Mutations
     end
 
     # Runs input thru the filter and sets @filtered_input and @errors
-    def validation_outcome(r = nil)
-      Outcome.new(!has_errors?, has_errors? ? nil : r, @errors)
+    def validation_outcome(result = nil)
+      Outcome.new(!has_errors?, has_errors? ? nil : result, @errors)
     end
 
   protected
@@ -124,11 +122,12 @@ module Mutations
     def add_error(key, kind, message = nil)
       raise ArgumentError.new("Invalid kind") unless kind.is_a?(Symbol)
 
-      (@errors ||= ErrorHash.new).tap do |errs|
+      @errors ||= ErrorHash.new
+      @errors.tap do |errs|
         *path, last = key.to_s.split(".")
-        inner = path.inject(errs){|cut_errors,part|
+        inner = path.inject(errs) do |cut_errors,part|
           cur_errors[part.to_sym] ||= ErrorHash.new
-        }
+        end
         inner[last] = ErrorAtom.new(key, kind, message: message)
       end
     end
