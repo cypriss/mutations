@@ -124,5 +124,11 @@ module Mutations
     def inputs
       @filtered_input
     end
+
+    # Be careful accessing this, as it gives access to the original data which
+    # was passed into initialize, before validation and filtering.
+    def raw_inputs
+      @original_hash
+    end
   end
 end
