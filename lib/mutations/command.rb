@@ -6,15 +6,15 @@ module Mutations
         keys = self.input_filters.send("#{meth}_keys")
         keys.each do |key|
           define_method(key) do
-            @filtered_input[key]
+            @inputs[key]
           end
 
           define_method("#{key}_present?") do
-            @filtered_input.has_key?(key)
+            @inputs.has_key?(key)
           end
 
           define_method("#{key}=") do |v|
-            @filtered_input[key] = v
+            @inputs[key] = v
           end
         end
       end
@@ -55,12 +55,12 @@ module Mutations
 
     # Instance methods
     def initialize(*args)
-      @original_hash = args.each_with_object({}.with_indifferent_access) do |arg, h|
+      @raw_inputs = args.each_with_object({}.with_indifferent_access) do |arg, h|
         raise ArgumentError.new("All arguments must be hashes") unless arg.is_a?(Hash)
         h.merge!(arg)
       end
       
-      @filtered_input, @errors = self.input_filters.filter(@original_hash)
+      @inputs, @errors = self.input_filters.filter(@raw_inputs)
     end
 
     def input_filters
@@ -90,10 +90,12 @@ module Mutations
     end
 
     def validation_outcome(result = nil)
-      Outcome.new(!has_errors?, has_errors? ? nil : result, @errors, @filtered_input)
+      Outcome.new(!has_errors?, has_errors? ? nil : result, @errors, @inputs)
     end
 
   protected
+
+    attr_reader :inputs, :raw_inputs
 
     def execute
       # Meant to be overridden
@@ -121,14 +123,5 @@ module Mutations
       @errors.merge!(hash)
     end
 
-    def inputs
-      @filtered_input
-    end
-
-    # Be careful accessing this, as it gives access to the original data which
-    # was passed into initialize, before validation and filtering.
-    def raw_inputs
-      @original_hash
-    end
   end
 end
