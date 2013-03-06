@@ -10,7 +10,7 @@ describe 'Mutations - inheritance' do
     end
 
     def execute
-      @filtered_input
+      inputs
     end
   end
 
