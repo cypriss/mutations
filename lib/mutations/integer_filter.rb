@@ -3,7 +3,8 @@ module Mutations
     @default_options = {
       nils: false,       # true allows an explicit nil to be valid. Overrides any other options
       min: nil,          # lowest value, inclusive
-      max: nil           # highest value, inclusive
+      max: nil,          # highest value, inclusive
+      in: nil            # Can be an array like %w(3 4 5)
     }
 
     def filter(data)
@@ -25,6 +26,9 @@ module Mutations
 
       return [data, :min] if options[:min] && data < options[:min]
       return [data, :max] if options[:max] && data > options[:max]
+
+      # Ensure it matches `in`
+      return [data, :in] if options[:in] && !options[:in].include?(data)
 
       # We win, it's valid!
       [data, nil]
