@@ -110,11 +110,13 @@ module Mutations
 
       @errors ||= ErrorHash.new
       @errors.tap do |errs|
-        *path, last = key.to_s.split(".")
+        tokens = key.to_s.split(".")
+        path = tokens[0...-1]
+        last = tokens[-1]
         inner = path.inject(errs) do |cut_errors,part|
           cur_errors[part.to_sym] ||= ErrorHash.new
         end
-        inner[last] = ErrorAtom.new(key, kind, message: message)
+        inner[last] = ErrorAtom.new(key, kind, :message => message)
       end
     end
 
