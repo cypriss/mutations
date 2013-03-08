@@ -6,7 +6,7 @@ describe "Mutations::HashFilter" do
     hf = Mutations::HashFilter.new do
       string :foo
     end
-    filtered, errors = hf.filter(foo: "bar")
+    filtered, errors = hf.filter(:foo => "bar")
     assert_equal ({"foo" => "bar"}), filtered
     assert_equal nil, errors
   end
@@ -23,7 +23,7 @@ describe "Mutations::HashFilter" do
     hf = Mutations::HashFilter.new do
       string :*
     end
-    filtered, errors = hf.filter(foo: "bar", baz: "ban")
+    filtered, errors = hf.filter(:foo => "bar", :baz => "ban")
     assert_equal ({"foo" => "bar", "baz" => "ban"}), filtered
     assert_equal nil, errors
   end
@@ -32,7 +32,7 @@ describe "Mutations::HashFilter" do
     hf = Mutations::HashFilter.new do
       float :foo
     end
-    filtered, errors = hf.filter(foo: 3.14)
+    filtered, errors = hf.filter(:foo => 3.14)
     assert_equal ({"foo" => 3.14}), filtered
     assert_equal nil, errors
   end
@@ -41,7 +41,7 @@ describe "Mutations::HashFilter" do
     hf = Mutations::HashFilter.new do
       string :*
     end
-    filtered, errors = hf.filter(foo: [])
+    filtered, errors = hf.filter(:foo => [])
     assert_equal ({"foo" => :string}), errors.symbolic
   end
 
@@ -50,7 +50,7 @@ describe "Mutations::HashFilter" do
       string :foo
       integer :*
     end
-    filtered, errors = hf.filter(foo: "bar", baz: "4")
+    filtered, errors = hf.filter(:foo => "bar", :baz => "4")
     assert_equal ({"foo" => "bar", "baz" => 4}), filtered
     assert_equal nil, errors
   end
@@ -60,7 +60,7 @@ describe "Mutations::HashFilter" do
       string :foo
       integer :*
     end
-    filtered, errors = hf.filter(foo: "bar", baz: "poopin")
+    filtered, errors = hf.filter(:foo => "bar", :baz => "poopin")
     assert_equal ({"baz" => :integer}), errors.symbolic
   end
 
@@ -75,7 +75,7 @@ describe "Mutations::HashFilter" do
         end
       end
 
-      filtered, errors = hf.filter(foo: "bar")
+      filtered, errors = hf.filter(:foo => "bar")
       assert_equal ({"foo" => "bar"}), filtered
       assert_equal nil, errors
     end
@@ -90,7 +90,7 @@ describe "Mutations::HashFilter" do
         end
       end
 
-      filtered, errors = hf.filter(foo: "bar", bar: nil)
+      filtered, errors = hf.filter(:foo => "bar", :bar => nil)
       assert_equal ({"foo" => "bar"}), filtered
       assert_equal nil, errors
     end
@@ -101,11 +101,11 @@ describe "Mutations::HashFilter" do
           string :foo
         end
         optional do
-          string :bar, nils: true
+          string :bar, :nils => true
         end
       end
 
-      filtered, errors = hf.filter(foo: "bar", bar: nil)
+      filtered, errors = hf.filter(:foo => "bar", :bar => nil)
       assert_equal ({"foo" => "bar", "bar" => nil}), filtered
       assert_equal nil, errors
     end
@@ -118,11 +118,11 @@ describe "Mutations::HashFilter" do
           string :foo
         end
         optional do
-          string :bar, discard_empty: true
+          string :bar, :discard_empty => true
         end
       end
 
-      filtered, errors = hf.filter(foo: "bar", bar: "")
+      filtered, errors = hf.filter(:foo => "bar", :bar => "")
       assert_equal ({"foo" => "bar"}), filtered
       assert_equal nil, errors
     end
@@ -133,11 +133,11 @@ describe "Mutations::HashFilter" do
           string :foo
         end
         optional do
-          string :bar, discard_empty: false
+          string :bar, :discard_empty => false
         end
       end
 
-      filtered, errors = hf.filter(foo: "bar", bar: "")
+      filtered, errors = hf.filter(:foo => "bar", :bar => "")
       assert_equal ({"bar" => :empty}), errors.symbolic
     end
 
@@ -147,11 +147,11 @@ describe "Mutations::HashFilter" do
           string :foo
         end
         optional do
-          string :*, discard_empty: true
+          string :*, :discard_empty => true
         end
       end
 
-      filtered, errors = hf.filter(foo: "bar", bar: "")
+      filtered, errors = hf.filter(:foo => "bar", :bar => "")
       assert_equal ({"foo" => "bar"}), filtered
       assert_equal nil, errors
     end
