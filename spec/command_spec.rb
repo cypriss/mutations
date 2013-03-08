@@ -1,3 +1,5 @@
+require 'backports/1.9.1/kernel/require_relative'
+require 'backports/1.9.1/enumerable/each_with_object'
 require_relative 'spec_helper'
 require 'simple_command'
 

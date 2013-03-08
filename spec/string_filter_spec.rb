@@ -1,3 +1,4 @@
+require 'backports/1.9.1/kernel/require_relative'
 require_relative 'spec_helper'
 
 describe "Mutations::StringFilter" do
