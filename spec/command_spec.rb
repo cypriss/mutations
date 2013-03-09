@@ -201,4 +201,22 @@ describe "Command" do
     end
   end
 
+  describe "RawInputsCommand" do
+    class RawInputsCommand < Mutations::Command
+
+      required do
+        string :name
+      end
+
+      def execute
+        return raw_inputs
+      end
+    end
+
+    it "should return the raw input data" do
+      input = { "name" => "Hello World", "other" => "Foo Bar Baz" }
+      assert_equal input, RawInputsCommand.run!(input)
+    end
+  end
+
 end
