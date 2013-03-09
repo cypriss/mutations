@@ -34,6 +34,10 @@ module Mutations
     def boolean(options = {})
       @element_filter = BooleanFilter.new(options)
     end
+    
+    def duck(options = {})
+      @element_filter = DuckFilter.new(options)
+    end
 
     def hash(options = {}, &block)
       @element_filter = HashFilter.new(options, &block)

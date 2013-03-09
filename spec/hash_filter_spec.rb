@@ -36,6 +36,15 @@ describe "Mutations::HashFilter" do
     assert_equal ({"foo" => 3.14}), filtered
     assert_equal nil, errors
   end
+  
+  it "allow ducks in hashes" do
+    hf = Mutations::HashFilter.new do
+      duck :foo, methods: [:length]
+    end
+    filtered, errors = hf.filter(foo: "123")
+    assert_equal ({"foo" => "123"}), filtered
+    assert_equal nil, errors
+  end
 
   it "doesn't allow wildcards in hashes" do
     hf = Mutations::HashFilter.new do

@@ -64,12 +64,15 @@ module Mutations
     def boolean(name, options = {})
       @current_inputs[name.to_sym] = BooleanFilter.new(options)
     end
+    
+    def duck(name, options = {})
+      @current_inputs[name.to_sym] = DuckFilter.new(options)
+    end
 
     def hash(name, options = {}, &block)
       @current_inputs[name.to_sym] = HashFilter.new(options, &block)
     end
 
-    # Advanced types
     def model(name, options = {})
       name_sym = name.to_sym
       @current_inputs[name_sym] = ModelFilter.new(name_sym, options)
