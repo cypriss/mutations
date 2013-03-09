@@ -73,4 +73,18 @@ describe "Mutations::IntegerFilter" do
     assert_equal nil, errors
   end
 
+  it "considers not matching numbers to be invalid" do
+    f = Mutations::IntegerFilter.new(in: [3, 4, 5])
+    filtered, errors = f.filter(6)
+    assert_equal 6, filtered
+    assert_equal :in, errors
+  end
+
+  it "considers matching numbers to be valid" do
+    f = Mutations::IntegerFilter.new(in: [3, 4, 5])
+    filtered, errors = f.filter(3)
+    assert_equal 3, filtered
+    assert_nil errors
+  end
+
 end
