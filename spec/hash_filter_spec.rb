@@ -1,4 +1,5 @@
 require_relative 'spec_helper'
+require 'stringio'
 
 describe "Mutations::HashFilter" do
 
@@ -28,7 +29,7 @@ describe "Mutations::HashFilter" do
     assert_equal nil, errors
   end
 
-  it "allow floats in hashes" do
+  it "allows floats in hashes" do
     hf = Mutations::HashFilter.new do
       float :foo
     end
@@ -37,12 +38,22 @@ describe "Mutations::HashFilter" do
     assert_equal nil, errors
   end
   
-  it "allow ducks in hashes" do
+  it "allows ducks in hashes" do
     hf = Mutations::HashFilter.new do
       duck :foo, methods: [:length]
     end
     filtered, errors = hf.filter(foo: "123")
     assert_equal ({"foo" => "123"}), filtered
+    assert_equal nil, errors
+  end
+  
+  it "allows files in hashes" do
+    sio = StringIO.new("bob")
+    hf = Mutations::HashFilter.new do
+      file :foo
+    end
+    filtered, errors = hf.filter(foo: sio)
+    assert_equal ({"foo" => sio}), filtered
     assert_equal nil, errors
   end
 

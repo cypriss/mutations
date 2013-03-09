@@ -38,6 +38,10 @@ module Mutations
     def duck(options = {})
       @element_filter = DuckFilter.new(options)
     end
+    
+    def file(options = {})
+      @element_filter = FileFilter.new(options)
+    end
 
     def hash(options = {}, &block)
       @element_filter = HashFilter.new(options, &block)
@@ -91,7 +95,6 @@ module Mutations
 
     # Returns [filtered, errors]
     def filter_element(data)
-
       if @element_filter
         data, el_errors = @element_filter.filter(data)
         return [data, el_errors] if el_errors

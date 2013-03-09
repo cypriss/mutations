@@ -68,6 +68,10 @@ module Mutations
     def duck(name, options = {})
       @current_inputs[name.to_sym] = DuckFilter.new(options)
     end
+    
+    def file(name, options = {})
+      @current_inputs[name.to_sym] = FileFilter.new(options)
+    end
 
     def hash(name, options = {}, &block)
       @current_inputs[name.to_sym] = HashFilter.new(options, &block)

@@ -1,4 +1,5 @@
 require_relative 'spec_helper'
+require 'stringio'
 
 describe "Mutations::ArrayFilter" do
 
@@ -98,6 +99,15 @@ describe "Mutations::ArrayFilter" do
     filtered, errors = f.filter(["hi", [1], true])
     assert_equal ["hi", [1], true], filtered
     assert_equal [nil, nil, :duck], errors.symbolic
+  end
+  
+  it "lets you pass files in arrays" do
+    sio = StringIO.new("bob")
+    f = Mutations::ArrayFilter.new(:arr) { file }
+
+    filtered, errors = f.filter([sio, "bob"])
+    assert_equal [sio, "bob"], filtered
+    assert_equal [nil, :file], errors.symbolic
   end
 
   it "lets you pass booleans in arrays" do
