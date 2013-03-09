@@ -37,6 +37,15 @@ describe "Mutations::HashFilter" do
     assert_equal nil, errors
   end
 
+  it "allow dates in hashes" do
+    hf = Mutations::HashFilter.new do
+      date :foo
+    end
+    filtered, errors = hf.filter(foo: Date.today)
+    assert_equal ({"foo" => Date.today}), filtered
+    assert_equal nil, errors
+  end
+
   it "doesn't allow wildcards in hashes" do
     hf = Mutations::HashFilter.new do
       string :*

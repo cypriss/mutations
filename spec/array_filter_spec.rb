@@ -11,7 +11,7 @@ describe "Mutations::ArrayFilter" do
 
   it "considers non-arrays to be invalid" do
     f = Mutations::ArrayFilter.new(:arr)
-    ['hi', true, 1, {a: "1"}, Object.new].each do |thing|
+    ['hi', true, 1, {a: "1"}, Object.new, Date.today].each do |thing|
       filtered, errors = f.filter(thing)
       assert_equal :array, errors
     end
@@ -97,6 +97,14 @@ describe "Mutations::ArrayFilter" do
 
     filtered, errors = f.filter([true, false, "1"])
     assert_equal [true, false, true], filtered
+    assert_equal nil, errors
+  end
+
+  it "lets you pass dates in arrays" do
+    f = Mutations::ArrayFilter.new(:arr) { date }
+
+    filtered, errors = f.filter([Date.today, Date.today - 7])
+    assert_equal [Date.today, Date.today - 7], filtered
     assert_equal nil, errors
   end
 

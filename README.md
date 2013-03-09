@@ -152,6 +152,7 @@ Here, we pass two hashes to CreateComment. Even if the params[:comment] hash has
       integer :age
       boolean :is_special, default: true
       model :account
+      date :start_date
     end
     ```
 
