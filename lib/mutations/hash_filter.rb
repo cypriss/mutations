@@ -69,6 +69,10 @@ module Mutations
       @current_inputs[name.to_sym] = HashFilter.new(options, &block)
     end
 
+    def date(name, options = {}, &block)
+      @current_inputs[name.to_sym] = DateFilter.new(options, &block)
+    end
+
     # Advanced types
     def model(name, options = {})
       name_sym = name.to_sym

@@ -39,6 +39,10 @@ module Mutations
       @element_filter = HashFilter.new(options, &block)
     end
 
+    def date(options = {}, &block)
+      @element_filter = DateFilter.new(options, &block)
+    end
+
     # Advanced types
     def model(name, options = {})
       @element_filter = ModelFilter.new(name.to_sym, options)
