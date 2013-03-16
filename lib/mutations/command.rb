@@ -2,9 +2,15 @@ module Mutations
   class Command
     class << self
       def create_attr_methods(meth, &block)
+        existing_keys = self.input_filters.send("#{meth}_keys")
+        disallowed_keys = instance_methods + methods - existing_keys
+
         self.input_filters.send(meth, &block)
+
         keys = self.input_filters.send("#{meth}_keys")
         keys.each do |key|
+          raise ArgumentError.new("#{key}, is a reserved name.") if disallowed_keys.include?(key) 
+
           define_method(key) do
             @inputs[key]
           end

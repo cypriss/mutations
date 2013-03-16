@@ -5,63 +5,63 @@ describe "Command" do
 
   describe "SimpleCommand" do
     it "should allow valid in put in" do
-      outcome = SimpleCommand.run(name: "John", email: "john@gmail.com", amount: 5)
+      outcome = SimpleCommand.run(full_name: "John", email: "john@gmail.com", amount: 5)
 
       assert outcome.success?
-      assert_equal ({name: "John", email: "john@gmail.com", amount: 5}).stringify_keys, outcome.result
+      assert_equal ({full_name: "John", email: "john@gmail.com", amount: 5}).stringify_keys, outcome.result
       assert_equal nil, outcome.errors
     end
 
     it "should filter out spurious params" do
-      outcome = SimpleCommand.run(name: "John", email: "john@gmail.com", amount: 5, buggers: true)
+      outcome = SimpleCommand.run(full_name: "John", email: "john@gmail.com", amount: 5, buggers: true)
 
       assert outcome.success?
-      assert_equal ({name: "John", email: "john@gmail.com", amount: 5}).stringify_keys, outcome.result
+      assert_equal ({full_name: "John", email: "john@gmail.com", amount: 5}).stringify_keys, outcome.result
       assert_equal nil, outcome.errors
     end
 
     it "should discover errors in inputs" do
-      outcome = SimpleCommand.run(name: "JohnTooLong", email: "john@gmail.com")
+      outcome = SimpleCommand.run(full_name: "JohnTooLong", email: "john@gmail.com")
 
       assert !outcome.success?
-      assert_equal :max_length, outcome.errors.symbolic[:name]
+      assert_equal :max_length, outcome.errors.symbolic[:full_name]
     end
 
     it "shouldn't throw an exception with run!" do
-      result = SimpleCommand.run!(name: "John", email: "john@gmail.com", amount: 5)
-      assert_equal ({name: "John", email: "john@gmail.com", amount: 5}).stringify_keys, result
+      result = SimpleCommand.run!(full_name: "John", email: "john@gmail.com", amount: 5)
+      assert_equal ({full_name: "John", email: "john@gmail.com", amount: 5}).stringify_keys, result
     end
 
     it "should throw an exception with run!" do
       assert_raises Mutations::ValidationException do
-        result = SimpleCommand.run!(name: "John", email: "john@gmail.com", amount: "bob")
+        result = SimpleCommand.run!(full_name: "John", email: "john@gmail.com", amount: "bob")
       end
     end
 
     it "should do standalone validation" do
-      outcome = SimpleCommand.validate(name: "JohnLong", email: "john@gmail.com")
+      outcome = SimpleCommand.validate(full_name: "JohnLong", email: "john@gmail.com")
       assert outcome.success?
       assert_nil outcome.result
       assert_nil outcome.errors
 
-      outcome = SimpleCommand.validate(name: "JohnTooLong", email: "john@gmail.com")
+      outcome = SimpleCommand.validate(full_name: "JohnTooLong", email: "john@gmail.com")
       assert !outcome.success?
       assert_nil outcome.result
-      assert_equal :max_length, outcome.errors.symbolic[:name]
+      assert_equal :max_length, outcome.errors.symbolic[:full_name]
     end
 
     it "should merge multiple hashes" do
-      outcome = SimpleCommand.run({name: "John", email: "john@gmail.com"}, {email: "bob@jones.com", amount: 5})
+      outcome = SimpleCommand.run({full_name: "John", email: "john@gmail.com"}, {email: "bob@jones.com", amount: 5})
 
       assert outcome.success?
-      assert_equal ({name: "John", email: "bob@jones.com", amount: 5}).stringify_keys, outcome.result
+      assert_equal ({full_name: "John", email: "bob@jones.com", amount: 5}).stringify_keys, outcome.result
     end
 
     it "should merge hashes indifferently" do
-      outcome = SimpleCommand.run({name: "John", email: "john@gmail.com"}, {"email" => "bob@jones.com", "amount" => 5})
+      outcome = SimpleCommand.run({full_name: "John", email: "john@gmail.com"}, {"email" => "bob@jones.com", "amount" => 5})
 
       assert outcome.success?
-      assert_equal ({name: "John", email: "bob@jones.com", amount: 5}).stringify_keys, outcome.result
+      assert_equal ({full_name: "John", email: "bob@jones.com", amount: 5}).stringify_keys, outcome.result
     end
 
     it "shouldn't accept non-hashes" do
@@ -74,7 +74,7 @@ describe "Command" do
       end
 
       assert_raises ArgumentError do
-        outcome = SimpleCommand.run({name: "John"}, 1)
+        outcome = SimpleCommand.run({full_name: "John"}, 1)
       end
     end
 
@@ -83,50 +83,50 @@ describe "Command" do
     end
     
     it "should return the filtered inputs in the outcome" do
-      outcome = SimpleCommand.run(name: " John ", email: "john@gmail.com", amount: "5")
-      assert_equal ({name: "John", email: "john@gmail.com", amount: 5}).stringify_keys, outcome.inputs
+      outcome = SimpleCommand.run(full_name: " John ", email: "john@gmail.com", amount: "5")
+      assert_equal ({full_name: "John", email: "john@gmail.com", amount: 5}).stringify_keys, outcome.inputs
     end
   end
 
   describe "EigenCommand" do
     class EigenCommand < Mutations::Command
 
-      required { string :name }
+      required { string :full_name }
       optional { string :email }
 
       def execute
-        {name: name, email: email}
+        {full_name: full_name, email: email}
       end
     end
 
     it "should define getter methods on params" do
-      mutation = EigenCommand.run(name: "John", email: "john@gmail.com")
-      assert_equal ({name: "John", email: "john@gmail.com"}), mutation.result
+      mutation = EigenCommand.run(full_name: "John", email: "john@gmail.com")
+      assert_equal ({full_name: "John", email: "john@gmail.com"}), mutation.result
     end
   end
 
   describe "MutatatedCommand" do
     class MutatatedCommand < Mutations::Command
 
-      required { string :name }
+      required { string :full_name }
       optional { string :email }
 
       def execute
-        self.name, self.email = "bob", "bob@jones.com"
-        {name: inputs[:name], email: inputs[:email]}
+        self.full_name, self.email = "bob", "bob@jones.com"
+        {full_name: inputs[:full_name], email: inputs[:email]}
       end
     end
 
     it "should define setter methods on params" do
-      mutation = MutatatedCommand.run(name: "John", email: "john@gmail.com")
-      assert_equal ({name: "bob", email: "bob@jones.com"}), mutation.result
+      mutation = MutatatedCommand.run(full_name: "John", email: "john@gmail.com")
+      assert_equal ({full_name: "bob", email: "bob@jones.com"}), mutation.result
     end
   end
 
   describe "ErrorfulCommand" do
     class ErrorfulCommand < Mutations::Command
 
-      required { string :name }
+      required { string :full_name }
       optional { string :email }
 
       def execute
@@ -137,7 +137,7 @@ describe "Command" do
     end
 
     it "should let you add errors" do
-      outcome = ErrorfulCommand.run(name: "John", email: "john@gmail.com")
+      outcome = ErrorfulCommand.run(full_name: "John", email: "john@gmail.com")
 
       assert !outcome.success?
       assert_nil outcome.result
@@ -148,7 +148,7 @@ describe "Command" do
   describe "MultiErrorCommand" do
     class ErrorfulCommand < Mutations::Command
 
-      required { string :name }
+      required { string :full_name }
       optional { string :email }
 
       def execute
@@ -163,7 +163,7 @@ describe "Command" do
     end
 
     it "should let you merge errors" do
-      outcome = ErrorfulCommand.run(name: "John", email: "john@gmail.com")
+      outcome = ErrorfulCommand.run(full_name: "John", email: "john@gmail.com")
 
       assert !outcome.success?
       assert_nil outcome.result
@@ -177,15 +177,15 @@ describe "Command" do
 
       optional do
         string :email
-        string :name
+        string :full_name
       end
 
       def execute
-        if name_present? && email_present?
+        if full_name_present? && email_present?
           1
-        elsif !name_present? && email_present?
+        elsif !full_name_present? && email_present?
           2
-        elsif name_present? && !email_present?
+        elsif full_name_present? && !email_present?
           3
         else
           4
@@ -194,9 +194,9 @@ describe "Command" do
     end
 
     it "should handle *_present? methods" do
-      assert_equal 1, PresentCommand.run!(name: "John", email: "john@gmail.com")
+      assert_equal 1, PresentCommand.run!(full_name: "John", email: "john@gmail.com")
       assert_equal 2, PresentCommand.run!(email: "john@gmail.com")
-      assert_equal 3, PresentCommand.run!(name: "John")
+      assert_equal 3, PresentCommand.run!(full_name: "John")
       assert_equal 4, PresentCommand.run!
     end
   end
@@ -205,7 +205,7 @@ describe "Command" do
     class RawInputsCommand < Mutations::Command
 
       required do
-        string :name
+        string :full_name
       end
 
       def execute
@@ -214,8 +214,28 @@ describe "Command" do
     end
 
     it "should return the raw input data" do
-      input = { "name" => "Hello World", "other" => "Foo Bar Baz" }
+      input = { "full_name" => "Hello World", "other" => "Foo Bar Baz" }
       assert_equal input, RawInputsCommand.run!(input)
+    end
+  end
+
+  describe "ReservedKeywordsCommand" do
+    it "should raise when reserverd names are used" do
+      assert_raises ArgumentError do
+        class ReservedKeywordsCommand < Mutations::Command
+          required do
+            string :execute
+          end
+        end
+      end
+
+      assert_raises ArgumentError do
+        class ReservedKeywordsCommand < Mutations::Command
+          required do
+            integer :run
+          end
+        end
+      end
     end
   end
 
