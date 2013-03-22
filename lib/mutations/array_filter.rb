@@ -31,14 +31,18 @@ module Mutations
       @element_filter = FloatFilter.new(options)
     end
 
+    def money(options = {})
+      @element_filter = MoneyFilter.new(options)
+    end
+
     def boolean(options = {})
       @element_filter = BooleanFilter.new(options)
     end
-    
+
     def duck(options = {})
       @element_filter = DuckFilter.new(options)
     end
-    
+
     def file(options = {})
       @element_filter = FileFilter.new(options)
     end
