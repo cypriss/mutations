@@ -55,7 +55,7 @@ module Mutations
 
     # Instance methods
     def initialize(*args)
-      @raw_inputs = args.each_with_object({}.with_indifferent_access) do |arg, h|
+      @raw_inputs = args.inject({}.with_indifferent_access) do |h, arg|
         raise ArgumentError.new("All arguments must be hashes") unless arg.is_a?(Hash)
         h.merge!(arg)
       end
@@ -110,11 +110,12 @@ module Mutations
 
       @errors ||= ErrorHash.new
       @errors.tap do |errs|
-        *path, last = key.to_s.split(".")
+        path = key.to_s.split(".")
+        last = path.pop
         inner = path.inject(errs) do |cut_errors,part|
           cur_errors[part.to_sym] ||= ErrorHash.new
         end
-        inner[last] = ErrorAtom.new(key, kind, message: message)
+        inner[last] = ErrorAtom.new(key, kind, :message => message)
       end
     end
 

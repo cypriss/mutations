@@ -1,9 +1,9 @@
 module Mutations
   class ArrayFilter < InputFilter
     @default_options = {
-      nils: false,            # true allows an explicit nil to be valid. Overrides any other options
-      class: nil,             # A constant or string indicates that each element of the array needs to be one of these classes
-      arrayize: false         # true will convert "hi" to ["hi"]. "" converts to []
+      :nils => false,            # true allows an explicit nil to be valid. Overrides any other options
+      :class => nil,             # A constant or string indicates that each element of the array needs to be one of these classes
+      :arrayize => false         # true will convert "hi" to ["hi"]. "" converts to []
     }
 
     def initialize(name, opts = {}, &block)
@@ -74,7 +74,7 @@ module Mutations
         found_error = false
         data.each_with_index do |el, i|
           el_filtered, el_error = filter_element(el)
-          el_error = ErrorAtom.new(@name, el_error, index: i) if el_error.is_a?(Symbol)
+          el_error = ErrorAtom.new(@name, el_error, :index => i) if el_error.is_a?(Symbol)
 
           errors << el_error
           found_error = true if el_error

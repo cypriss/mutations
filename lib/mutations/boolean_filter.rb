@@ -1,7 +1,7 @@
 module Mutations
   class BooleanFilter < InputFilter
     @default_options = {
-      nils: false   # true allows an explicit nil to be valid. Overrides any other options
+      :nils => false   # true allows an explicit nil to be valid. Overrides any other options
     }
 
     BOOL_MAP = {"true" => true, "1" => true, "false" => false, "0" => false}
