@@ -59,7 +59,7 @@ module Mutations
         raise ArgumentError.new("All arguments must be hashes") unless arg.is_a?(Hash)
         h.merge!(arg)
       end
-      
+
       @inputs, @errors = self.input_filters.filter(@raw_inputs)
     end
 

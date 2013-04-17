@@ -11,7 +11,7 @@ module Mutations
       super(opts)
       @name = name
     end
-    
+
     # Initialize the model class and builder
     def initialize_constants!
       @initialize_constants ||= begin
@@ -22,14 +22,14 @@ module Mutations
         if options[:builder]
           options[:builder] = options[:builder].constantize if options[:builder].is_a?(String)
         end
-        
+
         true
       end
     end
 
     def filter(data)
       initialize_constants!
-      
+
       # Handle nil case
       if data.nil?
         return [nil, nil] if options[:nils]

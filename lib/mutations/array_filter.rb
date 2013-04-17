@@ -34,11 +34,11 @@ module Mutations
     def boolean(options = {})
       @element_filter = BooleanFilter.new(options)
     end
-    
+
     def duck(options = {})
       @element_filter = DuckFilter.new(options)
     end
-    
+
     def file(options = {})
       @element_filter = FileFilter.new(options)
     end

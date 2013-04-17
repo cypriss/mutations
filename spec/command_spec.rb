@@ -81,7 +81,7 @@ describe "Command" do
     it "should accept nothing at all" do
       SimpleCommand.run # make sure nothing is raised
     end
-    
+
     it "should return the filtered inputs in the outcome" do
       outcome = SimpleCommand.run(:name => " John ", :email => "john@gmail.com", :amount => "5")
       assert_equal ({:name => "John", :email => "john@gmail.com", :amount => 5}).stringify_keys, outcome.inputs
