@@ -64,11 +64,11 @@ module Mutations
     def boolean(name, options = {})
       @current_inputs[name.to_sym] = BooleanFilter.new(options)
     end
-    
+
     def duck(name, options = {})
       @current_inputs[name.to_sym] = DuckFilter.new(options)
     end
-    
+
     def file(name, options = {})
       @current_inputs[name.to_sym] = FileFilter.new(options)
     end

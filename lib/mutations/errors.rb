@@ -49,7 +49,6 @@ module Mutations
     end
   end
 
-
   class ErrorAtom
 
     # NOTE: in the future, could also pass in:

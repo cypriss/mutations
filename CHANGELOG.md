@@ -20,7 +20,7 @@ unreleased
 - Model filters should lazily resolve their classes so that mocks can be used (@edwinv)
 - Filtered inputs should be included in the Outcome
 - Fix typos (@frodsan)
- 
+
 0.5.10 and earlier
 -----------
 
