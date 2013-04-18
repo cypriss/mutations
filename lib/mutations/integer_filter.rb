@@ -10,7 +10,7 @@ module Mutations
     def filter(data)
 
       # Handle nil case
-      if data.nil?
+      if data.nil? or data == ""
         return [nil, nil] if options[:nils]
         return [nil, :nils]
       end
