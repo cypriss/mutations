@@ -3,7 +3,7 @@ require 'stringio'
 require 'tempfile'
 
 describe "Mutations::FileFilter" do
-  
+
   class UploadedStringIO < StringIO
     attr_accessor :content_type, :original_filename
   end
@@ -19,7 +19,7 @@ describe "Mutations::FileFilter" do
       assert_equal nil, errors
     end
   end
-  
+
   it "allows files - stringio class" do
     file = StringIO.new("bob")
     f = Mutations::FileFilter.new
@@ -27,7 +27,7 @@ describe "Mutations::FileFilter" do
     assert_equal file, filtered
     assert_equal nil, errors
   end
-  
+
   it "allows files - tempfile" do
     file = Tempfile.new("bob")
     f = Mutations::FileFilter.new
@@ -41,7 +41,7 @@ describe "Mutations::FileFilter" do
     filtered, errors = f.filter("string")
     assert_equal "string", filtered
     assert_equal :file, errors
-  
+
     filtered, errors = f.filter(12)
     assert_equal 12, filtered
     assert_equal :file, errors
@@ -68,7 +68,7 @@ describe "Mutations::FileFilter" do
     assert_equal file, filtered
     assert_equal nil, errors
   end
-  
+
   it "shouldn't allow big files" do
     file = StringIO.new("bob")
     f = Mutations::FileFilter.new(:size => 2)
@@ -76,7 +76,7 @@ describe "Mutations::FileFilter" do
     assert_equal file, filtered
     assert_equal :size, errors
   end
-  
+
   it "should require extra methods if uploaded file: accept" do
     file = UploadedStringIO.new("bob")
     f = Mutations::FileFilter.new(:upload => true)
@@ -84,7 +84,7 @@ describe "Mutations::FileFilter" do
     assert_equal file, filtered
     assert_equal nil, errors
   end
-  
+
   it "should require extra methods if uploaded file: deny" do
     file = StringIO.new("bob")
     f = Mutations::FileFilter.new(:upload => true)

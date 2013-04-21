@@ -20,9 +20,9 @@ module Mutations
       methods.each do |method|
         return [data, :file] unless data.respond_to?(method)
       end
-      
+
       if options[:size].is_a?(Fixnum)
-        return [data, :size] if data.size > options[:size] 
+        return [data, :size] if data.size > options[:size]
       end
 
       # We win, it's valid!

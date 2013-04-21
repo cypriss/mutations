@@ -15,7 +15,6 @@ describe "Mutations::ModelFilter" do
     end
   end
 
-
   it "allows models" do
     f = Mutations::ModelFilter.new(:simple_model)
     m = SimpleModel.new

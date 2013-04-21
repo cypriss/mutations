@@ -1,6 +1,6 @@
  - Document default behavior discarding of nils for optional params
  - document string.discard_empty
- 
+
  - protected parameters:
      optional do
        boolean :skip_confirmation, protected: true
@@ -10,5 +10,3 @@
      But this would not:
      params = {user: current_user, skip_confirmation: true}
      User::ChangeEmail.run!(params)
-
-

@@ -37,7 +37,7 @@ describe "Mutations::HashFilter" do
     assert_equal ({"foo" => 3.14}), filtered
     assert_equal nil, errors
   end
-  
+
   it "allows ducks in hashes" do
     hf = Mutations::HashFilter.new do
       duck :foo, :methods => [:length]
@@ -46,7 +46,7 @@ describe "Mutations::HashFilter" do
     assert_equal ({"foo" => "123"}), filtered
     assert_equal nil, errors
   end
-  
+
   it "allows files in hashes" do
     sio = StringIO.new("bob")
     hf = Mutations::HashFilter.new do
@@ -176,6 +176,5 @@ describe "Mutations::HashFilter" do
       assert_equal nil, errors
     end
   end
-
 
 end
