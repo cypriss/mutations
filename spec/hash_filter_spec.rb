@@ -47,6 +47,15 @@ describe "Mutations::HashFilter" do
     assert_equal nil, errors
   end
 
+  it "allows dates in hashes" do
+    hf = Mutations::HashFilter.new do
+      date :foo, :format => "%d-%m-%Y"
+    end
+    filtered, errors = hf.filter(:foo => "1-1-2000")
+    assert_equal Date.new(2000, 1, 1), filtered[:foo]
+    assert_equal nil, errors
+  end
+
   it "allows files in hashes" do
     sio = StringIO.new("bob")
     hf = Mutations::HashFilter.new do

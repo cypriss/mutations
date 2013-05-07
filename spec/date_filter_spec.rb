@@ -47,7 +47,6 @@ describe "Mutations::DateFilter" do
     f = Mutations::DateFilter.new(:before => before_date)
     filtered, errors = f.filter(date)
 
-    puts "errors: #{errors}"
     assert_equal nil, filtered
     assert_equal :before, errors
   end
