@@ -101,6 +101,14 @@ describe "Mutations::ArrayFilter" do
     assert_equal [nil, nil, :duck], errors.symbolic
   end
 
+  it "lets you pass dates in arrays" do
+    f = Mutations::ArrayFilter.new(:arr) {date(:format => "%Y-%m-%d")}
+
+    filtered, errors = f.filter(["2000-1-1", Date.new(2000, 1, 1), "2000-20-1"])
+    assert_equal ["2000-1-1", Date.new(2000, 1, 1), "2000-20-1"], filtered
+    assert_equal [nil, nil, :date], errors.symbolic
+  end
+
   it "lets you pass files in arrays" do
     sio = StringIO.new("bob")
     f = Mutations::ArrayFilter.new(:arr) { file }

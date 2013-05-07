@@ -39,6 +39,10 @@ module Mutations
       @element_filter = DuckFilter.new(options)
     end
 
+    def date(options = {})
+      @element_filter = DateFilter.new(options)
+    end
+
     def file(options = {})
       @element_filter = FileFilter.new(options)
     end

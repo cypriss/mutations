@@ -17,6 +17,11 @@ module Mutations
         :array => "isn't an array",
         :model => "isn't the right class",
 
+        # Date
+        :date => "date doesn't exist",
+        :before => "isn't before given date",
+        :after => "isn't after given date",
+
         # String
         :empty => "can't be blank",
         :max_length => "is too long",
