@@ -11,14 +11,18 @@ module Mutations
         return [nil, :nils]
       end
 
-      if not data.is_a?(Date)
-        if options[:format]
-          actual_date = Date.strptime(data, options[:format])
+      begin
+        if not data.is_a?(Date)
+          if options[:format]
+            actual_date = Date.strptime(data, options[:format])
+          else
+            actual_date = Date.parse(data)
+          end
         else
-          actual_date = Date.parse(data)
+          actual_date = data
         end
-      else
-        actual_date = data
+      rescue ArgumentError
+        return [nil, :date]
       end
 
       # Ok, its a valid date, check if it falls within the range

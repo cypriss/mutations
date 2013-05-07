@@ -18,6 +18,7 @@ module Mutations
         :model => "isn't the right class",
 
         # Date
+        :date => "date doesn't exist",
         :before => "isn't before given date",
         :after => "isn't after given date",
 

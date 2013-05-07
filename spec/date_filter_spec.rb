@@ -114,4 +114,13 @@ describe "Mutations::DateFilter" do
     assert_equal nil, filtered
     assert_equal nil, errors
   end
+
+  it "doesn't allow non-existing dates" do
+    date_string = "1, 20, 2013"
+    f = Mutations::DateFilter.new
+    filtered, errors = f.filter(date_string)
+
+    assert_equal nil, filtered
+    assert_equal :date, errors
+  end
 end
