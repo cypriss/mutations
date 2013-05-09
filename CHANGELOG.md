@@ -2,6 +2,7 @@ unreleased
 -----------
 
 - Add ruby 1.8.7 support [#19]
+- Add a date filter: ```date :start_date``` (/via @eliank and @geronimo)
 
 0.5.12
 -----------
