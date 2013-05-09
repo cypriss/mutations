@@ -10,6 +10,22 @@ describe "Mutations::DateFilter" do
     assert_equal date, filtered
     assert_equal nil, errors
   end
+  
+  it "takes a DateTime object" do
+    date = DateTime.new
+    f = Mutations::DateFilter.new
+    filtered, errors = f.filter(date)
+    assert_equal date, filtered
+    assert_equal nil, errors
+  end
+  
+  it "takes a Time object and coverts it to a date" do
+    time = Time.now
+    f = Mutations::DateFilter.new
+    filtered, errors = f.filter(time)
+    assert_equal time.to_date, filtered
+    assert_equal nil, errors
+  end
 
   it "checks if the given date is after a certain date" do
     date = Date.new(2005, 1, 1)

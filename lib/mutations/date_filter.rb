@@ -14,20 +14,24 @@ module Mutations
         return [nil, :nils]
       end
 
-      begin
-        if !data.is_a?(Date)
-          if options[:format]
-            actual_date = Date.strptime(data, options[:format])
+      if data.is_a?(Date) # Date and DateTime
+        actual_date = data
+      elsif data.respond_to?(:to_date)  # Time
+        actual_date = data.to_date
+      elsif data.is_a?(String)
+        begin
+          actual_date = if options[:format]
+            Date.strptime(data, options[:format])
           else
-            actual_date = Date.parse(data)
+            Date.parse(data)
           end
-        else
-          actual_date = data
+        rescue ArgumentError
+          return [nil, :date]
         end
-      rescue ArgumentError
+      else
         return [nil, :date]
       end
-
+      
       # Ok, its a valid date, check if it falls within the range
       if options[:after]
         if actual_date <= options[:after]
