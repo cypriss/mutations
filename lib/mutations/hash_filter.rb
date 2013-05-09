@@ -69,6 +69,10 @@ module Mutations
       @current_inputs[name.to_sym] = DuckFilter.new(options)
     end
 
+    def date(name, options = {})
+      @current_inputs[name.to_sym] = DateFilter.new(options)
+    end
+
     def file(name, options = {})
       @current_inputs[name.to_sym] = FileFilter.new(options)
     end
