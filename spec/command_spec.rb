@@ -24,7 +24,7 @@ describe "Command" do
       outcome = SimpleCommand.run(:name => "JohnTooLong", :email => "john@gmail.com")
 
       assert !outcome.success?
-      assert_equal :max_length, outcome.errors.symbolic[:full_name]
+      assert_equal :max_length, outcome.errors.symbolic[:name]
     end
 
     it "shouldn't throw an exception with run!" do
@@ -47,7 +47,7 @@ describe "Command" do
       outcome = SimpleCommand.validate(:name => "JohnTooLong", :email => "john@gmail.com")
       assert !outcome.success?
       assert_nil outcome.result
-      assert_equal :max_length, outcome.errors.symbolic[:full_name]
+      assert_equal :max_length, outcome.errors.symbolic[:name]
     end
 
     it "should merge multiple hashes" do
@@ -91,11 +91,11 @@ describe "Command" do
   describe "EigenCommand" do
     class EigenCommand < Mutations::Command
 
-      required { string :full_name }
+      required { string :name }
       optional { string :email }
 
       def execute
-        {:name => name, :email => email}
+        {:name => inputs[:name], :email => email}
       end
     end
 
@@ -108,11 +108,11 @@ describe "Command" do
   describe "MutatatedCommand" do
     class MutatatedCommand < Mutations::Command
 
-      required { string :full_name }
+      required { string :name }
       optional { string :email }
 
       def execute
-        self.name, self.email = "bob", "bob@jones.com"
+        inputs[:name], self.email = "bob", "bob@jones.com"
         {:name => inputs[:name], :email => inputs[:email]}
       end
     end
@@ -194,9 +194,9 @@ describe "Command" do
     end
 
     it "should handle *_present? methods" do
-      assert_equal 1, PresentCommand.run!(:name => "John", :email => "john@gmail.com")
+      assert_equal 1, PresentCommand.run!(:full_name => "John", :email => "john@gmail.com")
       assert_equal 2, PresentCommand.run!(:email => "john@gmail.com")
-      assert_equal 3, PresentCommand.run!(:name => "John")
+      assert_equal 3, PresentCommand.run!(:full_name => "John")
       assert_equal 4, PresentCommand.run!
     end
   end
@@ -219,23 +219,32 @@ describe "Command" do
     end
   end
 
-  describe "ReservedKeywordsCommand" do
-    it "should raise when reserverd names are used" do
-      assert_raises ArgumentError do
-        class ReservedKeywordsCommand < Mutations::Command
-          required do
-            string :execute
-          end
-        end
+  describe "Ommit creating convenience functions for reserved variable names" do
+    class ReservedVariableNamesCommand < Mutations::Command
+      required do
+        # Reserved names
+        string :execute
+        integer :run
+
+        # Free name
+        string :email
       end
 
-      assert_raises ArgumentError do
-        class ReservedKeywordsCommand < Mutations::Command
-          required do
-            integer :run
+      def execute
+        if !self.respond_to?("execute_present?") and !self.respond_to?("run_present?")
+          if self.respond_to?("email_present?")
+            if inputs.include?(:execute) and inputs.include?(:run) and inputs.include?(:email)
+              return true
+            end
           end
         end
+
+        return false
       end
+    end
+
+    it "should not generate convenience functions for reserved names" do
+      assert_equal true, ReservedVariableNamesCommand.run!(:execute => "execute", :run => 3, :email => "john@gmail.com")
     end
   end
 

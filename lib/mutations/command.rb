@@ -9,7 +9,7 @@ module Mutations
 
         keys = self.input_filters.send("#{meth}_keys")
         keys.each do |key|
-          raise ArgumentError.new("#{key}, is a reserved name.") if disallowed_keys.include?(key) 
+          next if disallowed_keys.include?(key)
 
           define_method(key) do
             @inputs[key]
