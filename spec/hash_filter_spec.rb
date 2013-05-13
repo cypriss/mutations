@@ -1,4 +1,4 @@
-require_relative 'spec_helper'
+require 'spec_helper'
 require 'stringio'
 
 describe "Mutations::HashFilter" do
@@ -7,7 +7,7 @@ describe "Mutations::HashFilter" do
     hf = Mutations::HashFilter.new do
       string :foo
     end
-    filtered, errors = hf.filter(foo: "bar")
+    filtered, errors = hf.filter(:foo => "bar")
     assert_equal ({"foo" => "bar"}), filtered
     assert_equal nil, errors
   end
@@ -24,7 +24,7 @@ describe "Mutations::HashFilter" do
     hf = Mutations::HashFilter.new do
       string :*
     end
-    filtered, errors = hf.filter(foo: "bar", baz: "ban")
+    filtered, errors = hf.filter(:foo => "bar", :baz => "ban")
     assert_equal ({"foo" => "bar", "baz" => "ban"}), filtered
     assert_equal nil, errors
   end
@@ -33,26 +33,35 @@ describe "Mutations::HashFilter" do
     hf = Mutations::HashFilter.new do
       float :foo
     end
-    filtered, errors = hf.filter(foo: 3.14)
+    filtered, errors = hf.filter(:foo => 3.14)
     assert_equal ({"foo" => 3.14}), filtered
     assert_equal nil, errors
   end
-  
+
   it "allows ducks in hashes" do
     hf = Mutations::HashFilter.new do
-      duck :foo, methods: [:length]
+      duck :foo, :methods => [:length]
     end
-    filtered, errors = hf.filter(foo: "123")
+    filtered, errors = hf.filter(:foo => "123")
     assert_equal ({"foo" => "123"}), filtered
     assert_equal nil, errors
   end
-  
+
+  it "allows dates in hashes" do
+    hf = Mutations::HashFilter.new do
+      date :foo, :format => "%d-%m-%Y"
+    end
+    filtered, errors = hf.filter(:foo => "1-1-2000")
+    assert_equal Date.new(2000, 1, 1), filtered[:foo]
+    assert_equal nil, errors
+  end
+
   it "allows files in hashes" do
     sio = StringIO.new("bob")
     hf = Mutations::HashFilter.new do
       file :foo
     end
-    filtered, errors = hf.filter(foo: sio)
+    filtered, errors = hf.filter(:foo => sio)
     assert_equal ({"foo" => sio}), filtered
     assert_equal nil, errors
   end
@@ -61,7 +70,7 @@ describe "Mutations::HashFilter" do
     hf = Mutations::HashFilter.new do
       string :*
     end
-    filtered, errors = hf.filter(foo: [])
+    filtered, errors = hf.filter(:foo => [])
     assert_equal ({"foo" => :string}), errors.symbolic
   end
 
@@ -70,7 +79,7 @@ describe "Mutations::HashFilter" do
       string :foo
       integer :*
     end
-    filtered, errors = hf.filter(foo: "bar", baz: "4")
+    filtered, errors = hf.filter(:foo => "bar", :baz => "4")
     assert_equal ({"foo" => "bar", "baz" => 4}), filtered
     assert_equal nil, errors
   end
@@ -80,7 +89,7 @@ describe "Mutations::HashFilter" do
       string :foo
       integer :*
     end
-    filtered, errors = hf.filter(foo: "bar", baz: "poopin")
+    filtered, errors = hf.filter(:foo => "bar", :baz => "poopin")
     assert_equal ({"baz" => :integer}), errors.symbolic
   end
 
@@ -95,7 +104,7 @@ describe "Mutations::HashFilter" do
         end
       end
 
-      filtered, errors = hf.filter(foo: "bar")
+      filtered, errors = hf.filter(:foo => "bar")
       assert_equal ({"foo" => "bar"}), filtered
       assert_equal nil, errors
     end
@@ -110,7 +119,7 @@ describe "Mutations::HashFilter" do
         end
       end
 
-      filtered, errors = hf.filter(foo: "bar", bar: nil)
+      filtered, errors = hf.filter(:foo => "bar", :bar => nil)
       assert_equal ({"foo" => "bar"}), filtered
       assert_equal nil, errors
     end
@@ -121,11 +130,11 @@ describe "Mutations::HashFilter" do
           string :foo
         end
         optional do
-          string :bar, nils: true
+          string :bar, :nils => true
         end
       end
 
-      filtered, errors = hf.filter(foo: "bar", bar: nil)
+      filtered, errors = hf.filter(:foo => "bar", :bar => nil)
       assert_equal ({"foo" => "bar", "bar" => nil}), filtered
       assert_equal nil, errors
     end
@@ -138,11 +147,11 @@ describe "Mutations::HashFilter" do
           string :foo
         end
         optional do
-          string :bar, discard_empty: true
+          string :bar, :discard_empty => true
         end
       end
 
-      filtered, errors = hf.filter(foo: "bar", bar: "")
+      filtered, errors = hf.filter(:foo => "bar", :bar => "")
       assert_equal ({"foo" => "bar"}), filtered
       assert_equal nil, errors
     end
@@ -153,11 +162,11 @@ describe "Mutations::HashFilter" do
           string :foo
         end
         optional do
-          string :bar, discard_empty: false
+          string :bar, :discard_empty => false
         end
       end
 
-      filtered, errors = hf.filter(foo: "bar", bar: "")
+      filtered, errors = hf.filter(:foo => "bar", :bar => "")
       assert_equal ({"bar" => :empty}), errors.symbolic
     end
 
@@ -167,15 +176,14 @@ describe "Mutations::HashFilter" do
           string :foo
         end
         optional do
-          string :*, discard_empty: true
+          string :*, :discard_empty => true
         end
       end
 
-      filtered, errors = hf.filter(foo: "bar", bar: "")
+      filtered, errors = hf.filter(:foo => "bar", :bar => "")
       assert_equal ({"foo" => "bar"}), filtered
       assert_equal nil, errors
     end
   end
-
 
 end

@@ -1,4 +1,4 @@
-require_relative 'spec_helper'
+require 'spec_helper'
 
 describe "Mutations::IntegerFilter" do
 
@@ -32,56 +32,56 @@ describe "Mutations::IntegerFilter" do
   end
 
   it "considers nil to be invalid" do
-    f = Mutations::IntegerFilter.new(nils: false)
+    f = Mutations::IntegerFilter.new(:nils => false)
     filtered, errors = f.filter(nil)
     assert_equal nil, filtered
     assert_equal :nils, errors
   end
 
   it "considers nil to be valid" do
-    f = Mutations::IntegerFilter.new(nils: true)
+    f = Mutations::IntegerFilter.new(:nils => true)
     filtered, errors = f.filter(nil)
     assert_equal nil, filtered
     assert_equal nil, errors
   end
 
   it "considers low numbers invalid" do
-    f = Mutations::IntegerFilter.new(min: 10)
+    f = Mutations::IntegerFilter.new(:min => 10)
     filtered, errors = f.filter(3)
     assert_equal 3, filtered
     assert_equal :min, errors
   end
 
   it "considers low numbers valid" do
-    f = Mutations::IntegerFilter.new(min: 10)
+    f = Mutations::IntegerFilter.new(:min => 10)
     filtered, errors = f.filter(31)
     assert_equal 31, filtered
     assert_equal nil, errors
   end
 
   it "considers high numbers invalid" do
-    f = Mutations::IntegerFilter.new(max: 10)
+    f = Mutations::IntegerFilter.new(:max => 10)
     filtered, errors = f.filter(31)
     assert_equal 31, filtered
     assert_equal :max, errors
   end
 
   it "considers high numbers vaild" do
-    f = Mutations::IntegerFilter.new(max: 10)
+    f = Mutations::IntegerFilter.new(:max => 10)
     filtered, errors = f.filter(3)
     assert_equal 3, filtered
     assert_equal nil, errors
   end
 
   it "considers not matching numbers to be invalid" do
-    f = Mutations::IntegerFilter.new(in: [3, 4, 5])
+    f = Mutations::IntegerFilter.new(:in => [3, 4, 5])
     filtered, errors = f.filter(6)
     assert_equal 6, filtered
     assert_equal :in, errors
   end
 
   it "considers matching numbers to be valid" do
-    f = Mutations::IntegerFilter.new(in: [3, 4, 5])
+    f = Mutations::IntegerFilter.new(:in => [3, 4, 5])
     filtered, errors = f.filter(3)
     assert_equal 3, filtered
     assert_nil errors

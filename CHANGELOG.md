@@ -1,3 +1,9 @@
+unreleased
+-----------
+
+- Add ruby 1.8.7 support [#19]
+- Add a date filter: ```date :start_date``` (/via @eliank and @geronimo)
+
 0.5.12
 -----------
 
@@ -15,7 +21,7 @@
 - Model filters should lazily resolve their classes so that mocks can be used (@edwinv)
 - Filtered inputs should be included in the Outcome
 - Fix typos (@frodsan)
- 
+
 0.5.10 and earlier
 -----------
 

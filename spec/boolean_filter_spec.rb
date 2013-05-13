@@ -1,4 +1,4 @@
-require_relative 'spec_helper'
+require 'spec_helper'
 
 describe "Mutations::BooleanFilter" do
 
@@ -15,21 +15,21 @@ describe "Mutations::BooleanFilter" do
 
   it "considers non-booleans to be invalid" do
     f = Mutations::BooleanFilter.new
-    [[true], {a: "1"}, Object.new].each do |thing|
+    [[true], {:a => "1"}, Object.new].each do |thing|
       filtered, errors = f.filter(thing)
       assert_equal :boolean, errors
     end
   end
 
   it "considers nil to be invalid" do
-    f = Mutations::BooleanFilter.new(nils: false)
+    f = Mutations::BooleanFilter.new(:nils => false)
     filtered, errors = f.filter(nil)
     assert_equal nil, filtered
     assert_equal :nils, errors
   end
 
   it "considers nil to be valid" do
-    f = Mutations::BooleanFilter.new(nils: true)
+    f = Mutations::BooleanFilter.new(:nils => true)
     filtered, errors = f.filter(nil)
     assert_equal nil, filtered
     assert_equal nil, errors

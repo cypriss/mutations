@@ -1,4 +1,4 @@
-require_relative 'spec_helper'
+require 'spec_helper'
 
 describe "Mutations::ModelFilter" do
 
@@ -14,7 +14,6 @@ describe "Mutations::ModelFilter" do
       false
     end
   end
-
 
   it "allows models" do
     f = Mutations::ModelFilter.new(:simple_model)
@@ -35,28 +34,28 @@ describe "Mutations::ModelFilter" do
   end
 
   it "raises an exception during filtering if constantization of class fails" do
-    f = Mutations::ModelFilter.new(:simple_model, class: "ComplexModel")
+    f = Mutations::ModelFilter.new(:simple_model, :class => "ComplexModel")
     assert_raises NameError do
       f.filter(nil)
     end
   end
 
   it "raises an exception during filtering if constantization of builder fails" do
-    f = Mutations::ModelFilter.new(:simple_model, builder: "ComplexModel")
+    f = Mutations::ModelFilter.new(:simple_model, :builder => "ComplexModel")
     assert_raises NameError do
       f.filter(nil)
     end
   end
 
   it "considers nil to be invalid" do
-    f = Mutations::ModelFilter.new(:simple_model, nils: false)
+    f = Mutations::ModelFilter.new(:simple_model, :nils => false)
     filtered, errors = f.filter(nil)
     assert_equal nil, filtered
     assert_equal :nils, errors
   end
 
   it "considers nil to be valid" do
-    f = Mutations::ModelFilter.new(:simple_model, nils: true)
+    f = Mutations::ModelFilter.new(:simple_model, :nils => true)
     filtered, errors = f.filter(nil)
     assert_equal nil, filtered
     assert_equal nil, errors

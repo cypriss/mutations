@@ -6,33 +6,38 @@ module Mutations
     MESSAGES = Hash.new("is invalid").tap do |h|
       h.merge!(
         # General
-        nils: "can't be nil",
-        required: "is required",
+        :nils => "can't be nil",
+        :required => "is required",
 
         # Datatypes
-        string: "isn't a string",
-        integer: "isn't an integer",
-        boolean: "isn't a boolean",
-        hash: "isn't a hash",
-        array: "isn't an array",
-        model: "isn't the right class",
+        :string => "isn't a string",
+        :integer => "isn't an integer",
+        :boolean => "isn't a boolean",
+        :hash => "isn't a hash",
+        :array => "isn't an array",
+        :model => "isn't the right class",
+
+        # Date
+        :date => "date doesn't exist",
+        :before => "isn't before given date",
+        :after => "isn't after given date",
 
         # String
-        empty: "can't be blank",
-        max_length: "is too long",
-        min_length: "is too short",
-        matches: "isn't in the right format",
-        in: "isn't an option",
+        :empty => "can't be blank",
+        :max_length => "is too long",
+        :min_length => "is too short",
+        :matches => "isn't in the right format",
+        :in => "isn't an option",
 
         # Array
-        class: "isn't the right class",
+        :class => "isn't the right class",
 
         # Integer
-        min: "is too small",
-        max: "is too big",
+        :min => "is too small",
+        :max => "is too big",
 
         # Model
-        new_records: "isn't a saved model"
+        :new_records => "isn't a saved model"
       )
     end
 
@@ -48,7 +53,6 @@ module Mutations
       end
     end
   end
-
 
   class ErrorAtom
 
@@ -70,7 +74,7 @@ module Mutations
     end
 
     def message
-      @message ||= Mutations.error_message_creator.message(@key, @symbol, index: @index)
+      @message ||= Mutations.error_message_creator.message(@key, @symbol, :index => @index)
     end
 
     def message_list
