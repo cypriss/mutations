@@ -3,6 +3,7 @@ unreleased
 
 - Add ruby 1.8.7 support [#19]
 - Add a date filter: ```date :start_date``` (/via @eliank and @geronimo)
+- ```Mutations.cache_constants = false``` if you want to work in Rails dev mode which redefines constants. [#23]
 
 0.5.12
 -----------
