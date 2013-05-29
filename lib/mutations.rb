@@ -29,5 +29,15 @@ module Mutations
     def error_message_creator=(creator)
       @error_message_creator = creator
     end
+    
+    def cache_constants=(val)
+      @cache_constants = val
+    end
+    
+    def cache_constants?
+      @cache_constants
+    end
   end
 end
+
+Mutations.cache_constants = true
