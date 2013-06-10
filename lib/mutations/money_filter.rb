@@ -4,6 +4,7 @@ module Mutations
   class MoneyFilter < InputFilter
     @default_options = {
       nils: false,       # true allows an explicit nil to be valid. Overrides any other options
+      empty: false,      # true allows the value to be empty
       min: nil,          # lowest value, inclusive
       max: nil           # highest value, inclusive
     }
@@ -22,7 +23,9 @@ module Mutations
           data = BigDecimal.new(data.gsub(',', '.'))
         elsif data.is_a?(Fixnum)
           data = BigDecimal.new(data.to_s)
-        else
+        elsif data == "" and !options[:empty]
+          return [data, :empty]
+        elsif data != ""
           return [data, :money]
         end
       end

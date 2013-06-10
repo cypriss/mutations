@@ -73,6 +73,20 @@ describe "Mutations::MoneyFilter" do
     assert_equal nil, errors
   end
 
+  it "considers empty to be invalid" do
+    f = Mutations::MoneyFilter.new(empty: false)
+    filtered, errors = f.filter("")
+    assert_equal "", filtered
+    assert_equal :empty, errors
+  end
+
+  it "considers empty to be valid" do
+    f = Mutations::MoneyFilter.new(empty: true)
+    filtered, errors = f.filter("")
+    assert_equal "", filtered
+    assert_equal nil, errors
+  end
+
   it "considers low numbers invalid" do
     f = Mutations::MoneyFilter.new(min: 10)
     filtered, errors = f.filter(3)
