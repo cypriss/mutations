@@ -1,6 +1,7 @@
 require 'active_support'
 require 'active_support/core_ext/hash/indifferent_access'
 require 'active_support/core_ext/string/inflections'
+require 'bigdecimal'
 require 'date'
 
 require 'mutations/version'

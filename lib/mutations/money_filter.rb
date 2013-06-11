@@ -1,5 +1,3 @@
-require 'bigdecimal'
-
 module Mutations
   class MoneyFilter < InputFilter
     @default_options = {
