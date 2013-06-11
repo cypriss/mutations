@@ -60,56 +60,56 @@ describe "Mutations::MoneyFilter" do
   end
 
   it "considers nil to be invalid" do
-    f = Mutations::MoneyFilter.new(nils: false)
+    f = Mutations::MoneyFilter.new(:nils => false)
     filtered, errors = f.filter(nil)
     assert_equal nil, filtered
     assert_equal :nils, errors
   end
 
   it "considers nil to be valid" do
-    f = Mutations::MoneyFilter.new(nils: true)
+    f = Mutations::MoneyFilter.new(:nils => true)
     filtered, errors = f.filter(nil)
     assert_equal nil, filtered
     assert_equal nil, errors
   end
 
   it "considers empty to be invalid" do
-    f = Mutations::MoneyFilter.new(empty: false)
+    f = Mutations::MoneyFilter.new(:empty => false)
     filtered, errors = f.filter("")
     assert_equal "", filtered
     assert_equal :empty, errors
   end
 
   it "considers empty to be valid" do
-    f = Mutations::MoneyFilter.new(empty: true)
+    f = Mutations::MoneyFilter.new(:empty => true)
     filtered, errors = f.filter("")
     assert_equal "", filtered
     assert_equal nil, errors
   end
 
   it "considers low numbers invalid" do
-    f = Mutations::MoneyFilter.new(min: 10)
+    f = Mutations::MoneyFilter.new(:min => 10)
     filtered, errors = f.filter(3)
     assert_equal 3, filtered
     assert_equal :min, errors
   end
 
   it "considers low numbers valid" do
-    f = Mutations::MoneyFilter.new(min: 10)
+    f = Mutations::MoneyFilter.new(:min => 10)
     filtered, errors = f.filter(31)
     assert_equal 31, filtered
     assert_equal nil, errors
   end
 
   it "considers high numbers invalid" do
-    f = Mutations::MoneyFilter.new(max: 10)
+    f = Mutations::MoneyFilter.new(:max => 10)
     filtered, errors = f.filter(31)
     assert_equal 31, filtered
     assert_equal :max, errors
   end
 
   it "considers high numbers vaild" do
-    f = Mutations::MoneyFilter.new(max: 10)
+    f = Mutations::MoneyFilter.new(:max => 10)
     filtered, errors = f.filter(3)
     assert_equal 3, filtered
     assert_equal nil, errors
