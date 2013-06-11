@@ -1,10 +1,10 @@
 module Mutations
   class MoneyFilter < InputFilter
     @default_options = {
-      nils: false,       # true allows an explicit nil to be valid. Overrides any other options
-      empty: false,      # true allows the value to be empty
-      min: nil,          # lowest value, inclusive
-      max: nil           # highest value, inclusive
+      :nils => false,       # true allows an explicit nil to be valid. Overrides any other options
+      :empty => false,      # true allows the value to be empty
+      :min => nil,          # lowest value, inclusive
+      :max => nil           # highest value, inclusive
     }
 
     def filter(data)
