@@ -1,5 +1,8 @@
 source 'http://rubygems.org'
 gemspec
 
-gem 'minitest', '~> 4.0'
 gem 'activesupport'
+
+group :test do
+  gem 'minitest', '~> 4.0'
+end

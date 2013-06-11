@@ -1,7 +1,7 @@
 module Mutations
   class HashFilter < InputFilter
     @default_options = {
-      nils: false,            # true allows an explicit nil to be valid. Overrides any other options
+      :nils => false,            # true allows an explicit nil to be valid. Overrides any other options
     }
 
     attr_accessor :optional_inputs
@@ -71,6 +71,10 @@ module Mutations
 
     def duck(name, options = {})
       @current_inputs[name.to_sym] = DuckFilter.new(options)
+    end
+
+    def date(name, options = {})
+      @current_inputs[name.to_sym] = DateFilter.new(options)
     end
 
     def file(name, options = {})

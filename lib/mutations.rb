@@ -1,6 +1,7 @@
 require 'active_support'
 require 'active_support/core_ext/hash/indifferent_access'
 require 'active_support/core_ext/string/inflections'
+require 'date'
 
 require 'mutations/version'
 require 'mutations/exception'
@@ -12,6 +13,7 @@ require 'mutations/float_filter'
 require 'mutations/money_filter'
 require 'mutations/boolean_filter'
 require 'mutations/duck_filter'
+require 'mutations/date_filter'
 require 'mutations/file_filter'
 require 'mutations/model_filter'
 require 'mutations/array_filter'
@@ -28,5 +30,15 @@ module Mutations
     def error_message_creator=(creator)
       @error_message_creator = creator
     end
+    
+    def cache_constants=(val)
+      @cache_constants = val
+    end
+    
+    def cache_constants?
+      @cache_constants
+    end
   end
 end
+
+Mutations.cache_constants = true

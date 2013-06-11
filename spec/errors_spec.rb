@@ -1,4 +1,4 @@
-require_relative 'spec_helper'
+require 'spec_helper'
 
 describe "Mutations - errors" do
 
@@ -23,7 +23,7 @@ describe "Mutations - errors" do
   end
 
   it "returns an ErrorHash as the top level error object, and ErrorAtom's inside" do
-    o = GivesErrors.run(hash1: 1, arr1: "bob")
+    o = GivesErrors.run(:hash1 => 1, :arr1 => "bob")
 
     assert !o.success?
     assert o.errors.is_a?(Mutations::ErrorHash)
@@ -35,7 +35,7 @@ describe "Mutations - errors" do
   end
 
   it "returns an ErrorHash for nested hashes" do
-    o = GivesErrors.run(hash1: {bool1: "poop"})
+    o = GivesErrors.run(:hash1 => {:bool1 => "poop"})
 
     assert !o.success?
     assert o.errors.is_a?(Mutations::ErrorHash)
@@ -45,7 +45,7 @@ describe "Mutations - errors" do
   end
 
   it "returns an ErrorArray for errors in arrays" do
-    o = GivesErrors.run(str1: "a", str2: "opt1", arr1: ["bob", 1, "sally"])
+    o = GivesErrors.run(:str1 => "a", :str2 => "opt1", :arr1 => ["bob", 1, "sally"])
 
     assert !o.success?
     assert o.errors.is_a?(Mutations::ErrorHash)
@@ -62,7 +62,7 @@ describe "Mutations - errors" do
 
   describe "Bunch o errors" do
     before do
-      @outcome = GivesErrors.run(str1: "", str2: "opt9", int1: "zero", hash1: {bool1: "bob"}, arr1: ["bob", 1, "sally"])
+      @outcome = GivesErrors.run(:str1 => "", :str2 => "opt9", :int1 => "zero", :hash1 => {:bool1 => "bob"}, :arr1 => ["bob", 1, "sally"])
     end
 
     it "gives symbolic errors" do
@@ -84,10 +84,9 @@ describe "Mutations - errors" do
     it "can flatten those messages" do
       expected = ["Str1 can't be blank", "Str2 isn't an option", "Int1 isn't an integer", "Bool1 isn't a boolean", "Bool2 is required", "Arr1[0] isn't an integer", "Arr1[2] isn't an integer"]
 
-      assert_equal expected, @outcome.errors.message_list
+      assert_equal expected.size, @outcome.errors.message_list.size
+      expected.each { |e| assert @outcome.errors.message_list.include?(e) }
     end
   end
-
-
 
 end
