@@ -31,6 +31,10 @@ module Mutations
       @element_filter = FloatFilter.new(options)
     end
 
+    def money(options = {})
+      @element_filter = MoneyFilter.new(options)
+    end
+
     def boolean(options = {})
       @element_filter = BooleanFilter.new(options)
     end

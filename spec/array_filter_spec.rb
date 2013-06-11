@@ -93,6 +93,14 @@ describe "Mutations::ArrayFilter" do
     assert_equal [nil, nil, :min, :float], errors.symbolic
   end
 
+  it "lets you pass money in arrays" do
+    f = Mutations::ArrayFilter.new(:money) { money :min => 4.0 }
+
+    filtered, errors = f.filter([5.0,6.0,1.0,"bob"])
+    assert_equal [5.0,6.0,1.0,"bob"], filtered
+    assert_equal [nil, nil, :min, :money], errors.symbolic
+  end
+
   it "lets you pass ducks in arrays" do
     f = Mutations::ArrayFilter.new(:arr) { duck(:methods  => :length) }
 

@@ -61,6 +61,10 @@ module Mutations
       @current_inputs[name.to_sym] = FloatFilter.new(options)
     end
 
+    def money(name, options = {})
+      @current_inputs[name.to_sym] = MoneyFilter.new(options)
+    end
+
     def boolean(name, options = {})
       @current_inputs[name.to_sym] = BooleanFilter.new(options)
     end

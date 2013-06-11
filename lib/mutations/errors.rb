@@ -22,6 +22,9 @@ module Mutations
         :before => "isn't before given date",
         :after => "isn't after given date",
 
+        # Money
+        :money => "isn't money",
+
         # String
         :empty => "can't be blank",
         :max_length => "is too long",

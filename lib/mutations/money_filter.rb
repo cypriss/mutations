@@ -1,11 +1,10 @@
 module Mutations
-  class IntegerFilter < InputFilter
+  class MoneyFilter < InputFilter
     @default_options = {
       :nils => false,       # true allows an explicit nil to be valid. Overrides any other options
       :empty => false,      # true allows the value to be empty
       :min => nil,          # lowest value, inclusive
-      :max => nil,          # highest value, inclusive
-      :in => nil            # Can be an array like %w(3 4 5)
+      :max => nil           # highest value, inclusive
     }
 
     def filter(data)
@@ -16,29 +15,21 @@ module Mutations
         return [nil, :nils]
       end
 
-      # Check if the data is empty
-      if data == ""
-        if options[:empty]
-          return [data, nil]
-        else
+      # Ensure it's the correct data type (Float)
+      if !data.is_a?(Float)
+        if data.is_a?(String) && data =~ /^[-+]?\d*[.,]?\d+/
+          data = BigDecimal.new(data.gsub(',', '.'))
+        elsif data.is_a?(Fixnum)
+          data = BigDecimal.new(data.to_s)
+        elsif data == "" and !options[:empty]
           return [data, :empty]
-        end
-      end
-
-      # Ensure it's the correct data type (Fixnum)
-      if !data.is_a?(Fixnum)
-        if data.is_a?(String) && data =~ /^-?\d/
-          data = data.to_i
-        else
-          return [data, :integer]
+        elsif data != ""
+          return [data, :money]
         end
       end
 
       return [data, :min] if options[:min] && data < options[:min]
       return [data, :max] if options[:max] && data > options[:max]
-
-      # Ensure it matches `in`
-      return [data, :in] if options[:in] && !options[:in].include?(data)
 
       # We win, it's valid!
       [data, nil]
