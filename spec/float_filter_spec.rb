@@ -66,6 +66,20 @@ describe "Mutations::FloatFilter" do
     assert_equal nil, errors
   end
 
+  it "considers empty floats to be invalid" do
+    f = Mutations::FloatFilter.new(:empty => false)
+    filtered, errors = f.filter("")
+    assert_equal "", filtered
+    assert_equal :empty, errors
+  end
+
+  it "considers empty floats to be valid" do
+    f = Mutations::FloatFilter.new(:empty => true)
+    filtered, errors = f.filter("")
+    assert_equal "", filtered
+    assert_equal nil, errors
+  end
+
   it "considers low numbers invalid" do
     f = Mutations::FloatFilter.new(:min => 10)
     filtered, errors = f.filter(3)
