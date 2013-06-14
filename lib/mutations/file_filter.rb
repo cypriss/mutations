@@ -1,5 +1,5 @@
 module Mutations
-  class FileFilter < InputFilter
+  class FileFilter < AdditionalFilter
     @default_options = {
       :nils => false,       # true allows an explicit nil to be valid. Overrides any other options
       :upload => false,     # if true, also checks the file is has original_filename and content_type methods.

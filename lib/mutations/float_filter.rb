@@ -1,5 +1,5 @@
 module Mutations
-  class FloatFilter < InputFilter
+  class FloatFilter < AdditionalFilter
     @default_options = {
       :nils => false,       # true allows an explicit nil to be valid. Overrides any other options
       :min => nil,          # lowest value, inclusive

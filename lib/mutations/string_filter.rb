@@ -1,5 +1,5 @@
 module Mutations
-  class StringFilter < InputFilter
+  class StringFilter < AdditionalFilter
     @default_options = {
       :strip => true,          # true calls data.strip if data is a string
       :strict => false,        # If false, then symbols, numbers, and booleans are converted to a string with to_s. # TODO: TEST
