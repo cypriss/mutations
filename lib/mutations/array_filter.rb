@@ -29,6 +29,10 @@ module Mutations
       @element_filter = HashFilter.new(options, &block)
     end
 
+    def model(name, options = {})
+      @element_filter = ModelFilter.new(name.to_sym, options)
+    end
+
     def array(options = {}, &block)
       @element_filter = ArrayFilter.new(nil, options, &block)
     end

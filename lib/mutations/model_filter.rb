@@ -1,5 +1,5 @@
 module Mutations
-  class ModelFilter < AdditionalFilter
+  class ModelFilter < InputFilter
     @default_options = {
       :nils => false,        # true allows an explicit nil to be valid. Overrides any other options
       :class => nil,         # default is the attribute name.to_s.camelize.constantize.  This overrides it with class or class.constantize

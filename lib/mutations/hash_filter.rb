@@ -58,6 +58,10 @@ module Mutations
       @current_inputs[name.to_sym] = HashFilter.new(options, &block)
     end
 
+    def model(name, options = {})
+      @current_inputs[name.to_sym] = ModelFilter.new(name_sym, options)
+    end
+
     def array(name, options = {}, &block)
       name_sym = name.to_sym
       @current_inputs[name.to_sym] = ArrayFilter.new(name_sym, options, &block)
