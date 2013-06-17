@@ -59,7 +59,7 @@ module Mutations
     end
 
     def model(name, options = {})
-      @current_inputs[name.to_sym] = ModelFilter.new(name_sym, options)
+      @current_inputs[name.to_sym] = ModelFilter.new(name.to_sym, options)
     end
 
     def array(name, options = {}, &block)
