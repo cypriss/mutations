@@ -1,5 +1,12 @@
 module Mutations
   class ArrayFilter < InputFilter
+    def self.register_additional_filter(type_class, type_name)
+      define_method(type_name) do | *args |
+        options = args[0] || {}
+        @element_filter = type_class.new(options)
+      end
+    end
+
     @default_options = {
       :nils => false,            # true allows an explicit nil to be valid. Overrides any other options
       :class => nil,             # A constant or string indicates that each element of the array needs to be one of these classes
@@ -19,39 +26,10 @@ module Mutations
       raise ArgumentError.new("Can't supply both a class and a filter") if @element_filter && self.options[:class]
     end
 
-    def string(options = {})
-      @element_filter = StringFilter.new(options)
-    end
-
-    def integer(options = {})
-      @element_filter = IntegerFilter.new(options)
-    end
-
-    def float(options = {})
-      @element_filter = FloatFilter.new(options)
-    end
-
-    def boolean(options = {})
-      @element_filter = BooleanFilter.new(options)
-    end
-
-    def duck(options = {})
-      @element_filter = DuckFilter.new(options)
-    end
-
-    def date(options = {})
-      @element_filter = DateFilter.new(options)
-    end
-
-    def file(options = {})
-      @element_filter = FileFilter.new(options)
-    end
-
     def hash(options = {}, &block)
       @element_filter = HashFilter.new(options, &block)
     end
 
-    # Advanced types
     def model(name, options = {})
       @element_filter = ModelFilter.new(name.to_sym, options)
     end

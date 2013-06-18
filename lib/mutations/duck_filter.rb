@@ -1,5 +1,5 @@
 module Mutations
-  class DuckFilter < InputFilter
+  class DuckFilter < AdditionalFilter
     @default_options = {
       :nils => false,       # true allows an explicit nil to be valid. Overrides any other options
       :methods => nil       # The object needs to respond to each of the symbols in this array.
