@@ -1,5 +1,14 @@
 module Mutations
   class HashFilter < InputFilter
+    def self.register_additional_filter(type_class, type_name)
+      define_method(type_name) do | *args |
+        name = args[0]
+        options = args[1] || {}
+
+        @current_inputs[name.to_sym] = type_class.new(options)
+      end
+    end
+
     @default_options = {
       :nils => false,            # true allows an explicit nil to be valid. Overrides any other options
     }
@@ -48,42 +57,12 @@ module Mutations
       @optional_inputs.keys
     end
 
-    # Basic types:
-    def string(name, options = {})
-      @current_inputs[name.to_sym] = StringFilter.new(options)
-    end
-
-    def integer(name, options = {})
-      @current_inputs[name.to_sym] = IntegerFilter.new(options)
-    end
-
-    def float(name, options = {})
-      @current_inputs[name.to_sym] = FloatFilter.new(options)
-    end
-
-    def boolean(name, options = {})
-      @current_inputs[name.to_sym] = BooleanFilter.new(options)
-    end
-
-    def duck(name, options = {})
-      @current_inputs[name.to_sym] = DuckFilter.new(options)
-    end
-
-    def date(name, options = {})
-      @current_inputs[name.to_sym] = DateFilter.new(options)
-    end
-
-    def file(name, options = {})
-      @current_inputs[name.to_sym] = FileFilter.new(options)
-    end
-
     def hash(name, options = {}, &block)
       @current_inputs[name.to_sym] = HashFilter.new(options, &block)
     end
 
     def model(name, options = {})
-      name_sym = name.to_sym
-      @current_inputs[name_sym] = ModelFilter.new(name_sym, options)
+      @current_inputs[name.to_sym] = ModelFilter.new(name.to_sym, options)
     end
 
     def array(name, options = {}, &block)
