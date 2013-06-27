@@ -22,7 +22,7 @@ class UserSignup < Mutations::Command
   # These inputs are required
   required do
     string :email, matches: EMAIL_REGEX
-    string :full_name
+    string :name
   end
 
   # These inputs are optional
