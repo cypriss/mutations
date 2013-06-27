@@ -7,6 +7,7 @@ require 'mutations/version'
 require 'mutations/exception'
 require 'mutations/errors'
 require 'mutations/input_filter'
+require 'mutations/additional_filter'
 require 'mutations/string_filter'
 require 'mutations/integer_filter'
 require 'mutations/float_filter'
@@ -29,5 +30,15 @@ module Mutations
     def error_message_creator=(creator)
       @error_message_creator = creator
     end
+    
+    def cache_constants=(val)
+      @cache_constants = val
+    end
+    
+    def cache_constants?
+      @cache_constants
+    end
   end
 end
+
+Mutations.cache_constants = true

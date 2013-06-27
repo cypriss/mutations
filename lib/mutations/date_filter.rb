@@ -1,5 +1,5 @@
 module Mutations
-  class DateFilter < InputFilter
+  class DateFilter < AdditionalFilter
     @default_options = {
       :nils => false,       # true allows an explicit nil to be valid. Overrides any other options
       :format => nil,       # If nil, Date.parse will be used for coercsion. If something like "%Y-%m-%d", Date.strptime is used
@@ -16,8 +16,6 @@ module Mutations
 
       if data.is_a?(Date) # Date and DateTime
         actual_date = data
-      elsif data.respond_to?(:to_date)  # Time
-        actual_date = data.to_date
       elsif data.is_a?(String)
         begin
           actual_date = if options[:format]
@@ -28,6 +26,8 @@ module Mutations
         rescue ArgumentError
           return [nil, :date]
         end
+      elsif data.respond_to?(:to_date)  # Time
+        actual_date = data.to_date
       else
         return [nil, :date]
       end

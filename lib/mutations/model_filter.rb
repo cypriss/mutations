@@ -17,13 +17,18 @@ module Mutations
       @initialize_constants ||= begin
         class_const = options[:class] || @name.to_s.camelize
         class_const = class_const.constantize if class_const.is_a?(String)
-        self.options[:class] = class_const
+        options[:class] = class_const
 
         if options[:builder]
           options[:builder] = options[:builder].constantize if options[:builder].is_a?(String)
         end
 
         true
+      end
+      
+      unless Mutations.cache_constants?
+        options[:class] = options[:class].to_s.constantize if options[:class]
+        options[:builder] = options[:builder].to_s.constantize if options[:builder]
       end
     end
 

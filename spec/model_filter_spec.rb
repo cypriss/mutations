@@ -60,6 +60,27 @@ describe "Mutations::ModelFilter" do
     assert_equal nil, filtered
     assert_equal nil, errors
   end
+  
+  it "will re-constantize if cache_constants is false" do
+    was = Mutations.cache_constants?
+    Mutations.cache_constants = false
+    f = Mutations::ModelFilter.new(:simple_model)
+    m = SimpleModel.new
+    filtered, errors = f.filter(m)
+    assert_equal m, filtered
+    assert_equal nil, errors
+    
+    Object.send(:remove_const, 'SimpleModel')
+    
+    class SimpleModel; end
+    
+    m = SimpleModel.new
+    filtered, errors = f.filter(m)
+    assert_equal m, filtered
+    assert_equal nil, errors
+    
+    Mutations.cache_constants = was
+  end
 
   # it "allows you to override class with a constant and succeed" do
   # end

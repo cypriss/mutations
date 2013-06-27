@@ -1,5 +1,5 @@
 module Mutations
-  class BooleanFilter < InputFilter
+  class BooleanFilter < AdditionalFilter
     @default_options = {
       :nils => false   # true allows an explicit nil to be valid. Overrides any other options
     }
