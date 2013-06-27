@@ -5,6 +5,9 @@ module Mutations
         existing_keys = self.input_filters.send("#{meth}_keys")
         disallowed_keys = instance_methods - existing_keys
 
+        # 1.8.7 returns a string array, symbolize it first
+        disallowed_keys.collect! {|key| key.to_sym }
+
         self.input_filters.send(meth, &block)
 
         keys = self.input_filters.send("#{meth}_keys")
