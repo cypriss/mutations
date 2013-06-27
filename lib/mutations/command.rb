@@ -3,7 +3,7 @@ module Mutations
     class << self
       def create_attr_methods(meth, &block)
         existing_keys = self.input_filters.send("#{meth}_keys")
-        disallowed_keys = instance_methods + methods - existing_keys
+        disallowed_keys = instance_methods - existing_keys
 
         self.input_filters.send(meth, &block)
 

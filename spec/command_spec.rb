@@ -95,7 +95,7 @@ describe "Command" do
       optional { string :email }
 
       def execute
-        {:name => inputs[:name], :email => email}
+        {:name => name, :email => email}
       end
     end
 
@@ -112,7 +112,7 @@ describe "Command" do
       optional { string :email }
 
       def execute
-        inputs[:name], self.email = "bob", "bob@jones.com"
+        self.name, self.email = "bob", "bob@jones.com"
         {:name => inputs[:name], :email => inputs[:email]}
       end
     end
@@ -126,7 +126,7 @@ describe "Command" do
   describe "ErrorfulCommand" do
     class ErrorfulCommand < Mutations::Command
 
-      required { string :full_name }
+      required { string :name }
       optional { string :email }
 
       def execute
@@ -148,7 +148,7 @@ describe "Command" do
   describe "MultiErrorCommand" do
     class ErrorfulCommand < Mutations::Command
 
-      required { string :full_name }
+      required { string :name }
       optional { string :email }
 
       def execute
@@ -177,15 +177,15 @@ describe "Command" do
 
       optional do
         string :email
-        string :full_name
+        string :name
       end
 
       def execute
-        if full_name_present? && email_present?
+        if name_present? && email_present?
           1
-        elsif !full_name_present? && email_present?
+        elsif !name_present? && email_present?
           2
-        elsif full_name_present? && !email_present?
+        elsif name_present? && !email_present?
           3
         else
           4
@@ -194,9 +194,9 @@ describe "Command" do
     end
 
     it "should handle *_present? methods" do
-      assert_equal 1, PresentCommand.run!(:full_name => "John", :email => "john@gmail.com")
+      assert_equal 1, PresentCommand.run!(:name => "John", :email => "john@gmail.com")
       assert_equal 2, PresentCommand.run!(:email => "john@gmail.com")
-      assert_equal 3, PresentCommand.run!(:full_name => "John")
+      assert_equal 3, PresentCommand.run!(:name => "John")
       assert_equal 4, PresentCommand.run!
     end
   end
@@ -205,7 +205,7 @@ describe "Command" do
     class RawInputsCommand < Mutations::Command
 
       required do
-        string :full_name
+        string :name
       end
 
       def execute
@@ -214,7 +214,7 @@ describe "Command" do
     end
 
     it "should return the raw input data" do
-      input = { "full_name" => "Hello World", "other" => "Foo Bar Baz" }
+      input = { "name" => "Hello World", "other" => "Foo Bar Baz" }
       assert_equal input, RawInputsCommand.run!(input)
     end
   end
