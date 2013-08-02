@@ -10,8 +10,7 @@ module Mutations
     @default_options = {
       :nils => false,            # true allows an explicit nil to be valid. Overrides any other options
       :class => nil,             # A constant or string indicates that each element of the array needs to be one of these classes
-      :arrayize => false,        # true will convert "hi" to ["hi"]. "" converts to []
-      :discard_invalid => false  # true will strip invalid elements from our array
+      :arrayize => false         # true will convert "hi" to ["hi"]. "" converts to []
     }
 
     def initialize(name, opts = {}, &block)
