@@ -181,4 +181,10 @@ describe "Mutations::ArrayFilter" do
     assert_equal ["Array[2] isn't a string", "Array[0] can't be blank"], errors.message_list
   end
 
+  it "strips invalid elements" do
+    f = Mutations::ArrayFilter.new(:arr, :discard_invalid => true) { integer }
+    filtered, errors = f.filter([1, "2", "three", "4", 5, [6]])
+    assert_equal [1,2,4,5], filtered
+    assert_equal nil, errors
+  end
 end
