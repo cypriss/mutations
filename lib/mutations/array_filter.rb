@@ -57,15 +57,15 @@ module Mutations
         data.each_with_index do |el, i|
           el_filtered, el_error = filter_element(el)
           el_error = ErrorAtom.new(@name, el_error, :index => i) if el_error.is_a?(Symbol)
-
           errors << el_error
-          found_error = true if el_error
-          if !found_error
+          if el_error
+            found_error = true
+          else
             filtered_data << el_filtered
           end
         end
 
-        if found_error
+        if found_error && !(@element_filter && @element_filter.discard_invalid?)
           [data, errors]
         else
           [filtered_data, nil]

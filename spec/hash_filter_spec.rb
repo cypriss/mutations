@@ -186,4 +186,48 @@ describe "Mutations::HashFilter" do
     end
   end
 
+  describe "discarding invalid values" do
+    it "should discard invalid optional values" do
+      hf = Mutations::HashFilter.new do
+        required do
+          string :foo
+        end
+        optional do
+          integer :bar, :discard_invalid => true
+        end
+      end
+
+      filtered, errors = hf.filter(:foo => "bar", :bar => "baz")
+      assert_equal ({"foo" => "bar"}), filtered
+      assert_equal nil, errors
+    end
+
+    it "should discard invalid optional values for wildcards" do
+      hf = Mutations::HashFilter.new do
+        required do
+          string :foo
+        end
+        optional do
+          integer :*, :discard_invalid => true
+        end
+      end
+
+      filtered, errors = hf.filter(:foo => "bar", :bar => "baz", :wat => 1)
+      assert_equal ({"foo" => "bar", "wat" => 1}), filtered
+      assert_equal nil, errors
+    end
+
+
+    it "should not discard invalid require values" do
+      hf = Mutations::HashFilter.new do
+        required do
+          integer :foo, :discard_invalid => true
+        end
+      end
+
+      filtered, errors = hf.filter(:foo => "bar")
+      assert_equal ({"foo" => :integer}), errors.symbolic
+    end
+  end
+
 end
