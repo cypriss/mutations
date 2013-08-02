@@ -10,7 +10,8 @@ module Mutations
     @default_options = {
       :nils => false,            # true allows an explicit nil to be valid. Overrides any other options
       :class => nil,             # A constant or string indicates that each element of the array needs to be one of these classes
-      :arrayize => false         # true will convert "hi" to ["hi"]. "" converts to []
+      :arrayize => false,        # true will convert "hi" to ["hi"]. "" converts to []
+      :discard_invalid => false  # true will strip invalid elements from our array
     }
 
     def initialize(name, opts = {}, &block)
@@ -57,15 +58,15 @@ module Mutations
         data.each_with_index do |el, i|
           el_filtered, el_error = filter_element(el)
           el_error = ErrorAtom.new(@name, el_error, :index => i) if el_error.is_a?(Symbol)
-
           errors << el_error
-          found_error = true if el_error
-          if !found_error
+          if el_error
+            found_error = true
+          else
             filtered_data << el_filtered
           end
         end
 
-        if found_error
+        if found_error && !(@element_filter && @element_filter.discard_invalid?)
           [data, errors]
         else
           [filtered_data, nil]

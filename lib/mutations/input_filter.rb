@@ -34,5 +34,9 @@ module Mutations
     def discard_empty?
       options[:discard_empty]
     end
+
+    def discard_invalid?
+      self.options[:discard_invalid]
+    end
   end
 end
