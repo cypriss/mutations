@@ -116,6 +116,8 @@ module Mutations
 
             if sub_error.nil?
               filtered_data[key] = sub_data
+            elsif !is_required && filterer.discard_invalid?
+              data.delete(key)
             else
               sub_error = ErrorAtom.new(key, sub_error) if sub_error.is_a?(Symbol)
               errors[key] = sub_error
@@ -139,6 +141,8 @@ module Mutations
           sub_data, sub_error = wildcard_filterer.filter(data_element)
           if sub_error.nil?
             filtered_data[key] = sub_data
+          elsif wildcard_filterer.discard_invalid?
+            data.delete(key)
           else
             sub_error = ErrorAtom.new(key, sub_error) if sub_error.is_a?(Symbol)
             errors[key] = sub_error
