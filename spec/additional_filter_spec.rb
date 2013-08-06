@@ -13,20 +13,31 @@ describe "Mutations::AdditionalFilter" do
           return [data, nil]
         end
       end
+
+      class MultiWordTestFilter < Mutations::AdditionalFilter
+        @default_options = {
+          :nils => false
+        }
+
+        def filter(data)
+          return [data, nil]
+        end
+      end
     end
 
     class TestCommandUsingAdditionalFilters < Mutations::Command
       required do
         sometest :first_name
+        multi_word_test :last_name
       end
 
       def execute
-        { :first_name => first_name }
+        { :first_name => first_name, :last_name => last_name }
       end
     end
 
     it "should recognize additional filters" do
-      outcome = TestCommandUsingAdditionalFilters.run(:first_name => "John")
+      outcome = TestCommandUsingAdditionalFilters.run(:first_name => "John", :last_name => "Doe")
       assert outcome.success?
       assert_equal nil, outcome.errors
     end
