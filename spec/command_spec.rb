@@ -145,6 +145,28 @@ describe "Command" do
     end
   end
 
+  describe "NestingErrorfulCommand" do
+    class NestingErrorfulCommand < Mutations::Command
+
+      required { string :name }
+      optional { string :email }
+
+      def execute
+        add_error("people.bob", :is_a_bob)
+
+        1
+      end
+    end
+
+    it "should let you add errors nested under a namespace" do
+      outcome = NestingErrorfulCommand.run(:name => "John", :email => "john@gmail.com")
+
+      assert !outcome.success?
+      assert_nil outcome.result
+      assert :is_a_bob, outcome.errors[:people].symbolic[:bob]
+    end
+  end
+
   describe "MultiErrorCommand" do
     class ErrorfulCommand < Mutations::Command
 
