@@ -2,7 +2,7 @@ module Mutations
   class StringFilter < AdditionalFilter
     @default_options = {
       :strip => true,          # true calls data.strip if data is a string
-      :strict => false,        # If false, then symbols, numbers, and booleans are converted to a string with to_s. # TODO: TEST
+      :strict => false,        # If false, then symbols, numbers, and booleans are converted to a string with to_s.
       :nils => false,          # true allows an explicit nil to be valid. Overrides any other options
       :empty => false,         # false disallows "".  true allows "" and overrides any other validations (b/c they couldn't be true if it's empty)
       :min_length => nil,      # Can be a number like 5, meaning that 5 codepoints are required
