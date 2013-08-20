@@ -135,4 +135,46 @@ describe "Mutations::StringFilter" do
     assert_equal "red", filtered
     assert_equal nil, errors
   end
+
+  it "converts symbols to strings" do
+    sf = Mutations::StringFilter.new(:strict => false)
+    filtered, errors = sf.filter(:my_sym)
+    assert_equal "my_sym", filtered
+    assert_equal nil, errors
+  end
+
+  it "converts integers to strings" do
+    sf = Mutations::StringFilter.new(:strict => false)
+    filtered, errors = sf.filter(1)
+    assert_equal "1", filtered
+    assert_equal nil, errors
+  end
+
+  it "converts booleans to strings" do
+    sf = Mutations::StringFilter.new(:strict => false)
+    filtered, errors = sf.filter(true)
+    assert_equal "true", filtered
+    assert_equal nil, errors
+  end
+
+  it "disallows symbols" do
+    sf = Mutations::StringFilter.new(:strict => true)
+    filtered, errors = sf.filter(:my_sym)
+    assert_equal :my_sym, filtered
+    assert_equal :string, errors
+  end
+
+  it "disallows integers" do
+    sf = Mutations::StringFilter.new(:strict => true)
+    filtered, errors = sf.filter(1)
+    assert_equal 1, filtered
+    assert_equal :string, errors
+  end
+
+  it "disallows booleans" do
+    sf = Mutations::StringFilter.new(:strict => true)
+    filtered, errors = sf.filter(true)
+    assert_equal true, filtered
+    assert_equal :string, errors
+  end
 end
