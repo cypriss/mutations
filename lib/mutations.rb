@@ -1,4 +1,3 @@
-require 'active_support'
 require 'active_support/core_ext/hash/indifferent_access'
 require 'active_support/core_ext/string/inflections'
 require 'date'
@@ -30,11 +29,11 @@ module Mutations
     def error_message_creator=(creator)
       @error_message_creator = creator
     end
-    
+
     def cache_constants=(val)
       @cache_constants = val
     end
-    
+
     def cache_constants?
       @cache_constants
     end
