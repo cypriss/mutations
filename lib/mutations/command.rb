@@ -68,7 +68,11 @@ module Mutations
     end
 
     def has_errors?
-      !@errors.nil?
+      !correct?
+    end
+
+    def correct?
+      @errors.nil? || @errors.empty?
     end
 
     def run
@@ -90,7 +94,7 @@ module Mutations
     end
 
     def validation_outcome(result = nil)
-      Outcome.new(!has_errors?, has_errors? ? nil : result, @errors, @inputs)
+      Outcome.new(correct?, has_errors? ? nil : result, @errors, @inputs)
     end
 
   protected
