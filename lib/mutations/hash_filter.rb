@@ -11,6 +11,7 @@ module Mutations
 
     @default_options = {
       :nils => false,            # true allows an explicit nil to be valid. Overrides any other options
+      :any => false              # any allows any hash contents, including nested hashes
     }
 
     attr_accessor :optional_inputs
@@ -84,6 +85,11 @@ module Mutations
       # We always want a hash with indiffernet access
       unless data.is_a?(HashWithIndifferentAccess)
         data = data.with_indifferent_access
+      end
+
+      # Return unfiltered data when :any option is true
+      if options[:any]
+        return [data, nil]
       end
 
       errors = ErrorHash.new

@@ -93,6 +93,39 @@ describe "Mutations::HashFilter" do
     assert_equal ({"baz" => :integer}), errors.symbolic
   end
 
+  describe ":any option" do
+
+    it "defaults to false" do
+      assert_equal false, Mutations::HashFilter.new.options[:any]
+    end
+
+    it "filters hash when false" do
+      hf = Mutations::HashFilter.new(:any => false) do
+        string :foo
+      end
+      filtered, errors = hf.filter(:foo => "bar", :invalid => "poopin")
+      assert_equal ({"foo" => "bar"}), filtered
+      assert_equal nil, errors
+    end
+
+    it "allows any value when true" do
+      hf = Mutations::HashFilter.new(:any => true)
+      filtered, errors = hf.filter(
+        :foo => "bar",
+        :nested => {
+          :bar => "foo"
+        }
+      )
+      assert_equal ({
+        "foo" => "bar",
+        "nested" => {
+          "bar" => "foo"
+        }
+      }), filtered
+      assert_equal nil, errors
+    end
+  end
+
   describe "optional params and nils" do
     it "bar is optional -- it works if not passed" do
       hf = Mutations::HashFilter.new do
