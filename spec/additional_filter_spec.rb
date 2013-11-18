@@ -56,7 +56,7 @@ describe "Mutations::AdditionalFilter" do
 
     it "should be useable in hashes" do
       outcome = TestCommandUsingAdditionalFiltersInHashes.run(
-        :a_hash => { :first_name => "John" } 
+        :a_hash => { :first_name => "John" }
       )
 
       assert outcome.success?
@@ -83,5 +83,47 @@ describe "Mutations::AdditionalFilter" do
       assert outcome.success?
       assert_equal nil, outcome.errors
     end
+
+    module Mutations
+      class AdditionalWithBlockFilter < Mutations::AdditionalFilter
+
+        def initialize(opts={}, &block)
+          super(opts)
+
+          if block_given?
+            instance_eval &block
+          end
+        end
+
+        def should_be_called
+          @was_called = true
+        end
+
+        def filter(data)
+          if @was_called
+            [true, nil]
+          else
+            [nil, :not_called]
+          end
+        end
+      end
+    end
+
+    class TestCommandUsingBlockArgument < Mutations::Command
+      required do
+        additional_with_block :foo do
+          should_be_called
+        end
+      end
+
+      def execute
+        true
+      end
+    end
+
+    it "can have a block constructor" do
+      assert_equal true, TestCommandUsingBlockArgument.run!(:foo => 'bar')
+    end
+
   end
 end
