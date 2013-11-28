@@ -74,7 +74,7 @@ module Mutations
     def run
       vo = validate_all
       return vo if has_errors?
-      validation_outcome(execute)
+      build_outcome(execute)
     end
 
     def run!
@@ -88,10 +88,10 @@ module Mutations
 
     def validate_all
       validate
-      validation_outcome
+      build_outcome
     end
 
-    def validation_outcome(result = nil)
+    def build_outcome(result = nil)
       Outcome.new(!has_errors?, has_errors? ? nil : result, @errors, @inputs)
     end
 
