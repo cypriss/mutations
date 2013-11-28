@@ -9,7 +9,14 @@ class SimpleCommand < Mutations::Command
     integer :amount
   end
 
+  def validate
+    unless email && email.include?('@')
+      add_error(:email, :invalid, 'Email must contain @')
+    end
+  end
+
   def execute
     inputs
   end
+
 end

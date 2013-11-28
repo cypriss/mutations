@@ -38,7 +38,7 @@ module Mutations
 
       # Validates input, but doesn't call execute. Returns an Outcome with errors anyway.
       def validate(*args)
-        new(*args).validate
+        new(*args).validate_all
       end
 
       def input_filters
@@ -72,7 +72,8 @@ module Mutations
     end
 
     def run
-      return validation_outcome if has_errors?
+      vo = validate_all
+      return vo if has_errors?
       validation_outcome(execute)
     end
 
@@ -85,7 +86,8 @@ module Mutations
       end
     end
 
-    def validate
+    def validate_all
+      validate
       validation_outcome
     end
 
@@ -96,6 +98,10 @@ module Mutations
   protected
 
     attr_reader :inputs, :raw_inputs
+
+    def validate
+      # Meant to be overridden
+    end
 
     def execute
       # Meant to be overridden
