@@ -38,7 +38,7 @@ module Mutations
 
       # Validates input, but doesn't call execute. Returns an Outcome with errors anyway.
       def validate(*args)
-        new(*args).validate_all
+        new(*args).tap(&:validate).build_outcome
       end
 
       def input_filters
@@ -72,9 +72,9 @@ module Mutations
     end
 
     def run
-      vo = validate_all
-      return vo if has_errors?
-      build_outcome(execute)
+      validate
+      result = has_errors? ? nil : execute
+      build_outcome(result)
     end
 
     def run!
@@ -84,11 +84,6 @@ module Mutations
       else
         raise ValidationException.new(outcome.errors)
       end
-    end
-
-    def validate_all
-      validate
-      build_outcome
     end
 
     def build_outcome(result = nil)
