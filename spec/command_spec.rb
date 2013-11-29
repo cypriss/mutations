@@ -65,7 +65,7 @@ describe "Command" do
       assert_equal :max_length, outcome.errors.symbolic[:name]
     end
 
-    it "should execute cusomt validate method during run" do
+    it "should execute custom validate method during run" do
       outcome = SimpleCommand.run(:name => "JohnTooLong", :email => "xxxx")
 
       assert !outcome.success?
