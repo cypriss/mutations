@@ -89,4 +89,33 @@ describe "Mutations - errors" do
     end
   end
 
+  describe "error accessibility" do
+    class AddsError < Mutations::Command
+      required do
+        string :str1
+        string :str2
+      end
+
+      def execute
+        add_error(:str1, :validation, 'Str1 is always wrong')
+      end
+    end
+
+    describe 'with validation errors' do
+      it 'allows [] access via symbols or strings' do
+        o = AddsError.run()
+        assert_equal o.errors[:str1], o.errors['str1']
+        assert       !o.errors['str1'].nil?
+      end
+    end
+
+    describe 'with manually added errors' do
+      it  'allows [] access via symbols or strings' do
+        o = AddsError.run(:str1 => 'foo', :str2 => 'bar')
+
+        assert_equal o.errors[:str1], o.errors['str1']
+        assert       !o.errors[:str1].nil?
+      end
+    end
+  end
 end
