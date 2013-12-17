@@ -103,7 +103,7 @@ module Mutations
 
           # First, discard optional nils/empty params
           data.delete(key) if !is_required && data.has_key?(key) && filterer.discard_nils? && data_element.nil?
-          data.delete(key) if !is_required && data.has_key?(key) && filterer.discard_empty? && data_element == ""
+          data.delete(key) if !is_required && data.has_key?(key) && filterer.discard_empty? && data_element == "" # BUG: this doesn't account for data_elem being " "
 
           default_used = false
           if !data.has_key?(key) && filterer.has_default?
