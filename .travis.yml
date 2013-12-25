@@ -5,6 +5,4 @@ rvm:
   - jruby-19mode
   - rbx-19mode
   - 2.0.0
-branches:
-  only:
-    - master
+  - 2.1.0
