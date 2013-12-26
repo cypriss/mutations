@@ -1,3 +1,8 @@
+0.7.1
+-----------
+
+- Bug fix: If your optional filter discards_empty and strips, then discard whitespace.
+
 0.7.0
 -----------
 

@@ -38,9 +38,5 @@ module Mutations
     def discard_invalid?
       options[:discard_invalid]
     end
-    
-    def strip?
-      options[:strip]
-    end
   end
 end

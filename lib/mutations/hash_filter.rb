@@ -101,29 +101,29 @@ module Mutations
 
           data_element = data[key]
 
-          # First, discard optional nils/empty params
-          data.delete(key) if !is_required && data.has_key?(key) && filterer.discard_nils? && data_element.nil?
-          data.delete(key) if !is_required && data.has_key?(key) && filterer.discard_empty? && data_element == "" # BUG: this doesn't account for data_elem being " "
-
-          default_used = false
-          if !data.has_key?(key) && filterer.has_default?
-            data_element = filterer.default
-            default_used = true
-          end
-
-          if data.has_key?(key) || default_used
+          if data.has_key?(key)
             sub_data, sub_error = filterer.filter(data_element)
 
             if sub_error.nil?
               filtered_data[key] = sub_data
             elsif !is_required && filterer.discard_invalid?
               data.delete(key)
+            elsif !is_required && sub_error == :empty && filterer.discard_empty?
+              data.delete(key)
+            elsif !is_required && sub_error == :nils && filterer.discard_nils?
+              data.delete(key)
             else
               sub_error = ErrorAtom.new(key, sub_error) if sub_error.is_a?(Symbol)
               errors[key] = sub_error
             end
-          elsif is_required
-            errors[key] = ErrorAtom.new(key, :required)
+          end
+          
+          if !data.has_key?(key)
+            if filterer.has_default?
+              filtered_data[key] = filterer.default
+            elsif is_required
+              errors[key] = ErrorAtom.new(key, :required)
+            end
           end
         end
       end
@@ -134,14 +134,14 @@ module Mutations
         filtered_keys.each do |key|
           data_element = data[key]
 
-          # First, discard optional nils/empty params
-          next if data.has_key?(key) && wildcard_filterer.discard_nils? && data_element.nil?
-          next if data.has_key?(key) && wildcard_filterer.discard_empty? && data_element == ""
-
           sub_data, sub_error = wildcard_filterer.filter(data_element)
           if sub_error.nil?
             filtered_data[key] = sub_data
           elsif wildcard_filterer.discard_invalid?
+            data.delete(key)
+          elsif sub_error == :empty && wildcard_filterer.discard_empty?
+            data.delete(key)
+          elsif sub_error == :nils && wildcard_filterer.discard_nils?
             data.delete(key)
           else
             sub_error = ErrorAtom.new(key, sub_error) if sub_error.is_a?(Symbol)

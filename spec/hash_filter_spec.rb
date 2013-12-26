@@ -155,6 +155,36 @@ describe "Mutations::HashFilter" do
       assert_equal ({"foo" => "bar"}), filtered
       assert_equal nil, errors
     end
+    
+    it "bar is optional -- discards empty if it needs to be stripped" do
+      hf = Mutations::HashFilter.new do
+        required do
+          string :foo
+        end
+        optional do
+          string :bar, :discard_empty => true
+        end
+      end
+
+      filtered, errors = hf.filter(:foo => "bar", :bar => " ")
+      assert_equal ({"foo" => "bar"}), filtered
+      assert_equal nil, errors
+    end
+    
+    it "bar is optional -- don't discard empty if it's spaces but stripping is off" do
+      hf = Mutations::HashFilter.new do
+        required do
+          string :foo
+        end
+        optional do
+          string :bar, :discard_empty => true, :strip => false
+        end
+      end
+
+      filtered, errors = hf.filter(:foo => "bar", :bar => " ")
+      assert_equal ({"foo" => "bar", "bar" => " "}), filtered
+      assert_equal nil, errors
+    end
 
     it "bar is optional -- errors if discard_empty is false and value is blank" do
       hf = Mutations::HashFilter.new do
@@ -180,7 +210,7 @@ describe "Mutations::HashFilter" do
         end
       end
 
-      filtered, errors = hf.filter(:foo => "bar", :bar => "")
+      filtered, errors = hf.filter(:foo => "bar", :bar => "", :baz => "\t")
       assert_equal ({"foo" => "bar"}), filtered
       assert_equal nil, errors
     end
