@@ -124,8 +124,10 @@ module Mutations
     end
 
     def merge_errors(hash)
-      @errors ||= ErrorHash.new
-      @errors.merge!(hash)
+      if hash.any?
+        @errors ||= ErrorHash.new
+        @errors.merge!(hash)
+      end
     end
 
   end
