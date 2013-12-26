@@ -1,3 +1,14 @@
+0.7.0
+-----------
+
+- Ruby 2.1 support added.
+- Ruby 1.8.7 support removed.
+- Rubinius support updated.
+- Gemfile.lock removed (Rails 4 support, etc)
+- API change: Add ability to implement a 'validate' method
+- ```discard_invalid``` option added
+- AdditionFilters: Gain ability to pass blocks to filters.
+
 0.6.0
 -----------
 
