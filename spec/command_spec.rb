@@ -50,6 +50,29 @@ describe "Command" do
       assert_equal :max_length, outcome.errors.symbolic[:name]
     end
 
+    it "should execute a custom validate method" do
+      outcome = SimpleCommand.validate(:name => "JohnLong", :email => "xxxx")
+
+      assert !outcome.success?
+      assert_equal :invalid, outcome.errors.symbolic[:email]
+    end
+
+    it "should execute custom validate method along with regular validations" do
+      outcome = SimpleCommand.validate(:name => "JohnTooLong", :email => "xxxx")
+
+      assert !outcome.success?
+      assert_equal :invalid, outcome.errors.symbolic[:email]
+      assert_equal :max_length, outcome.errors.symbolic[:name]
+    end
+
+    it "should execute custom validate method during run" do
+      outcome = SimpleCommand.run(:name => "JohnTooLong", :email => "xxxx")
+
+      assert !outcome.success?
+      assert_nil outcome.result
+      assert_equal :invalid, outcome.errors.symbolic[:email]
+    end
+
     it "should merge multiple hashes" do
       outcome = SimpleCommand.run({:name => "John", :email => "john@gmail.com"}, {:email => "bob@jones.com", :amount => 5})
 
