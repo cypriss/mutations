@@ -1,3 +1,8 @@
+0.7.2
+-----------
+
+- Bug fix: discards_empty broke on non-strings. Fix that.
+
 0.7.1
 -----------
 
