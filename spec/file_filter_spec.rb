@@ -60,6 +60,12 @@ describe "Mutations::FileFilter" do
     assert_equal nil, filtered
     assert_equal nil, errors
   end
+  
+  it "considers empty strings to be empty" do
+    f = Mutations::FileFilter.new
+    filtered, errors = f.filter("")
+    assert_equal :empty, errors
+  end
 
   it "should allow small files" do
     file = StringIO.new("bob")

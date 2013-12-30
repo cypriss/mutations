@@ -126,6 +126,12 @@ describe "Mutations::DateFilter" do
     assert_equal nil, filtered
     assert_equal :nils, errors
   end
+  
+  it "considers empty strings to be empty" do
+    f = Mutations::DateFilter.new
+    filtered, errors = f.filter("")
+    assert_equal :empty, errors
+  end
 
   it "allows the use of nil when specified" do
     f = Mutations::DateFilter.new(:nils => true)

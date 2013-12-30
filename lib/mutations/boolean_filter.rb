@@ -13,6 +13,9 @@ module Mutations
         return [nil, nil] if options[:nils]
         return [nil, :nils]
       end
+      
+      # Now check if it's empty:
+      return [data, :empty] if data == ""
 
       # If data is true or false, we win.
       return [data, nil] if data == true || data == false

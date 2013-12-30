@@ -13,6 +13,9 @@ module Mutations
         return [nil, nil] if options[:nils]
         return [nil, :nils]
       end
+      
+      # Now check if it's empty:
+      return [data, :empty] if data == ""
 
       # Ensure it's the correct data type (Float)
       if !data.is_a?(Float)

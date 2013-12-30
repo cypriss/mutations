@@ -44,6 +44,12 @@ describe "Mutations::IntegerFilter" do
     assert_equal nil, filtered
     assert_equal nil, errors
   end
+  
+  it "considers empty strings to be empty" do
+    f = Mutations::IntegerFilter.new
+    filtered, errors = f.filter("")
+    assert_equal :empty, errors
+  end
 
   it "considers low numbers invalid" do
     f = Mutations::IntegerFilter.new(:min => 10)

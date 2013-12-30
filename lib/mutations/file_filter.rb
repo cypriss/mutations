@@ -13,6 +13,9 @@ module Mutations
         return [nil, nil] if options[:nils]
         return [nil, :nils]
       end
+      
+      # Now check if it's empty:
+      return [data, :empty] if data == ""
 
       # Ensure the data responds to each of the methods
       methods = [:read, :size]

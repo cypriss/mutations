@@ -43,10 +43,16 @@ describe "Mutations::BooleanFilter" do
       assert_equal nil, errors
     end
   end
+  
+  it "considers empty strings to be empty" do
+    f = Mutations::BooleanFilter.new
+    filtered, errors = f.filter("")
+    assert_equal :empty, errors
+  end
 
   it "considers other string to be invalid" do
     f = Mutations::BooleanFilter.new
-    ["", "truely", "2"].each do |str|
+    ["truely", "2"].each do |str|
       filtered, errors = f.filter(str)
       assert_equal str, filtered
       assert_equal :boolean, errors
