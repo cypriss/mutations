@@ -150,6 +150,20 @@ describe "Mutations::StringFilter" do
     assert_equal nil, errors
   end
 
+  it "converts bigdecimals to strings" do
+    sf = Mutations::StringFilter.new(:strict => false)
+    filtered, errors = sf.filter(BigDecimal.new("0.0001"))
+    assert_equal "0.1E-3", filtered
+    assert_equal nil, errors
+  end
+
+  it "converts floats to strings" do
+    sf = Mutations::StringFilter.new(:strict => false)
+    filtered, errors = sf.filter(0.0001)
+    assert_equal "0.0001", filtered
+    assert_equal nil, errors
+  end
+
   it "converts booleans to strings" do
     sf = Mutations::StringFilter.new(:strict => false)
     filtered, errors = sf.filter(true)
@@ -168,6 +182,21 @@ describe "Mutations::StringFilter" do
     sf = Mutations::StringFilter.new(:strict => true)
     filtered, errors = sf.filter(1)
     assert_equal 1, filtered
+    assert_equal :string, errors
+  end
+
+  it "disallows bigdecimals" do
+    sf = Mutations::StringFilter.new(:strict => true)
+    big_decimal = BigDecimal.new("0.0001")
+    filtered, errors = sf.filter(big_decimal)
+    assert_equal big_decimal, filtered
+    assert_equal :string, errors
+  end
+
+  it "disallows floats" do
+    sf = Mutations::StringFilter.new(:strict => true)
+    filtered, errors = sf.filter(0.0001)
+    assert_equal 0.0001, filtered
     assert_equal :string, errors
   end
 

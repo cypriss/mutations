@@ -21,7 +21,7 @@ module Mutations
       end
 
       # At this point, data is not nil. If it's not a string, convert it to a string for some standard classes
-      data = data.to_s if !options[:strict] && [TrueClass, FalseClass, Fixnum, Symbol].include?(data.class)
+      data = data.to_s if !options[:strict] && [TrueClass, FalseClass, Fixnum, Float, BigDecimal, Symbol].include?(data.class)
 
       # Now ensure it's a string:
       return [data, :string] unless data.is_a?(String)
