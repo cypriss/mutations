@@ -44,7 +44,7 @@ describe "Mutations::IntegerFilter" do
     assert_equal nil, filtered
     assert_equal nil, errors
   end
-  
+
   it "considers empty strings to be empty" do
     f = Mutations::IntegerFilter.new
     filtered, errors = f.filter("")
@@ -93,4 +93,10 @@ describe "Mutations::IntegerFilter" do
     assert_nil errors
   end
 
+  it "considers matching numbers to be valid with a proc" do
+    f = Mutations::IntegerFilter.new(:in => Proc.new { [3, 4, 5] })
+    filtered, errors = f.filter(3)
+    assert_equal 3, filtered
+    assert_nil errors
+  end
 end

@@ -4,7 +4,7 @@ module Mutations
       :nils => false,          # true allows an explicit nil to be valid. Overrides any other options
       :min => nil,             # lowest value, inclusive
       :max => nil,             # highest value, inclusive
-      :in => nil,              # Can be an array like %w(3 4 5)
+      :in => nil,              # Can be an array like %w(3 4 5) or a callable object that returns an array
     }
 
     def filter(data)
@@ -14,7 +14,7 @@ module Mutations
         return [nil, nil] if options[:nils]
         return [nil, :nils]
       end
-      
+
       # Now check if it's empty:
       return [data, :empty] if data == ""
 
@@ -31,7 +31,10 @@ module Mutations
       return [data, :max] if options[:max] && data > options[:max]
 
       # Ensure it matches `in`
-      return [data, :in] if options[:in] && !options[:in].include?(data)
+      if allowed_values = options[:in]
+        allowed_values = allowed_values.call if allowed_values.respond_to?(:call)
+        return [data, :in] if !allowed_values.include?(data)
+      end
 
       # We win, it's valid!
       [data, nil]

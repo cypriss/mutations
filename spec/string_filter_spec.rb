@@ -136,6 +136,13 @@ describe "Mutations::StringFilter" do
     assert_equal nil, errors
   end
 
+  it "considers inclusion to be valid with a proc" do
+    sf = Mutations::StringFilter.new(:in => Proc.new { %w(red blue green) })
+    filtered, errors = sf.filter("red")
+    assert_equal "red", filtered
+    assert_equal nil, errors
+  end
+
   it "converts symbols to strings" do
     sf = Mutations::StringFilter.new(:strict => false)
     filtered, errors = sf.filter(:my_sym)

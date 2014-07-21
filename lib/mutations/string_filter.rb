@@ -8,7 +8,7 @@ module Mutations
       :min_length => nil,      # Can be a number like 5, meaning that 5 codepoints are required
       :max_length => nil,      # Can be a number like 10, meaning that at most 10 codepoints are permitted
       :matches => nil,         # Can be a regexp
-      :in => nil,              # Can be an array like %w(red blue green)
+      :in => nil,              # Can be an array like %w(red blue green) or a callable object that returns an array
       :discard_empty => false  # If the param is optional, discard_empty: true drops empty fields.
     }
 
@@ -43,7 +43,10 @@ module Mutations
       return [data, :max_length] if options[:max_length] && data.length > options[:max_length]
 
       # Ensure it match
-      return [data, :in] if options[:in] && !options[:in].include?(data)
+      if allowed_values = options[:in]
+        allowed_values = allowed_values.call if allowed_values.respond_to?(:call)
+        return [data, :in] if !allowed_values.include?(data)
+      end
 
       # Ensure it matches the regexp
       return [data, :matches] if options[:matches] && (options[:matches] !~ data)
