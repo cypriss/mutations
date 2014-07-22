@@ -9,5 +9,9 @@ module Mutations
     def success?
       @success
     end
+
+    def failure?
+      !success?
+    end
   end
 end

@@ -23,7 +23,7 @@ describe "Command" do
     it "should discover errors in inputs" do
       outcome = SimpleCommand.run(:name => "JohnTooLong", :email => "john@gmail.com")
 
-      assert !outcome.success?
+      assert outcome.failure?
       assert_equal :max_length, outcome.errors.symbolic[:name]
     end
 
@@ -45,7 +45,7 @@ describe "Command" do
       assert_nil outcome.errors
 
       outcome = SimpleCommand.validate(:name => "JohnTooLong", :email => "john@gmail.com")
-      assert !outcome.success?
+      assert outcome.failure?
       assert_nil outcome.result
       assert_equal :max_length, outcome.errors.symbolic[:name]
     end
@@ -53,14 +53,14 @@ describe "Command" do
     it "should execute a custom validate method" do
       outcome = SimpleCommand.validate(:name => "JohnLong", :email => "xxxx")
 
-      assert !outcome.success?
+      assert outcome.failure?
       assert_equal :invalid, outcome.errors.symbolic[:email]
     end
 
     it "should execute custom validate method during run" do
       outcome = SimpleCommand.run(:name => "JohnLong", :email => "xxxx")
       
-      assert !outcome.success?
+      assert outcome.failure?
       assert_nil outcome.result
       assert_equal :invalid, outcome.errors.symbolic[:email]
     end
@@ -68,7 +68,7 @@ describe "Command" do
     it "should execute custom validate method only if regular validations succeed" do
       outcome = SimpleCommand.validate(:name => "JohnTooLong", :email => "xxxx")
 
-      assert !outcome.success?
+      assert outcome.failure?
       assert_equal :max_length, outcome.errors.symbolic[:name]
       assert_equal nil, outcome.errors.symbolic[:email]
     end
@@ -162,7 +162,7 @@ describe "Command" do
     it "should let you add errors" do
       outcome = ErrorfulCommand.run(:name => "John", :email => "john@gmail.com")
 
-      assert !outcome.success?
+      assert outcome.failure?
       assert_nil outcome.result
       assert :is_a_bob, outcome.errors.symbolic[:bob]
     end
@@ -184,7 +184,7 @@ describe "Command" do
     it "should let you add errors nested under a namespace" do
       outcome = NestingErrorfulCommand.run(:name => "John", :email => "john@gmail.com")
 
-      assert !outcome.success?
+      assert outcome.failure?
       assert_nil outcome.result
       assert :is_a_bob, outcome.errors[:people].symbolic[:bob]
     end
@@ -210,7 +210,7 @@ describe "Command" do
     it "should let you merge errors" do
       outcome = ErrorfulCommand.run(:name => "John", :email => "john@gmail.com")
 
-      assert !outcome.success?
+      assert outcome.failure?
       assert_nil outcome.result
       assert :is_short, outcome.errors.symbolic[:bob]
       assert :is_fat, outcome.errors.symbolic[:sally]
