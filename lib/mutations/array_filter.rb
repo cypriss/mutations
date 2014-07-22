@@ -38,13 +38,7 @@ module Mutations
       @element_filter = ArrayFilter.new(nil, options, &block)
     end
 
-    def filter(data)
-      # Handle nil case
-      if data.nil?
-        return [nil, nil] if options[:nils]
-        return [nil, :nils]
-      end
-
+    def _filter(data)
       if !data.is_a?(Array) && options[:arrayize]
         return [[], nil] if data == ""
         data = Array(data)

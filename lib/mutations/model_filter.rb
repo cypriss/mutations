@@ -34,13 +34,10 @@ module Mutations
 
     def filter(data)
       initialize_constants!
+      super
+    end
 
-      # Handle nil case
-      if data.nil?
-        return [nil, nil] if options[:nils]
-        return [nil, :nils]
-      end
-
+    def _filter(data)
       # Passing in attributes.  Let's see if we have a builder
       if data.is_a?(Hash) && options[:builder]
         ret = options[:builder].run(data)

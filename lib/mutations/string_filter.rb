@@ -12,14 +12,7 @@ module Mutations
       :discard_empty => false  # If the param is optional, discard_empty: true drops empty fields.
     }
 
-    def filter(data)
-
-      # Handle nil case
-      if data.nil?
-        return [nil, nil] if options[:nils]
-        return [nil, :nils]
-      end
-
+    def _filter(data)
       # At this point, data is not nil. If it's not a string, convert it to a string for some standard classes
       data = data.to_s if !options[:strict] && [TrueClass, FalseClass, Fixnum, Float, BigDecimal, Symbol].include?(data.class)
 
