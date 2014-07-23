@@ -31,7 +31,7 @@ describe "Mutations - errors" do
     assert o.errors.is_a?(Mutations::ErrorHash)
     assert o.errors[:str1].is_a?(Mutations::ErrorAtom)
     assert o.errors[:str2].is_a?(Mutations::ErrorAtom)
-    assert_nil o.errors[:int1]
+    assert_nil(o.errors[:int1])
     assert o.errors[:hash1].is_a?(Mutations::ErrorAtom)
     assert o.errors[:arr1].is_a?(Mutations::ErrorAtom)
   end
@@ -53,13 +53,13 @@ describe "Mutations - errors" do
     assert o.errors.is_a?(Mutations::ErrorHash)
     assert o.errors[:arr1].is_a?(Mutations::ErrorArray)
     assert o.errors[:arr1][0].is_a?(Mutations::ErrorAtom)
-    assert_nil o.errors[:arr1][1]
+    assert_nil(o.errors[:arr1][1])
     assert o.errors[:arr1][2].is_a?(Mutations::ErrorAtom)
   end
 
   it "titleizes keys" do
     atom = Mutations::ErrorAtom.new(:newsletter_subscription, :boolean)
-    assert_equal "Newsletter Subscription isn't a boolean", atom.message
+    assert_equal("Newsletter Subscription isn't a boolean", atom.message)
   end
 
   describe "Bunch o errors" do
@@ -74,7 +74,7 @@ describe "Mutations - errors" do
                   "hash1" => {"bool1" => :boolean, "bool2" => :required},
                   "arr1" => [:integer, nil, :integer]}
 
-      assert_equal expected, @outcome.errors.symbolic
+      assert_equal(expected, @outcome.errors.symbolic)
     end
 
     it "gives messages" do
@@ -87,13 +87,13 @@ describe "Mutations - errors" do
                              nil,
                              "Arr1[2] isn't an integer"]}
 
-      assert_equal expected, @outcome.errors.message
+      assert_equal(expected, @outcome.errors.message)
     end
 
     it "can flatten those messages" do
       expected = ["Str1 can't be blank", "Str2 isn't an option", "Int1 isn't an integer", "Bool1 isn't a boolean", "Bool2 is required", "Arr1[0] isn't an integer", "Arr1[2] isn't an integer"]
 
-      assert_equal expected.size, @outcome.errors.message_list.size
+      assert_equal(expected.size, @outcome.errors.message_list.size)
       expected.each { |e| assert @outcome.errors.message_list.include?(e) }
     end
   end
