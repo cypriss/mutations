@@ -1,13 +1,10 @@
 module Mutations
   class Outcome
-    attr_reader :result, :errors, :inputs
+    attr_reader :errors, :inputs, :result, :success
+    alias_method :success?, :success
 
     def initialize(is_success, result, errors, inputs)
       @success, @result, @errors, @inputs = is_success, result, errors, inputs
-    end
-
-    def success?
-      @success
     end
   end
 end

@@ -55,7 +55,8 @@ module Mutations
   end
 
   class ErrorAtom
-
+    attr_reader :symbol
+    alias_method :symbolic, :symbol
     # NOTE: in the future, could also pass in:
     #  - error type
     #  - value (eg, string :name, length: 5 # value=5)
@@ -67,10 +68,6 @@ module Mutations
       @symbol = error_symbol
       @message = options[:message]
       @index = options[:index]
-    end
-
-    def symbolic
-      @symbol
     end
 
     def message
