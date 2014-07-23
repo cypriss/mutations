@@ -10,7 +10,7 @@ describe "Mutations::AdditionalFilter" do
         }
 
         def filter(data)
-          return [data, nil]
+          [data, nil]
         end
       end
 
@@ -20,7 +20,7 @@ describe "Mutations::AdditionalFilter" do
         }
 
         def filter(data)
-          return [data, nil]
+          [data, nil]
         end
       end
     end
@@ -89,16 +89,14 @@ describe "Mutations::AdditionalFilter" do
         def initialize(opts = {}, &block)
           super(opts)
 
-          if block_given?
-            instance_eval(&block)
-          end
+          instance_eval(&block) if block_given?
         end
 
         def should_be_called
           @was_called = true
         end
 
-        def filter(data)
+        def filter(_)
           if @was_called
             [true, nil]
           else

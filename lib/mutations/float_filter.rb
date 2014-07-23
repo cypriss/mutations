@@ -17,7 +17,7 @@ module Mutations
       return [data, :empty] if data == ""
 
       # Ensure it's the correct data type (Float)
-      if !data.is_a?(Float)
+      unless data.is_a?(Float)
         if data.is_a?(String) && data =~ /^[-+]?\d*\.?\d+/
           data = data.to_f
         elsif data.is_a?(Fixnum)

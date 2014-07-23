@@ -14,7 +14,9 @@ describe "Mutations - errors" do
         boolean :bool1
         boolean :bool2
       end
-      array :arr1 do integer end
+      array :arr1 do
+        integer
+      end
     end
 
     def execute

@@ -130,7 +130,7 @@ module Mutations
     # ]
     def message_list
       list = []
-      each do |k, v|
+      each do |_, v|
         list.concat(v.message_list)
       end
       list

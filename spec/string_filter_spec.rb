@@ -26,7 +26,7 @@ describe "Mutations::StringFilter" do
   it "disallows non-string" do
     sf = Mutations::StringFilter.new
     [["foo"], {:a => "1"}, Object.new].each do |thing|
-      filtered, errors = sf.filter(thing)
+      _, errors = sf.filter(thing)
       assert_equal :string, errors
     end
   end

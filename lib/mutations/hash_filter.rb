@@ -23,9 +23,7 @@ module Mutations
       @required_inputs = {}
       @current_inputs = @required_inputs
 
-      if block_given?
-        instance_eval(&block)
-      end
+      instance_eval(&block) if block_given?
     end
 
     def dup
@@ -117,7 +115,7 @@ module Mutations
             end
           end
 
-          if !data.has_key?(key)
+          unless data.has_key?(key)
             if filterer.has_default?
               filtered_data[key] = filterer.default
             elsif is_required

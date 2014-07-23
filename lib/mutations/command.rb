@@ -123,10 +123,10 @@ module Mutations
     end
 
     def merge_errors(hash)
-      if hash.any?
-        @errors ||= ErrorHash.new
-        @errors.merge!(hash)
-      end
+      return unless hash.any?
+
+      @errors ||= ErrorHash.new
+      @errors.merge!(hash)
     end
   end
 end

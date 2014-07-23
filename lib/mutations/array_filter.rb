@@ -19,9 +19,7 @@ module Mutations
       @name = name
       @element_filter = nil
 
-      if block_given?
-        instance_eval(&block)
-      end
+      instance_eval(&block) if block_given?
 
       raise ArgumentError.new("Can't supply both a class and a filter") if @element_filter && self.options[:class]
     end
@@ -84,9 +82,7 @@ module Mutations
         class_const = options[:class]
         class_const = class_const.constantize if class_const.is_a?(String)
 
-        if !data.is_a?(class_const)
-          return [data, :class]
-        end
+        return [data, :class] unless data.is_a?(class_const)
       end
 
       [data, nil]

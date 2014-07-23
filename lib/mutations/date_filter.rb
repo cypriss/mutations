@@ -36,17 +36,9 @@ module Mutations
       end
 
       # Ok, its a valid date, check if it falls within the range
-      if options[:after]
-        if actual_date <= options[:after]
-          return [nil, :after]
-        end
-      end
+      return [nil, :after] if options[:after] && actual_date <= options[:after]
 
-      if options[:before]
-        if actual_date >= options[:before]
-          return [nil, :before]
-        end
-      end
+      return [nil, :before] if options[:before] && actual_date >= options[:before]
 
       # We win, it's valid!
       [actual_date, nil]

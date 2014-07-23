@@ -9,9 +9,9 @@ class SimpleCommand < Mutations::Command
   end
 
   def validate
-    unless email && email.include?('@')
-      add_error(:email, :invalid, 'Email must contain @')
-    end
+    return if email && email.include?('@')
+
+    add_error(:email, :invalid, 'Email must contain @')
   end
 
   def execute
