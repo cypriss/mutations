@@ -52,7 +52,7 @@ describe "Mutations::BooleanFilter" do
 
   it "considers other string to be invalid" do
     f = Mutations::BooleanFilter.new
-    ["truely", "2"].each do |str|
+    %w[truely 2].each do |str|
       filtered, errors = f.filter(str)
       assert_equal(str, filtered)
       assert_equal(:boolean, errors)

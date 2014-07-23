@@ -123,14 +123,14 @@ describe "Mutations::StringFilter" do
   end
 
   it "considers non-inclusion to be invalid" do
-    sf = Mutations::StringFilter.new(:in => %w(red blue green))
+    sf = Mutations::StringFilter.new(:in => %w[red blue green])
     filtered, errors = sf.filter("orange")
     assert_equal("orange", filtered)
     assert_equal(:in, errors)
   end
 
   it "considers inclusion to be valid" do
-    sf = Mutations::StringFilter.new(:in => %w(red blue green))
+    sf = Mutations::StringFilter.new(:in => %w[red blue green])
     filtered, errors = sf.filter("red")
     assert_equal("red", filtered)
     assert_equal(nil, errors)

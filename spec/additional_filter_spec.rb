@@ -77,7 +77,7 @@ describe "Mutations::AdditionalFilter" do
 
     it "should be useable in arrays" do
       outcome = TestCommandUsingAdditionalFiltersInArrays.run(
-        :an_array => ["John", "Bill"]
+        :an_array => %w[John Bill]
       )
 
       assert outcome.success?

@@ -163,8 +163,8 @@ describe "Mutations::ArrayFilter" do
       end
     end
 
-    filtered, errors = f.filter([["h", "e"], ["l"], [], ["lo"]])
-    assert_equal(filtered, [["h", "e"], ["l"], [], ["lo"]])
+    filtered, errors = f.filter([%w[h e], ["l"], [], ["lo"]])
+    assert_equal(filtered, [%w[h e], ["l"], [], ["lo"]])
     assert_equal(nil, errors)
   end
 

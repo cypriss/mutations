@@ -5,7 +5,7 @@ describe "Mutations - errors" do
   class GivesErrors < Mutations::Command
     required do
       string :str1
-      string :str2, :in => %w(opt1 opt2 opt3)
+      string :str2, :in => %w[opt1 opt2 opt3]
     end
 
     optional do
