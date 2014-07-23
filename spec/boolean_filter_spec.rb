@@ -43,7 +43,7 @@ describe "Mutations::BooleanFilter" do
       assert_equal nil, errors
     end
   end
-  
+
   it "considers empty strings to be empty" do
     f = Mutations::BooleanFilter.new
     filtered, errors = f.filter("")

@@ -34,23 +34,23 @@ describe "Mutations::ArrayFilter" do
 
   it "lets you specify a class, and has valid elements" do
     f = Mutations::ArrayFilter.new(:arr, :class => Fixnum)
-    filtered, errors = f.filter([1,2,3])
+    filtered, errors = f.filter([1, 2, 3])
     assert_equal nil, errors
-    assert_equal [1,2,3], filtered
+    assert_equal [1, 2, 3], filtered
   end
 
   it "lets you specify a class as a string, and has valid elements" do
     f = Mutations::ArrayFilter.new(:arr, :class => 'Fixnum')
-    filtered, errors = f.filter([1,2,3])
+    filtered, errors = f.filter([1, 2, 3])
     assert_equal nil, errors
-    assert_equal [1,2,3], filtered
+    assert_equal [1, 2, 3], filtered
   end
 
   it "lets you specify a class, and has invalid elements" do
     f = Mutations::ArrayFilter.new(:arr, :class => Fixnum)
     filtered, errors = f.filter([1, "bob"])
     assert_equal [nil, :class], errors.symbolic
-    assert_equal [1,"bob"], filtered
+    assert_equal [1, "bob"], filtered
   end
 
   it "lets you use a block to supply an element filter" do
@@ -80,16 +80,16 @@ describe "Mutations::ArrayFilter" do
   it "lets you pass integers in arrays" do
     f = Mutations::ArrayFilter.new(:arr) { integer :min => 4 }
 
-    filtered, errors = f.filter([5,6,1,"bob"])
-    assert_equal [5,6,1,"bob"], filtered
+    filtered, errors = f.filter([5, 6, 1, "bob"])
+    assert_equal [5, 6, 1, "bob"], filtered
     assert_equal [nil, nil, :min, :integer], errors.symbolic
   end
 
   it "lets you pass floats in arrays" do
     f = Mutations::ArrayFilter.new(:float) { float :min => 4.0 }
 
-    filtered, errors = f.filter([5.0,6.0,1.0,"bob"])
-    assert_equal [5.0,6.0,1.0,"bob"], filtered
+    filtered, errors = f.filter([5.0, 6.0, 1.0, "bob"])
+    assert_equal [5.0, 6.0, 1.0, "bob"], filtered
     assert_equal [nil, nil, :min, :float], errors.symbolic
   end
 
@@ -102,7 +102,7 @@ describe "Mutations::ArrayFilter" do
   end
 
   it "lets you pass dates in arrays" do
-    f = Mutations::ArrayFilter.new(:arr) {date(:format => "%Y-%m-%d")}
+    f = Mutations::ArrayFilter.new(:arr) { date(:format => "%Y-%m-%d") }
 
     filtered, errors = f.filter(["2000-1-1", Date.new(2000, 1, 1), "2000-20-1"])
     assert_equal ["2000-1-1", Date.new(2000, 1, 1), "2000-20-1"], filtered
@@ -149,11 +149,11 @@ describe "Mutations::ArrayFilter" do
     end
 
     filtered, errors = f.filter([{:foo => "f", :bar => 3, :baz => true}, {:foo => "f", :bar => 3}, {:foo => "f"}])
-    assert_equal [{:foo=>"f", :bar=>3, :baz=>true}, {:foo=>"f", :bar=>3}, {:foo=>"f"}], filtered
+    assert_equal [{:foo => "f", :bar => 3, :baz => true}, {:foo => "f", :bar => 3}, {:foo => "f"}], filtered
 
     assert_equal nil, errors[0]
     assert_equal nil, errors[1]
-    assert_equal ({"bar"=>:required}), errors[2].symbolic
+    assert_equal ({"bar" => :required}), errors[2].symbolic
   end
 
   it "lets you pass arrays of arrays" do
@@ -186,7 +186,7 @@ describe "Mutations::ArrayFilter" do
       integer :discard_invalid => true
     end
     filtered, errors = f.filter([1, "2", "three", "4", 5, [6]])
-    assert_equal [1,2,4,5], filtered
+    assert_equal [1, 2, 4, 5], filtered
     assert_equal nil, errors
   end
 end

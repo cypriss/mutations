@@ -25,7 +25,7 @@ module Mutations
 
         true
       end
-      
+
       unless Mutations.cache_constants?
         options[:class] = options[:class].to_s.constantize if options[:class]
         options[:builder] = options[:builder].to_s.constantize if options[:builder]
@@ -60,6 +60,5 @@ module Mutations
 
       return [data, :model]
     end
-
   end
 end

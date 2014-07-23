@@ -2,9 +2,7 @@ require 'spec_helper'
 require 'simple_command'
 
 describe 'Mutations - inheritance' do
-
   class SimpleInherited < SimpleCommand
-
     required do
       integer :age
     end
@@ -35,5 +33,4 @@ describe 'Mutations - inheritance' do
     assert mutation.success?
     assert_equal HashWithIndifferentAccess.new(:name => "bob", :email => "jon@jones.com", :amount => 22), mutation.result
   end
-
 end

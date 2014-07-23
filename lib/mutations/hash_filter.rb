@@ -24,7 +24,7 @@ module Mutations
       @current_inputs = @required_inputs
 
       if block_given?
-        instance_eval &block
+        instance_eval(&block)
       end
     end
 
@@ -41,12 +41,12 @@ module Mutations
 
     def required(&block)
       @current_inputs = @required_inputs
-      instance_eval &block
+      instance_eval(&block)
     end
 
     def optional(&block)
       @current_inputs = @optional_inputs
-      instance_eval &block
+      instance_eval(&block)
     end
 
     def required_keys
@@ -71,7 +71,6 @@ module Mutations
     end
 
     def filter(data)
-
       # Handle nil case
       if data.nil?
         return [nil, nil] if options[:nils]
@@ -117,7 +116,7 @@ module Mutations
               errors[key] = sub_error
             end
           end
-          
+
           if !data.has_key?(key)
             if filterer.has_default?
               filtered_data[key] = filterer.default

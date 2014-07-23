@@ -1,5 +1,4 @@
 class SimpleCommand < Mutations::Command
-
   required do
     string :name, :max_length => 10
     string :email
@@ -18,5 +17,4 @@ class SimpleCommand < Mutations::Command
   def execute
     inputs
   end
-
 end

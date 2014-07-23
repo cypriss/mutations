@@ -8,13 +8,12 @@ module Mutations
     }
 
     def filter(data)
-
       # Handle nil case
       if data.nil?
         return [nil, nil] if options[:nils]
         return [nil, :nils]
       end
-      
+
       # Now check if it's empty:
       return [data, :empty] if data == ""
 

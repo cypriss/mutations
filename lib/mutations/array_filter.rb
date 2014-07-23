@@ -20,7 +20,7 @@ module Mutations
       @element_filter = nil
 
       if block_given?
-        instance_eval &block
+        instance_eval(&block)
       end
 
       raise ArgumentError.new("Can't supply both a class and a filter") if @element_filter && self.options[:class]

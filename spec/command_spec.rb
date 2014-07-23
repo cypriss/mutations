@@ -59,12 +59,12 @@ describe "Command" do
 
     it "should execute custom validate method during run" do
       outcome = SimpleCommand.run(:name => "JohnLong", :email => "xxxx")
-      
+
       assert !outcome.success?
       assert_nil outcome.result
       assert_equal :invalid, outcome.errors.symbolic[:email]
     end
-    
+
     it "should execute custom validate method only if regular validations succeed" do
       outcome = SimpleCommand.validate(:name => "JohnTooLong", :email => "xxxx")
 
@@ -113,7 +113,6 @@ describe "Command" do
 
   describe "EigenCommand" do
     class EigenCommand < Mutations::Command
-
       required { string :name }
       optional { string :email }
 
@@ -130,7 +129,6 @@ describe "Command" do
 
   describe "MutatatedCommand" do
     class MutatatedCommand < Mutations::Command
-
       required { string :name }
       optional { string :email }
 
@@ -148,7 +146,6 @@ describe "Command" do
 
   describe "ErrorfulCommand" do
     class ErrorfulCommand < Mutations::Command
-
       required { string :name }
       optional { string :email }
 
@@ -170,7 +167,6 @@ describe "Command" do
 
   describe "NestingErrorfulCommand" do
     class NestingErrorfulCommand < Mutations::Command
-
       required { string :name }
       optional { string :email }
 
@@ -192,7 +188,6 @@ describe "Command" do
 
   describe "MultiErrorCommand" do
     class ErrorfulCommand < Mutations::Command
-
       required { string :name }
       optional { string :email }
 
@@ -219,7 +214,6 @@ describe "Command" do
 
   describe "PresentCommand" do
     class PresentCommand < Mutations::Command
-
       optional do
         string :email
         string :name
@@ -248,7 +242,6 @@ describe "Command" do
 
   describe "RawInputsCommand" do
     class RawInputsCommand < Mutations::Command
-
       required do
         string :name
       end
@@ -259,7 +252,7 @@ describe "Command" do
     end
 
     it "should return the raw input data" do
-      input = { "name" => "Hello World", "other" => "Foo Bar Baz" }
+      input = {"name" => "Hello World", "other" => "Foo Bar Baz"}
       assert_equal input, RawInputsCommand.run!(input)
     end
   end

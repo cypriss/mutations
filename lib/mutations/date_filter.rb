@@ -13,7 +13,7 @@ module Mutations
         return [nil, nil] if options[:nils]
         return [nil, :nils]
       end
-      
+
       # Now check if it's empty:
       return [data, :empty] if data == ""
 
@@ -34,7 +34,7 @@ module Mutations
       else
         return [nil, :date]
       end
-      
+
       # Ok, its a valid date, check if it falls within the range
       if options[:after]
         if actual_date <= options[:after]

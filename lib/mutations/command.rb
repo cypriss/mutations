@@ -50,7 +50,6 @@ module Mutations
           end
         end
       end
-
     end
 
     # Instance methods
@@ -93,7 +92,7 @@ module Mutations
       Outcome.new(!has_errors?, has_errors? ? nil : result, @errors, @inputs)
     end
 
-  protected
+    protected
 
     attr_reader :inputs, :raw_inputs
 
@@ -116,7 +115,7 @@ module Mutations
       @errors.tap do |errs|
         path = key.to_s.split(".")
         last = path.pop
-        inner = path.inject(errs) do |cur_errors,part|
+        inner = path.inject(errs) do |cur_errors, part|
           cur_errors[part.to_sym] ||= ErrorHash.new
         end
         inner[last] = ErrorAtom.new(key, kind, :message => message)
@@ -129,6 +128,5 @@ module Mutations
         @errors.merge!(hash)
       end
     end
-
   end
 end

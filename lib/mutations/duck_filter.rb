@@ -6,7 +6,6 @@ module Mutations
     }
 
     def filter(data)
-
       # Handle nil case
       if data.nil?
         return [nil, nil] if options[:nils]

@@ -66,17 +66,24 @@ describe "Mutations - errors" do
     end
 
     it "gives symbolic errors" do
-      expected = {"str1"=>:empty,
-       "str2"=>:in,
-       "int1"=>:integer,
-       "hash1"=>{"bool1"=>:boolean, "bool2"=>:required},
-       "arr1"=>[:integer, nil, :integer]}
+      expected = {"str1" => :empty,
+                  "str2" => :in,
+                  "int1" => :integer,
+                  "hash1" => {"bool1" => :boolean, "bool2" => :required},
+                  "arr1" => [:integer, nil, :integer]}
 
       assert_equal expected, @outcome.errors.symbolic
     end
 
     it "gives messages" do
-      expected = {"str1"=>"Str1 can't be blank", "str2"=>"Str2 isn't an option", "int1"=>"Int1 isn't an integer", "hash1"=>{"bool1"=>"Bool1 isn't a boolean", "bool2"=>"Bool2 is required"}, "arr1"=>["Arr1[0] isn't an integer", nil, "Arr1[2] isn't an integer"]}
+      expected = {"str1" => "Str1 can't be blank",
+                  "str2" => "Str2 isn't an option",
+                  "int1" => "Int1 isn't an integer",
+                  "hash1" => {"bool1" => "Bool1 isn't a boolean",
+                              "bool2" => "Bool2 is required"},
+                  "arr1" => ["Arr1[0] isn't an integer",
+                             nil,
+                             "Arr1[2] isn't an integer"]}
 
       assert_equal expected, @outcome.errors.message
     end

@@ -32,7 +32,7 @@ describe "Mutations::AdditionalFilter" do
       end
 
       def execute
-        { :first_name => first_name, :last_name => last_name }
+        {:first_name => first_name, :last_name => last_name}
       end
     end
 
@@ -50,13 +50,13 @@ describe "Mutations::AdditionalFilter" do
       end
 
       def execute
-        { :a_hash => a_hash }
+        {:a_hash => a_hash}
       end
     end
 
     it "should be useable in hashes" do
       outcome = TestCommandUsingAdditionalFiltersInHashes.run(
-        :a_hash => { :first_name => "John" }
+        :a_hash => {:first_name => "John"}
       )
 
       assert outcome.success?
@@ -71,13 +71,13 @@ describe "Mutations::AdditionalFilter" do
       end
 
       def execute
-        { :an_array => an_array }
+        {:an_array => an_array}
       end
     end
 
     it "should be useable in arrays" do
       outcome = TestCommandUsingAdditionalFiltersInArrays.run(
-        :an_array => [ "John", "Bill" ]
+        :an_array => ["John", "Bill"]
       )
 
       assert outcome.success?
@@ -86,12 +86,11 @@ describe "Mutations::AdditionalFilter" do
 
     module Mutations
       class AdditionalWithBlockFilter < Mutations::AdditionalFilter
-
-        def initialize(opts={}, &block)
+        def initialize(opts = {}, &block)
           super(opts)
 
           if block_given?
-            instance_eval &block
+            instance_eval(&block)
           end
         end
 

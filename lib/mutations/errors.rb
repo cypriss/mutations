@@ -1,8 +1,6 @@
 module Mutations
-
   # Offers a non-localized, english only, non configurable way to get error messages.  This probably isnt good enough for users as-is.
   class DefaultErrorMessageCreator
-
     MESSAGES = Hash.new("is invalid").tap do |h|
       h.merge!(
         # General
@@ -89,7 +87,6 @@ module Mutations
   #   }
   # }
   class ErrorHash < Hash
-
     # Returns a nested HashWithIndifferentAccess where the values are symbols.  Eg:
     # {
     #   email: :matches,
@@ -142,15 +139,15 @@ module Mutations
 
   class ErrorArray < Array
     def symbolic
-      map {|e| e && e.symbolic }
+      map { |e| e && e.symbolic }
     end
 
     def message
-      map {|e| e && e.message }
+      map { |e| e && e.message }
     end
 
     def message_list
-      compact.map {|e| e.message_list }.flatten
+      compact.map { |e| e.message_list }.flatten
     end
   end
 end
