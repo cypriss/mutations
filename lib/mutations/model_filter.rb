@@ -1,10 +1,10 @@
 module Mutations
   class ModelFilter < InputFilter
     @default_options = {
-      :nils => false,        # true allows an explicit nil to be valid. Overrides any other options
-      :class => nil,         # default is the attribute name.to_s.camelize.constantize.  This overrides it with class or class.constantize
-      :builder => nil,       # Could be a class or a string which will be constantized. If present, and a hash is passed, then we use that to construct a model
-      :new_records => false, # If false, unsaved AR records are not valid. Things that don't respond to new_record? are valid.  true: anything is valid
+      nils: false,        # true allows an explicit nil to be valid. Overrides any other options
+      class: nil,         # default is the attribute name.to_s.camelize.constantize.  This overrides it with class or class.constantize
+      builder: nil,       # Could be a class or a string which will be constantized. If present, and a hash is passed, then we use that to construct a model
+      new_records: false, # If false, unsaved AR records are not valid. Things that don't respond to new_record? are valid.  true: anything is valid
     }
 
     def initialize(name, opts = {})

@@ -48,14 +48,14 @@ describe "Mutations::FileFilter" do
   end
 
   it "considers nil to be invalid" do
-    f = Mutations::FileFilter.new(:nils => false)
+    f = Mutations::FileFilter.new(nils: false)
     filtered, errors = f.filter(nil)
     assert_equal(nil, filtered)
     assert_equal(:nils, errors)
   end
 
   it "considers nil to be valid" do
-    f = Mutations::FileFilter.new(:nils => true)
+    f = Mutations::FileFilter.new(nils: true)
     filtered, errors = f.filter(nil)
     assert_equal(nil, filtered)
     assert_equal(nil, errors)
@@ -69,7 +69,7 @@ describe "Mutations::FileFilter" do
 
   it "should allow small files" do
     file = StringIO.new("bob")
-    f = Mutations::FileFilter.new(:size => 4)
+    f = Mutations::FileFilter.new(size: 4)
     filtered, errors = f.filter(file)
     assert_equal(file, filtered)
     assert_equal(nil, errors)
@@ -77,7 +77,7 @@ describe "Mutations::FileFilter" do
 
   it "shouldn't allow big files" do
     file = StringIO.new("bob")
-    f = Mutations::FileFilter.new(:size => 2)
+    f = Mutations::FileFilter.new(size: 2)
     filtered, errors = f.filter(file)
     assert_equal(file, filtered)
     assert_equal(:size, errors)
@@ -85,7 +85,7 @@ describe "Mutations::FileFilter" do
 
   it "should require extra methods if uploaded file: accept" do
     file = UploadedStringIO.new("bob")
-    f = Mutations::FileFilter.new(:upload => true)
+    f = Mutations::FileFilter.new(upload: true)
     filtered, errors = f.filter(file)
     assert_equal(file, filtered)
     assert_equal(nil, errors)
@@ -93,7 +93,7 @@ describe "Mutations::FileFilter" do
 
   it "should require extra methods if uploaded file: deny" do
     file = StringIO.new("bob")
-    f = Mutations::FileFilter.new(:upload => true)
+    f = Mutations::FileFilter.new(upload: true)
     filtered, errors = f.filter(file)
     assert_equal(file, filtered)
     assert_equal(:file, errors)

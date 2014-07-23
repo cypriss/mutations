@@ -10,7 +10,7 @@ module Mutations
     end
 
     @default_options = {
-      :nils => false,            # true allows an explicit nil to be valid. Overrides any other options
+      nils: false,            # true allows an explicit nil to be valid. Overrides any other options
     }
 
     attr_accessor :optional_inputs

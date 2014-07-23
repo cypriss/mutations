@@ -5,7 +5,7 @@ describe "Mutations - errors" do
   class GivesErrors < Mutations::Command
     required do
       string :str1
-      string :str2, :in => %w[opt1 opt2 opt3]
+      string :str2, in: %w[opt1 opt2 opt3]
     end
 
     optional do
@@ -25,7 +25,7 @@ describe "Mutations - errors" do
   end
 
   it "returns an ErrorHash as the top level error object, and ErrorAtom's inside" do
-    o = GivesErrors.run(:hash1 => 1, :arr1 => "bob")
+    o = GivesErrors.run(hash1: 1, arr1: "bob")
 
     assert !o.success?
     assert o.errors.is_a?(Mutations::ErrorHash)
@@ -37,7 +37,7 @@ describe "Mutations - errors" do
   end
 
   it "returns an ErrorHash for nested hashes" do
-    o = GivesErrors.run(:hash1 => {:bool1 => "poop"})
+    o = GivesErrors.run(hash1: {bool1: "poop"})
 
     assert !o.success?
     assert o.errors.is_a?(Mutations::ErrorHash)
@@ -47,7 +47,7 @@ describe "Mutations - errors" do
   end
 
   it "returns an ErrorArray for errors in arrays" do
-    o = GivesErrors.run(:str1 => "a", :str2 => "opt1", :arr1 => ["bob", 1, "sally"])
+    o = GivesErrors.run(str1: "a", str2: "opt1", arr1: ["bob", 1, "sally"])
 
     assert !o.success?
     assert o.errors.is_a?(Mutations::ErrorHash)
@@ -64,7 +64,7 @@ describe "Mutations - errors" do
 
   describe "Bunch o errors" do
     before do
-      @outcome = GivesErrors.run(:str1 => "", :str2 => "opt9", :int1 => "zero", :hash1 => {:bool1 => "bob"}, :arr1 => ["bob", 1, "sally"])
+      @outcome = GivesErrors.run(str1: "", str2: "opt9", int1: "zero", hash1: {bool1: "bob"}, arr1: ["bob", 1, "sally"])
     end
 
     it "gives symbolic errors" do
