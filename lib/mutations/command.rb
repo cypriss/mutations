@@ -2,8 +2,8 @@ module Mutations
   class Command
     class << self
       def create_attr_methods(meth, &block)
-        self.input_filters.send(meth, &block)
-        keys = self.input_filters.send("#{meth}_keys")
+        input_filters.send(meth, &block)
+        keys = input_filters.send("#{meth}_keys")
         keys.each do |key|
           define_method(key) do
             @inputs[key]
@@ -43,10 +43,10 @@ module Mutations
 
       def input_filters
         @input_filters ||= begin
-          if Command == self.superclass
+          if Command == superclass
             HashFilter.new
           else
-            self.superclass.input_filters.dup
+            superclass.input_filters.dup
           end
         end
       end
@@ -60,7 +60,7 @@ module Mutations
       end
 
       # Do field-level validation / filtering:
-      @inputs, @errors = self.input_filters.filter(@raw_inputs)
+      @inputs, @errors = input_filters.filter(@raw_inputs)
 
       # Run a custom validation method if supplied:
       validate unless has_errors?

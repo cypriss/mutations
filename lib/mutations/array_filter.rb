@@ -21,7 +21,7 @@ module Mutations
 
       instance_eval(&block) if block_given?
 
-      raise ArgumentError.new("Can't supply both a class and a filter") if @element_filter && self.options[:class]
+      raise ArgumentError.new("Can't supply both a class and a filter") if @element_filter && options[:class]
     end
 
     def hash(options = {}, &block)
