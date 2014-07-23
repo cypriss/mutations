@@ -10,7 +10,7 @@ module Mutations
           end
 
           define_method("#{key}_present?") do
-            @inputs.has_key?(key)
+            @inputs.key?(key)
           end
 
           define_method("#{key}=") do |v|
@@ -63,19 +63,19 @@ module Mutations
       @inputs, @errors = input_filters.filter(@raw_inputs)
 
       # Run a custom validation method if supplied:
-      validate unless has_errors?
+      validate unless errors?
     end
 
     def input_filters
       self.class.input_filters
     end
 
-    def has_errors?
+    def errors?
       !@errors.nil?
     end
 
     def run
-      return validation_outcome if has_errors?
+      return validation_outcome if errors?
       validation_outcome(execute)
     end
 
@@ -89,7 +89,7 @@ module Mutations
     end
 
     def validation_outcome(result = nil)
-      Outcome.new(!has_errors?, has_errors? ? nil : result, @errors, @inputs)
+      Outcome.new(!errors?, errors? ? nil : result, @errors, @inputs)
     end
 
     protected

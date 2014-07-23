@@ -98,7 +98,7 @@ module Mutations
 
           data_element = data[key]
 
-          if data.has_key?(key)
+          if data.key?(key)
             sub_data, sub_error = filterer.filter(data_element)
 
             if sub_error.nil?
@@ -115,8 +115,8 @@ module Mutations
             end
           end
 
-          unless data.has_key?(key)
-            if filterer.has_default?
+          unless data.key?(key)
+            if filterer.default?
               filtered_data[key] = filterer.default
             elsif is_required
               errors[key] = ErrorAtom.new(key, :required)
