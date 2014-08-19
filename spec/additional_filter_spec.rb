@@ -125,5 +125,22 @@ describe "Mutations::AdditionalFilter" do
       assert_equal true, TestCommandUsingBlockArgument.run!(:foo => 'bar')
     end
 
+    class TestCommandUsingBlockArgumentInAnArray < Mutations::Command
+      required do
+        array :some_array do
+          additional_with_block do
+            should_be_called
+          end
+        end
+      end
+
+      def execute
+        true
+      end
+    end
+
+    it "It can have a block constructor when used in an array" do
+      assert_equal true, TestCommandUsingBlockArgumentInAnArray.run!(:some_array => ['bar'])
+    end
   end
 end
