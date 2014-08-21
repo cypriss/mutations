@@ -2,8 +2,8 @@ module Mutations
   class InputFilter
     @default_options = {}
 
-    def self.default_options
-      @default_options
+    class << self
+      attr_reader :default_options
     end
 
     attr_accessor :options
@@ -18,8 +18,8 @@ module Mutations
       [data, nil]
     end
 
-    def has_default?
-      options.has_key?(:default)
+    def default?
+      options.key?(:default)
     end
 
     def default

@@ -6,21 +6,21 @@ describe "Mutations::AdditionalFilter" do
     module Mutations
       class SometestFilter < Mutations::AdditionalFilter
         @default_options = {
-          :nils => false
+          nils: false
         }
 
         def filter(data)
-          return [data, nil]
+          [data, nil]
         end
       end
 
       class MultiWordTestFilter < Mutations::AdditionalFilter
         @default_options = {
-          :nils => false
+          nils: false
         }
 
         def filter(data)
-          return [data, nil]
+          [data, nil]
         end
       end
     end
@@ -32,14 +32,14 @@ describe "Mutations::AdditionalFilter" do
       end
 
       def execute
-        { :first_name => first_name, :last_name => last_name }
+        {first_name: first_name, last_name: last_name}
       end
     end
 
     it "should recognize additional filters" do
-      outcome = TestCommandUsingAdditionalFilters.run(:first_name => "John", :last_name => "Doe")
+      outcome = TestCommandUsingAdditionalFilters.run(first_name: "John", last_name: "Doe")
       assert outcome.success?
-      assert_equal nil, outcome.errors
+      assert_equal(nil, outcome.errors)
     end
 
     class TestCommandUsingAdditionalFiltersInHashes < Mutations::Command
@@ -50,17 +50,17 @@ describe "Mutations::AdditionalFilter" do
       end
 
       def execute
-        { :a_hash => a_hash }
+        {a_hash: a_hash}
       end
     end
 
     it "should be useable in hashes" do
       outcome = TestCommandUsingAdditionalFiltersInHashes.run(
-        :a_hash => { :first_name => "John" }
+        a_hash: {first_name: "John"}
       )
 
       assert outcome.success?
-      assert_equal nil, outcome.errors
+      assert_equal(nil, outcome.errors)
     end
 
     class TestCommandUsingAdditionalFiltersInArrays < Mutations::Command
@@ -71,35 +71,32 @@ describe "Mutations::AdditionalFilter" do
       end
 
       def execute
-        { :an_array => an_array }
+        {an_array: an_array}
       end
     end
 
     it "should be useable in arrays" do
       outcome = TestCommandUsingAdditionalFiltersInArrays.run(
-        :an_array => [ "John", "Bill" ]
+        an_array: %w[John Bill]
       )
 
       assert outcome.success?
-      assert_equal nil, outcome.errors
+      assert_equal(nil, outcome.errors)
     end
 
     module Mutations
       class AdditionalWithBlockFilter < Mutations::AdditionalFilter
-
-        def initialize(opts={}, &block)
+        def initialize(opts = {}, &block)
           super(opts)
 
-          if block_given?
-            instance_eval &block
-          end
+          instance_eval(&block) if block_given?
         end
 
         def should_be_called
           @was_called = true
         end
 
-        def filter(data)
+        def filter(_)
           if @was_called
             [true, nil]
           else
@@ -122,7 +119,7 @@ describe "Mutations::AdditionalFilter" do
     end
 
     it "can have a block constructor" do
-      assert_equal true, TestCommandUsingBlockArgument.run!(:foo => 'bar')
+      assert_equal(true, TestCommandUsingBlockArgument.run!(foo: 'bar'))
     end
 
     class TestCommandUsingBlockArgumentInAnArray < Mutations::Command

@@ -1,43 +1,41 @@
 module Mutations
-
   # Offers a non-localized, english only, non configurable way to get error messages.  This probably isnt good enough for users as-is.
   class DefaultErrorMessageCreator
-
     MESSAGES = Hash.new("is invalid").tap do |h|
       h.merge!(
         # General
-        :nils => "can't be nil",
-        :required => "is required",
+        nils: "can't be nil",
+        required: "is required",
 
         # Datatypes
-        :string => "isn't a string",
-        :integer => "isn't an integer",
-        :boolean => "isn't a boolean",
-        :hash => "isn't a hash",
-        :array => "isn't an array",
-        :model => "isn't the right class",
+        string: "isn't a string",
+        integer: "isn't an integer",
+        boolean: "isn't a boolean",
+        hash: "isn't a hash",
+        array: "isn't an array",
+        model: "isn't the right class",
 
         # Date
-        :date => "date doesn't exist",
-        :before => "isn't before given date",
-        :after => "isn't after given date",
+        date: "date doesn't exist",
+        before: "isn't before given date",
+        after: "isn't after given date",
 
         # String
-        :empty => "can't be blank",
-        :max_length => "is too long",
-        :min_length => "is too short",
-        :matches => "isn't in the right format",
-        :in => "isn't an option",
+        empty: "can't be blank",
+        max_length: "is too long",
+        min_length: "is too short",
+        matches: "isn't in the right format",
+        in: "isn't an option",
 
         # Array
-        :class => "isn't the right class",
+        class: "isn't the right class",
 
         # Integer
-        :min => "is too small",
-        :max => "is too big",
+        min: "is too small",
+        max: "is too big",
 
         # Model
-        :new_records => "isn't a saved model"
+        new_records: "isn't a saved model"
       )
     end
 
@@ -55,7 +53,8 @@ module Mutations
   end
 
   class ErrorAtom
-
+    attr_reader :symbol
+    alias_method :symbolic, :symbol
     # NOTE: in the future, could also pass in:
     #  - error type
     #  - value (eg, string :name, length: 5 # value=5)
@@ -69,12 +68,8 @@ module Mutations
       @index = options[:index]
     end
 
-    def symbolic
-      @symbol
-    end
-
     def message
-      @message ||= Mutations.error_message_creator.message(@key, @symbol, :index => @index)
+      @message ||= Mutations.error_message_creator.message(@key, @symbol, index: @index)
     end
 
     def message_list
@@ -92,7 +87,6 @@ module Mutations
   #   }
   # }
   class ErrorHash < Hash
-
     # Returns a nested HashWithIndifferentAccess where the values are symbols.  Eg:
     # {
     #   email: :matches,
@@ -136,7 +130,7 @@ module Mutations
     # ]
     def message_list
       list = []
-      each do |k, v|
+      each do |_, v|
         list.concat(v.message_list)
       end
       list
@@ -145,15 +139,15 @@ module Mutations
 
   class ErrorArray < Array
     def symbolic
-      map {|e| e && e.symbolic }
+      map { |e| e && e.symbolic }
     end
 
     def message
-      map {|e| e && e.message }
+      map { |e| e && e.message }
     end
 
     def message_list
-      compact.map {|e| e.message_list }.flatten
+      compact.map { |e| e.message_list }.flatten
     end
   end
 end

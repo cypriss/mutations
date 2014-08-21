@@ -1,10 +1,10 @@
 module Mutations
   class DateFilter < AdditionalFilter
     @default_options = {
-      :nils => false,       # true allows an explicit nil to be valid. Overrides any other options
-      :format => nil,       # If nil, Date.parse will be used for coercsion. If something like "%Y-%m-%d", Date.strptime is used
-      :after => nil,        # A date object, representing the minimum date allowed, inclusive
-      :before => nil        # A date object, representing the maximum date allowed, inclusive
+      nils: false,       # true allows an explicit nil to be valid. Overrides any other options
+      format: nil,       # If nil, Date.parse will be used for coercsion. If something like "%Y-%m-%d", Date.strptime is used
+      after: nil,        # A date object, representing the minimum date allowed, inclusive
+      before: nil        # A date object, representing the maximum date allowed, inclusive
     }
 
     def filter(data)
@@ -13,7 +13,7 @@ module Mutations
         return [nil, nil] if options[:nils]
         return [nil, :nils]
       end
-      
+
       # Now check if it's empty:
       return [data, :empty] if data == ""
 
@@ -34,19 +34,11 @@ module Mutations
       else
         return [nil, :date]
       end
-      
-      # Ok, its a valid date, check if it falls within the range
-      if options[:after]
-        if actual_date <= options[:after]
-          return [nil, :after]
-        end
-      end
 
-      if options[:before]
-        if actual_date >= options[:before]
-          return [nil, :before]
-        end
-      end
+      # Ok, its a valid date, check if it falls within the range
+      return [nil, :after] if options[:after] && actual_date <= options[:after]
+
+      return [nil, :before] if options[:before] && actual_date >= options[:before]
 
       # We win, it's valid!
       [actual_date, nil]

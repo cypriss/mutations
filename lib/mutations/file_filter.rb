@@ -1,19 +1,18 @@
 module Mutations
   class FileFilter < AdditionalFilter
     @default_options = {
-      :nils => false,       # true allows an explicit nil to be valid. Overrides any other options
-      :upload => false,     # if true, also checks the file is has original_filename and content_type methods.
-      :size => nil          # An integer value like 1_000_000 limits the size of the file to 1M bytes
+      nils: false,       # true allows an explicit nil to be valid. Overrides any other options
+      upload: false,     # if true, also checks the file is has original_filename and content_type methods.
+      size: nil          # An integer value like 1_000_000 limits the size of the file to 1M bytes
     }
 
     def filter(data)
-
       # Handle nil case
       if data.nil?
         return [nil, nil] if options[:nils]
         return [nil, :nils]
       end
-      
+
       # Now check if it's empty:
       return [data, :empty] if data == ""
 

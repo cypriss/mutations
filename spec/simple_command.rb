@@ -1,7 +1,6 @@
 class SimpleCommand < Mutations::Command
-
   required do
-    string :name, :max_length => 10
+    string :name, max_length: 10
     string :email
   end
 
@@ -10,13 +9,12 @@ class SimpleCommand < Mutations::Command
   end
 
   def validate
-    unless email && email.include?('@')
-      add_error(:email, :invalid, 'Email must contain @')
-    end
+    return if email && email.include?('@')
+
+    add_error(:email, :invalid, 'Email must contain @')
   end
 
   def execute
     inputs
   end
-
 end

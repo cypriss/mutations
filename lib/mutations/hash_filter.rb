@@ -10,7 +10,7 @@ module Mutations
     end
 
     @default_options = {
-      :nils => false,            # true allows an explicit nil to be valid. Overrides any other options
+      nils: false,            # true allows an explicit nil to be valid. Overrides any other options
     }
 
     attr_accessor :optional_inputs
@@ -23,9 +23,7 @@ module Mutations
       @required_inputs = {}
       @current_inputs = @required_inputs
 
-      if block_given?
-        instance_eval &block
-      end
+      instance_eval(&block) if block_given?
     end
 
     def dup
@@ -41,12 +39,12 @@ module Mutations
 
     def required(&block)
       @current_inputs = @required_inputs
-      instance_eval &block
+      instance_eval(&block)
     end
 
     def optional(&block)
       @current_inputs = @optional_inputs
-      instance_eval &block
+      instance_eval(&block)
     end
 
     def required_keys
@@ -71,7 +69,6 @@ module Mutations
     end
 
     def filter(data)
-
       # Handle nil case
       if data.nil?
         return [nil, nil] if options[:nils]
@@ -101,7 +98,7 @@ module Mutations
 
           data_element = data[key]
 
-          if data.has_key?(key)
+          if data.key?(key)
             sub_data, sub_error = filterer.filter(data_element)
 
             if sub_error.nil?
@@ -117,9 +114,9 @@ module Mutations
               errors[key] = sub_error
             end
           end
-          
-          if !data.has_key?(key)
-            if filterer.has_default?
+
+          unless data.key?(key)
+            if filterer.default?
               filtered_data[key] = filterer.default
             elsif is_required
               errors[key] = ErrorAtom.new(key, :required)

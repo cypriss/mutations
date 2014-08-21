@@ -7,53 +7,53 @@ describe "Mutations::HashFilter" do
     hf = Mutations::HashFilter.new do
       string :foo
     end
-    filtered, errors = hf.filter(:foo => "bar")
-    assert_equal ({"foo" => "bar"}), filtered
-    assert_equal nil, errors
+    filtered, errors = hf.filter(foo: "bar")
+    assert_equal({"foo" => "bar"}, filtered)
+    assert_equal(nil, errors)
   end
 
   it 'disallows non-hashes' do
     hf = Mutations::HashFilter.new do
       string :foo
     end
-    filtered, errors = hf.filter("bar")
-    assert_equal :hash, errors
+    _, errors = hf.filter("bar")
+    assert_equal(:hash, errors)
   end
 
   it "allows wildcards in hashes" do
     hf = Mutations::HashFilter.new do
       string :*
     end
-    filtered, errors = hf.filter(:foo => "bar", :baz => "ban")
-    assert_equal ({"foo" => "bar", "baz" => "ban"}), filtered
-    assert_equal nil, errors
+    filtered, errors = hf.filter(foo: "bar", baz: "ban")
+    assert_equal({"foo" => "bar", "baz" => "ban"}, filtered)
+    assert_equal(nil, errors)
   end
 
   it "allows floats in hashes" do
     hf = Mutations::HashFilter.new do
       float :foo
     end
-    filtered, errors = hf.filter(:foo => 3.14)
-    assert_equal ({"foo" => 3.14}), filtered
-    assert_equal nil, errors
+    filtered, errors = hf.filter(foo: 3.14)
+    assert_equal({"foo" => 3.14}, filtered)
+    assert_equal(nil, errors)
   end
 
   it "allows ducks in hashes" do
     hf = Mutations::HashFilter.new do
-      duck :foo, :methods => [:length]
+      duck :foo, methods: [:length]
     end
-    filtered, errors = hf.filter(:foo => "123")
-    assert_equal ({"foo" => "123"}), filtered
-    assert_equal nil, errors
+    filtered, errors = hf.filter(foo: "123")
+    assert_equal({"foo" => "123"}, filtered)
+    assert_equal(nil, errors)
   end
 
   it "allows dates in hashes" do
     hf = Mutations::HashFilter.new do
-      date :foo, :format => "%d-%m-%Y"
+      date :foo, format: "%d-%m-%Y"
     end
-    filtered, errors = hf.filter(:foo => "1-1-2000")
-    assert_equal Date.new(2000, 1, 1), filtered[:foo]
-    assert_equal nil, errors
+    filtered, errors = hf.filter(foo: "1-1-2000")
+    assert_equal(Date.new(2000, 1, 1), filtered[:foo])
+    assert_equal(nil, errors)
   end
 
   it "allows files in hashes" do
@@ -61,17 +61,17 @@ describe "Mutations::HashFilter" do
     hf = Mutations::HashFilter.new do
       file :foo
     end
-    filtered, errors = hf.filter(:foo => sio)
-    assert_equal ({"foo" => sio}), filtered
-    assert_equal nil, errors
+    filtered, errors = hf.filter(foo: sio)
+    assert_equal({"foo" => sio}, filtered)
+    assert_equal(nil, errors)
   end
 
   it "doesn't allow wildcards in hashes" do
     hf = Mutations::HashFilter.new do
       string :*
     end
-    filtered, errors = hf.filter(:foo => [])
-    assert_equal ({"foo" => :string}), errors.symbolic
+    _, errors = hf.filter(foo: [])
+    assert_equal({"foo" => :string}, errors.symbolic)
   end
 
   it "allows a mix of specific keys and then wildcards" do
@@ -79,9 +79,9 @@ describe "Mutations::HashFilter" do
       string :foo
       integer :*
     end
-    filtered, errors = hf.filter(:foo => "bar", :baz => "4")
-    assert_equal ({"foo" => "bar", "baz" => 4}), filtered
-    assert_equal nil, errors
+    filtered, errors = hf.filter(foo: "bar", baz: "4")
+    assert_equal({"foo" => "bar", "baz" => 4}, filtered)
+    assert_equal(nil, errors)
   end
 
   it "doesn't allow a mix of specific keys and then wildcards -- should raise errors appropriately" do
@@ -89,8 +89,8 @@ describe "Mutations::HashFilter" do
       string :foo
       integer :*
     end
-    filtered, errors = hf.filter(:foo => "bar", :baz => "poopin")
-    assert_equal ({"baz" => :integer}), errors.symbolic
+    _, errors = hf.filter(foo: "bar", baz: "poopin")
+    assert_equal({"baz" => :integer}, errors.symbolic)
   end
 
   describe "optional params and nils" do
@@ -104,9 +104,9 @@ describe "Mutations::HashFilter" do
         end
       end
 
-      filtered, errors = hf.filter(:foo => "bar")
-      assert_equal ({"foo" => "bar"}), filtered
-      assert_equal nil, errors
+      filtered, errors = hf.filter(foo: "bar")
+      assert_equal({"foo" => "bar"}, filtered)
+      assert_equal(nil, errors)
     end
 
     it "bar is optional -- it works if nil is passed" do
@@ -119,9 +119,9 @@ describe "Mutations::HashFilter" do
         end
       end
 
-      filtered, errors = hf.filter(:foo => "bar", :bar => nil)
-      assert_equal ({"foo" => "bar"}), filtered
-      assert_equal nil, errors
+      filtered, errors = hf.filter(foo: "bar", bar: nil)
+      assert_equal({"foo" => "bar"}, filtered)
+      assert_equal(nil, errors)
     end
 
     it "bar is optional -- it works if nil is passed and nils are allowed" do
@@ -130,13 +130,13 @@ describe "Mutations::HashFilter" do
           string :foo
         end
         optional do
-          string :bar, :nils => true
+          string :bar, nils: true
         end
       end
 
-      filtered, errors = hf.filter(:foo => "bar", :bar => nil)
-      assert_equal ({"foo" => "bar", "bar" => nil}), filtered
-      assert_equal nil, errors
+      filtered, errors = hf.filter(foo: "bar", bar: nil)
+      assert_equal({"foo" => "bar", "bar" => nil}, filtered)
+      assert_equal(nil, errors)
     end
   end
 
@@ -147,43 +147,43 @@ describe "Mutations::HashFilter" do
           string :foo
         end
         optional do
-          string :bar, :discard_empty => true
+          string :bar, discard_empty: true
         end
       end
 
-      filtered, errors = hf.filter(:foo => "bar", :bar => "")
-      assert_equal ({"foo" => "bar"}), filtered
-      assert_equal nil, errors
+      filtered, errors = hf.filter(foo: "bar", bar: "")
+      assert_equal({"foo" => "bar"}, filtered)
+      assert_equal(nil, errors)
     end
-    
+
     it "bar is optional -- discards empty if it needs to be stripped" do
       hf = Mutations::HashFilter.new do
         required do
           string :foo
         end
         optional do
-          string :bar, :discard_empty => true
+          string :bar, discard_empty: true
         end
       end
 
-      filtered, errors = hf.filter(:foo => "bar", :bar => " ")
-      assert_equal ({"foo" => "bar"}), filtered
-      assert_equal nil, errors
+      filtered, errors = hf.filter(foo: "bar", bar: " ")
+      assert_equal({"foo" => "bar"}, filtered)
+      assert_equal(nil, errors)
     end
-    
+
     it "bar is optional -- don't discard empty if it's spaces but stripping is off" do
       hf = Mutations::HashFilter.new do
         required do
           string :foo
         end
         optional do
-          string :bar, :discard_empty => true, :strip => false
+          string :bar, discard_empty: true, strip: false
         end
       end
 
-      filtered, errors = hf.filter(:foo => "bar", :bar => " ")
-      assert_equal ({"foo" => "bar", "bar" => " "}), filtered
-      assert_equal nil, errors
+      filtered, errors = hf.filter(foo: "bar", bar: " ")
+      assert_equal({"foo" => "bar", "bar" => " "}, filtered)
+      assert_equal(nil, errors)
     end
 
     it "bar is optional -- errors if discard_empty is false and value is blank" do
@@ -192,12 +192,12 @@ describe "Mutations::HashFilter" do
           string :foo
         end
         optional do
-          string :bar, :discard_empty => false
+          string :bar, discard_empty: false
         end
       end
 
-      filtered, errors = hf.filter(:foo => "bar", :bar => "")
-      assert_equal ({"bar" => :empty}), errors.symbolic
+      _, errors = hf.filter(foo: "bar", bar: "")
+      assert_equal({"bar" => :empty}, errors.symbolic)
     end
 
     it "bar is optional -- discards empty -- now with wildcards" do
@@ -206,13 +206,13 @@ describe "Mutations::HashFilter" do
           string :foo
         end
         optional do
-          string :*, :discard_empty => true
+          string :*, discard_empty: true
         end
       end
 
-      filtered, errors = hf.filter(:foo => "bar", :bar => "", :baz => "\t")
-      assert_equal ({"foo" => "bar"}), filtered
-      assert_equal nil, errors
+      filtered, errors = hf.filter(foo: "bar", bar: "", baz: "\t")
+      assert_equal({"foo" => "bar"}, filtered)
+      assert_equal(nil, errors)
     end
   end
 
@@ -223,13 +223,13 @@ describe "Mutations::HashFilter" do
           string :foo
         end
         optional do
-          integer :bar, :discard_invalid => true
+          integer :bar, discard_invalid: true
         end
       end
 
-      filtered, errors = hf.filter(:foo => "bar", :bar => "baz")
-      assert_equal ({"foo" => "bar"}), filtered
-      assert_equal nil, errors
+      filtered, errors = hf.filter(foo: "bar", bar: "baz")
+      assert_equal({"foo" => "bar"}, filtered)
+      assert_equal(nil, errors)
     end
 
     it "should discard invalid optional values for wildcards" do
@@ -238,25 +238,24 @@ describe "Mutations::HashFilter" do
           string :foo
         end
         optional do
-          integer :*, :discard_invalid => true
+          integer :*, discard_invalid: true
         end
       end
 
-      filtered, errors = hf.filter(:foo => "bar", :bar => "baz", :wat => 1)
-      assert_equal ({"foo" => "bar", "wat" => 1}), filtered
-      assert_equal nil, errors
+      filtered, errors = hf.filter(foo: "bar", bar: "baz", wat: 1)
+      assert_equal({"foo" => "bar", "wat" => 1}, filtered)
+      assert_equal(nil, errors)
     end
-
 
     it "should not discard invalid require values" do
       hf = Mutations::HashFilter.new do
         required do
-          integer :foo, :discard_invalid => true
+          integer :foo, discard_invalid: true
         end
       end
 
-      filtered, errors = hf.filter(:foo => "bar")
-      assert_equal ({"foo" => :integer}), errors.symbolic
+      _, errors = hf.filter(foo: "bar")
+      assert_equal({"foo" => :integer}, errors.symbolic)
     end
   end
 

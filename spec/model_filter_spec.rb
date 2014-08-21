@@ -19,8 +19,8 @@ describe "Mutations::ModelFilter" do
     f = Mutations::ModelFilter.new(:simple_model)
     m = SimpleModel.new
     filtered, errors = f.filter(m)
-    assert_equal m, filtered
-    assert_equal nil, errors
+    assert_equal(m, filtered)
+    assert_equal(nil, errors)
   end
 
   # it "disallows different types of models" do
@@ -28,57 +28,57 @@ describe "Mutations::ModelFilter" do
 
   it "raises an exception during filtering if constantization fails" do
     f = Mutations::ModelFilter.new(:complex_model)
-    assert_raises NameError do
+    assert_raises(NameError) do
       f.filter(nil)
     end
   end
 
   it "raises an exception during filtering if constantization of class fails" do
-    f = Mutations::ModelFilter.new(:simple_model, :class => "ComplexModel")
-    assert_raises NameError do
+    f = Mutations::ModelFilter.new(:simple_model, class: "ComplexModel")
+    assert_raises(NameError) do
       f.filter(nil)
     end
   end
 
   it "raises an exception during filtering if constantization of builder fails" do
-    f = Mutations::ModelFilter.new(:simple_model, :builder => "ComplexModel")
-    assert_raises NameError do
+    f = Mutations::ModelFilter.new(:simple_model, builder: "ComplexModel")
+    assert_raises(NameError) do
       f.filter(nil)
     end
   end
 
   it "considers nil to be invalid" do
-    f = Mutations::ModelFilter.new(:simple_model, :nils => false)
+    f = Mutations::ModelFilter.new(:simple_model, nils: false)
     filtered, errors = f.filter(nil)
-    assert_equal nil, filtered
-    assert_equal :nils, errors
+    assert_equal(nil, filtered)
+    assert_equal(:nils, errors)
   end
 
   it "considers nil to be valid" do
-    f = Mutations::ModelFilter.new(:simple_model, :nils => true)
+    f = Mutations::ModelFilter.new(:simple_model, nils: true)
     filtered, errors = f.filter(nil)
-    assert_equal nil, filtered
-    assert_equal nil, errors
+    assert_equal(nil, filtered)
+    assert_equal(nil, errors)
   end
-  
+
   it "will re-constantize if cache_constants is false" do
     was = Mutations.cache_constants?
     Mutations.cache_constants = false
     f = Mutations::ModelFilter.new(:simple_model)
     m = SimpleModel.new
     filtered, errors = f.filter(m)
-    assert_equal m, filtered
-    assert_equal nil, errors
-    
+    assert_equal(m, filtered)
+    assert_equal(nil, errors)
+
     Object.send(:remove_const, 'SimpleModel')
-    
+
     class SimpleModel; end
-    
+
     m = SimpleModel.new
     filtered, errors = f.filter(m)
-    assert_equal m, filtered
-    assert_equal nil, errors
-    
+    assert_equal(m, filtered)
+    assert_equal(nil, errors)
+
     Mutations.cache_constants = was
   end
 

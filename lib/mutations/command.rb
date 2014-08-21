@@ -2,15 +2,15 @@ module Mutations
   class Command
     class << self
       def create_attr_methods(meth, &block)
-        self.input_filters.send(meth, &block)
-        keys = self.input_filters.send("#{meth}_keys")
+        input_filters.send(meth, &block)
+        keys = input_filters.send("#{meth}_keys")
         keys.each do |key|
           define_method(key) do
             @inputs[key]
           end
 
           define_method("#{key}_present?") do
-            @inputs.has_key?(key)
+            @inputs.key?(key)
           end
 
           define_method("#{key}=") do |v|
@@ -43,14 +43,13 @@ module Mutations
 
       def input_filters
         @input_filters ||= begin
-          if Command == self.superclass
+          if Command == superclass
             HashFilter.new
           else
-            self.superclass.input_filters.dup
+            superclass.input_filters.dup
           end
         end
       end
-
     end
 
     # Instance methods
@@ -61,22 +60,22 @@ module Mutations
       end
 
       # Do field-level validation / filtering:
-      @inputs, @errors = self.input_filters.filter(@raw_inputs)
+      @inputs, @errors = input_filters.filter(@raw_inputs)
 
       # Run a custom validation method if supplied:
-      validate unless has_errors?
+      validate unless errors?
     end
 
     def input_filters
       self.class.input_filters
     end
 
-    def has_errors?
+    def errors?
       !@errors.nil?
     end
 
     def run
-      return validation_outcome if has_errors?
+      return validation_outcome if errors?
       validation_outcome(execute)
     end
 
@@ -90,10 +89,10 @@ module Mutations
     end
 
     def validation_outcome(result = nil)
-      Outcome.new(!has_errors?, has_errors? ? nil : result, @errors, @inputs)
+      Outcome.new(!errors?, errors? ? nil : result, @errors, @inputs)
     end
 
-  protected
+    protected
 
     attr_reader :inputs, :raw_inputs
 
@@ -116,19 +115,18 @@ module Mutations
       @errors.tap do |errs|
         path = key.to_s.split(".")
         last = path.pop
-        inner = path.inject(errs) do |cur_errors,part|
+        inner = path.inject(errs) do |cur_errors, part|
           cur_errors[part.to_sym] ||= ErrorHash.new
         end
-        inner[last] = ErrorAtom.new(key, kind, :message => message)
+        inner[last] = ErrorAtom.new(key, kind, message: message)
       end
     end
 
     def merge_errors(hash)
-      if hash.any?
-        @errors ||= ErrorHash.new
-        @errors.merge!(hash)
-      end
-    end
+      return unless hash.any?
 
+      @errors ||= ErrorHash.new
+      @errors.merge!(hash)
+    end
   end
 end

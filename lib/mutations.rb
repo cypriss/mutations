@@ -23,20 +23,12 @@ require 'mutations/command'
 
 module Mutations
   class << self
+    attr_accessor :cache_constants
+    attr_writer :error_message_creator
+    alias_method :cache_constants?, :cache_constants
+
     def error_message_creator
       @error_message_creator ||= DefaultErrorMessageCreator.new
-    end
-
-    def error_message_creator=(creator)
-      @error_message_creator = creator
-    end
-
-    def cache_constants=(val)
-      @cache_constants = val
-    end
-
-    def cache_constants?
-      @cache_constants
     end
   end
 end

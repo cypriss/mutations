@@ -7,7 +7,7 @@ module Mutations
     end
 
     def to_s
-      "#{self.errors.message_list.join('; ')}"
+      "#{errors.message_list.join('; ')}"
     end
   end
 end

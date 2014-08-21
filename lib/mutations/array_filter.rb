@@ -8,9 +8,9 @@ module Mutations
     end
 
     @default_options = {
-      :nils => false,            # true allows an explicit nil to be valid. Overrides any other options
-      :class => nil,             # A constant or string indicates that each element of the array needs to be one of these classes
-      :arrayize => false         # true will convert "hi" to ["hi"]. "" converts to []
+      nils: false,            # true allows an explicit nil to be valid. Overrides any other options
+      class: nil,             # A constant or string indicates that each element of the array needs to be one of these classes
+      arrayize: false         # true will convert "hi" to ["hi"]. "" converts to []
     }
 
     def initialize(name, opts = {}, &block)
@@ -19,11 +19,9 @@ module Mutations
       @name = name
       @element_filter = nil
 
-      if block_given?
-        instance_eval &block
-      end
+      instance_eval(&block) if block_given?
 
-      raise ArgumentError.new("Can't supply both a class and a filter") if @element_filter && self.options[:class]
+      raise ArgumentError.new("Can't supply both a class and a filter") if @element_filter && options[:class]
     end
 
     def hash(options = {}, &block)
@@ -56,7 +54,7 @@ module Mutations
         found_error = false
         data.each_with_index do |el, i|
           el_filtered, el_error = filter_element(el)
-          el_error = ErrorAtom.new(@name, el_error, :index => i) if el_error.is_a?(Symbol)
+          el_error = ErrorAtom.new(@name, el_error, index: i) if el_error.is_a?(Symbol)
           errors << el_error
           if el_error
             found_error = true
@@ -84,9 +82,7 @@ module Mutations
         class_const = options[:class]
         class_const = class_const.constantize if class_const.is_a?(String)
 
-        if !data.is_a?(class_const)
-          return [data, :class]
-        end
+        return [data, :class] unless data.is_a?(class_const)
       end
 
       [data, nil]
