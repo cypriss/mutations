@@ -15,6 +15,14 @@ module Mutations
     # returns -> [sanitized data, error]
     # If an error is returned, then data will be nil
     def filter(data)
+      if data.nil?
+        return [nil, nil] if options[:nils]
+        return [nil, :nils]
+      end
+      _filter(data)
+    end
+
+    def _filter(data)
       [data, nil]
     end
 

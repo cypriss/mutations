@@ -70,14 +70,7 @@ module Mutations
       @current_inputs[name.to_sym] = ArrayFilter.new(name_sym, options, &block)
     end
 
-    def filter(data)
-
-      # Handle nil case
-      if data.nil?
-        return [nil, nil] if options[:nils]
-        return [nil, :nils]
-      end
-
+    def _filter(data)
       # Ensure it's a hash
       return [data, :hash] unless data.is_a?(Hash)
 

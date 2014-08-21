@@ -6,14 +6,7 @@ module Mutations
       :max => nil           # highest value, inclusive
     }
 
-    def filter(data)
-
-      # Handle nil case
-      if data.nil?
-        return [nil, nil] if options[:nils]
-        return [nil, :nils]
-      end
-      
+    def _filter(data)
       # Now check if it's empty:
       return [data, :empty] if data == ""
 
