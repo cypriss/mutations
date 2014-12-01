@@ -2,6 +2,7 @@ module Mutations
   class IntegerFilter < AdditionalFilter
     @default_options = {
       :nils => false,          # true allows an explicit nil to be valid. Overrides any other options
+      :empty_is_nil => false,  # if true, treat empty string as if it were nil
       :min => nil,             # lowest value, inclusive
       :max => nil,             # highest value, inclusive
       :in => nil,              # Can be an array like %w(3 4 5)
@@ -9,12 +10,16 @@ module Mutations
 
     def filter(data)
 
+      if options[:empty_is_nil] && data == ""
+        data = nil
+      end
+
       # Handle nil case
       if data.nil?
         return [nil, nil] if options[:nils]
         return [nil, :nils]
       end
-      
+
       # Now check if it's empty:
       return [data, :empty] if data == ""
 
