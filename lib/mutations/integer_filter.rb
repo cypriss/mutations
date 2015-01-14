@@ -5,7 +5,7 @@ module Mutations
       :empty_is_nil => false,  # if true, treat empty string as if it were nil
       :min => nil,             # lowest value, inclusive
       :max => nil,             # highest value, inclusive
-      :in => nil,              # Can be an array like %w(3 4 5)
+      :in => nil,              # Can be an array like %w(3 4 5) or a callable object that returns an array
     }
 
     def filter(data)
@@ -36,7 +36,10 @@ module Mutations
       return [data, :max] if options[:max] && data > options[:max]
 
       # Ensure it matches `in`
-      return [data, :in] if options[:in] && !options[:in].include?(data)
+      if allowed_values = options[:in]
+        allowed_values = allowed_values.call if allowed_values.respond_to?(:call)
+        return [data, :in] if !allowed_values.include?(data)
+      end
 
       # We win, it's valid!
       [data, nil]
