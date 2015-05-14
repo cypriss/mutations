@@ -1,11 +1,12 @@
 module Mutations
   class IntegerFilter < AdditionalFilter
     @default_options = {
-      :nils => false,          # true allows an explicit nil to be valid. Overrides any other options
       :empty_is_nil => false,  # if true, treat empty string as if it were nil
-      :min => nil,             # lowest value, inclusive
-      :max => nil,             # highest value, inclusive
       :in => nil,              # Can be an array like %w(3 4 5)
+      :max => nil,             # highest value, inclusive
+      :min => nil,             # lowest value, inclusive
+      :nils => false,          # true allows an explicit nil to be valid. Overrides any other options
+      :strict => false,        # if true do not cast strings to integers
     }
 
     def filter(data)
@@ -25,7 +26,7 @@ module Mutations
 
       # Ensure it's the correct data type (Fixnum)
       if !data.is_a?(Fixnum)
-        if data.is_a?(String) && data =~ /^-?\d/
+        if !options[:strict] && data.is_a?(String) && data =~ /^-?\d/
           data = data.to_i
         else
           return [data, :integer]

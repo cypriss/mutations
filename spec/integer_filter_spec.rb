@@ -10,10 +10,17 @@ describe "Mutations::IntegerFilter" do
   end
 
   it "allows strings that start with a digit" do
-    f = Mutations::IntegerFilter.new
+    f = Mutations::IntegerFilter.new(:strict => false)
     filtered, errors = f.filter("3")
     assert_equal 3, filtered
     assert_equal nil, errors
+  end
+
+  it "doesn't allow strings if strict is set to true" do
+    f = Mutations::IntegerFilter.new(:strict => true)
+    filtered, errors = f.filter("6")
+    assert_equal "6", filtered
+    assert_equal :integer, errors
   end
 
   it "allows negative strings" do
@@ -44,7 +51,7 @@ describe "Mutations::IntegerFilter" do
     assert_equal nil, filtered
     assert_equal nil, errors
   end
-  
+
   it "considers empty strings to be empty" do
     f = Mutations::IntegerFilter.new
     filtered, errors = f.filter("")
