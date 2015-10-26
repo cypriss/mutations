@@ -215,21 +215,21 @@ describe "Mutations::StringFilter" do
   end
 
   it "removes unprintable characters" do
-    sf = Mutations::StringFilter.new(:unprintable => false)
+    sf = Mutations::StringFilter.new(:allow_control_characters => false)
     filtered, errors = sf.filter("Hello\u0000\u0000World!")
     assert_equal "Hello World!", filtered
     assert_equal nil, errors
   end
 
   it "doesn't remove unprintable characters" do
-    sf = Mutations::StringFilter.new(:unprintable => true)
+    sf = Mutations::StringFilter.new(:allow_control_characters => true)
     filtered, errors = sf.filter("Hello\u0000\u0000World!")
     assert_equal "Hello\u0000\u0000World!", filtered
     assert_equal nil, errors
   end
 
   it "doesn't remove tabs, spaces and line breaks" do
-    sf = Mutations::StringFilter.new(:unprintable => false)
+    sf = Mutations::StringFilter.new(:allow_control_characters => false)
     filtered, errors = sf.filter("Hello,\tWorld !\r\nNew Line")
     assert_equal "Hello,\tWorld !\r\nNew Line", filtered
     assert_equal nil, errors
