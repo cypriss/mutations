@@ -9,7 +9,8 @@ module Mutations
       :max_length => nil,      # Can be a number like 10, meaning that at most 10 codepoints are permitted
       :matches => nil,         # Can be a regexp
       :in => nil,              # Can be an array like %w(red blue green)
-      :discard_empty => false  # If the param is optional, discard_empty: true drops empty fields.
+      :discard_empty => false, # If the param is optional, discard_empty: true drops empty fields.
+      :allow_control_characters => false    # false removes unprintable characters from the string
     }
 
     def filter(data)
@@ -26,7 +27,10 @@ module Mutations
       # Now ensure it's a string:
       return [data, :string] unless data.is_a?(String)
 
-      # At this point, data is a string.  Now transform it using strip:
+      # At this point, data is a string. Now remove unprintable characters from the string:
+      data = data.gsub(/[^[:print:]\t\r\n]+/, ' ') unless options[:allow_control_characters]
+
+      # Transform it using strip:
       data = data.strip if options[:strip]
 
       # Now check if it's blank:
