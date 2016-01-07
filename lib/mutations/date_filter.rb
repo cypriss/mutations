@@ -15,7 +15,7 @@ module Mutations
       end
       
       # Now check if it's empty:
-      return [data, :empty] if data == ""
+      return [data, :empty] if "" == data 
 
       if data.is_a?(Date) # Date and DateTime
         actual_date = data
