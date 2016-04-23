@@ -1,4 +1,6 @@
 language: ruby
+before_install:
+  - gem install bundler # the default bundler version on travis is very old and causes 1.9.3 build issues
 rvm:
   - 1.9.3
   - jruby-19mode
