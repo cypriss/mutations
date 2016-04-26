@@ -1,6 +1,4 @@
 require 'spec_helper'
-require 'stringio'
-require 'tempfile'
 
 describe "Mutations::DateFilter" do
   it "takes a date object" do
@@ -19,7 +17,7 @@ describe "Mutations::DateFilter" do
     assert_equal nil, errors
   end
   
-  it "takes a Time object and coverts it to a date" do
+  it "takes a Time object and converts it to a date" do
     time = Time.now
     f = Mutations::DateFilter.new
     filtered, errors = f.filter(time)
@@ -61,7 +59,7 @@ describe "Mutations::DateFilter" do
     assert_equal nil, errors
   end
 
-  it "gives errors when the given date is after the after before" do
+  it "gives errors when the given date is after the before date" do
     date = Date.new(2005, 1, 1)
     before_date = Date.new(2000, 1, 1)
     f = Mutations::DateFilter.new(:before => before_date)
@@ -130,6 +128,7 @@ describe "Mutations::DateFilter" do
   it "considers empty strings to be empty" do
     f = Mutations::DateFilter.new
     filtered, errors = f.filter("")
+    assert_equal "", filtered
     assert_equal :empty, errors
   end
 
