@@ -1,3 +1,11 @@
+0.8.0
+-----------
+ - Add Time filter: ```time :start_time```
+ - Remove unprintable characters from `string` by default.
+ - Add bigdecimal and float as non-strict string input options
+ - Additonal filters that are used in arrays can now have block arguments
+ - Add `empty_is_nil` option to integer filter.
+
 0.7.2
 -----------
 
