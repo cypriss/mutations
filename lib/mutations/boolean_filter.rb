@@ -20,8 +20,8 @@ module Mutations
       # If data is true or false, we win.
       return [data, nil] if data == true || data == false
 
-      # If data is a Fixnum, like 1, let's convert it to a string first
-      data = data.to_s if data.is_a?(Fixnum)
+      # If data is an Integer, like 1, let's convert it to a string first
+      data = data.to_s if data.is_a?(Integer)
 
       # If data's a string, try to convert it to a boolean. If we can't, it's invalid.
       if data.is_a?(String)
