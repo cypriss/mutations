@@ -13,7 +13,7 @@ module Mutations
         return [nil, nil] if options[:nils]
         return [nil, :nils]
       end
-      
+
       # Now check if it's empty:
       return [data, :empty] if data == ""
 
@@ -21,7 +21,7 @@ module Mutations
       if !data.is_a?(Float)
         if data.is_a?(String) && data =~ /^[-+]?\d*\.?\d+/
           data = data.to_f
-        elsif data.is_a?(Fixnum)
+        elsif data.is_a?(Numeric)
           data = data.to_f
         else
           return [data, :float]

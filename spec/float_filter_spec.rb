@@ -65,7 +65,7 @@ describe "Mutations::FloatFilter" do
     assert_equal nil, filtered
     assert_equal nil, errors
   end
-  
+
   it "considers empty strings to be empty" do
     f = Mutations::FloatFilter.new
     filtered, errors = f.filter("")
@@ -97,6 +97,14 @@ describe "Mutations::FloatFilter" do
     f = Mutations::FloatFilter.new(:max => 10)
     filtered, errors = f.filter(3)
     assert_equal 3, filtered
+    assert_equal nil, errors
+  end
+
+  it 'allows BigDecimal as input' do
+    f = Mutations::FloatFilter.new
+    value = BigDecimal.new(5)
+    filtered, errors = f.filter(value)
+    assert_equal 5, filtered
     assert_equal nil, errors
   end
 
