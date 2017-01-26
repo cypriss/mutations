@@ -2,7 +2,7 @@ module Mutations
   class FloatFilter < AdditionalFilter
     @default_options = {
       :nils => false,         # true allows an explicit nil to be valid. Overrides any other options
-      :empty_as_nil => false, # true will interpret empty strings as nil
+      :empty_is_nil => false,  # if true, treat empty string as if it were nil
       :min => nil,            # lowest value, inclusive
       :max => nil             # highest value, inclusive
     }
@@ -10,7 +10,7 @@ module Mutations
     def filter(data)
 
       # change empty to nil if required
-      if data == "" && options[:empty_as_nil]
+      if data == "" && options[:empty_is_nil]
         data = nil
       end
 
