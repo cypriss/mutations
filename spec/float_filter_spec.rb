@@ -73,7 +73,7 @@ describe "Mutations::FloatFilter" do
   end
 
   it "it allows empty strings as nil" do
-    f = Mutations::FloatFilter.new(empty_as_nil: true, nils: true)
+    f = Mutations::FloatFilter.new(empty_is_nil: true, nils: true)
     filtered, errors = f.filter("")
     assert_equal nil, filtered
     assert_equal nil, errors
