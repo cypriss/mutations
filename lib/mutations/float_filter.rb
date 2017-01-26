@@ -8,6 +8,11 @@ module Mutations
 
     def filter(data)
 
+      # change empty to nil if required
+      if data == "" && options[:empty_as_nil]
+        data = nil
+      end
+
       # Handle nil case
       if data.nil?
         return [nil, nil] if options[:nils]
