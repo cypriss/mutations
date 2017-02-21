@@ -26,7 +26,7 @@ describe "Mutations::StringFilter" do
   it "disallows non-string" do
     sf = Mutations::StringFilter.new
     [["foo"], {:a => "1"}, Object.new].each do |thing|
-      filtered, errors = sf.filter(thing)
+      _filtered, errors = sf.filter(thing)
       assert_equal :string, errors
     end
   end
@@ -160,7 +160,7 @@ describe "Mutations::StringFilter" do
   it "converts bigdecimals to strings" do
     sf = Mutations::StringFilter.new(:strict => false)
     filtered, errors = sf.filter(BigDecimal.new("0.0001"))
-    assert_equal "0.1E-3", filtered
+    assert_equal("0.1E-3", filtered.upcase)
     assert_equal nil, errors
   end
 

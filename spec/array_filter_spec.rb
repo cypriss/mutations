@@ -13,7 +13,7 @@ describe "Mutations::ArrayFilter" do
   it "considers non-arrays to be invalid" do
     f = Mutations::ArrayFilter.new(:arr)
     ['hi', true, 1, {:a => "1"}, Object.new].each do |thing|
-      filtered, errors = f.filter(thing)
+      _filtered, errors = f.filter(thing)
       assert_equal :array, errors
     end
   end
@@ -27,8 +27,8 @@ describe "Mutations::ArrayFilter" do
 
   it "considers nil to be valid" do
     f = Mutations::ArrayFilter.new(:arr, :nils => true)
-    filtered, errors = f.filter(nil)
-    filtered, errors = f.filter(nil)
+    _filtered, errors = f.filter(nil)
+    _filtered, errors = f.filter(nil)
     assert_equal nil, errors
   end
 
@@ -56,7 +56,7 @@ describe "Mutations::ArrayFilter" do
   it "lets you use a block to supply an element filter" do
     f = Mutations::ArrayFilter.new(:arr) { string }
 
-    filtered, errors = f.filter(["hi", {:stuff => "ok"}])
+    _filtered, errors = f.filter(["hi", {:stuff => "ok"}])
     assert_nil errors[0]
     assert_equal :string, errors[1].symbolic
   end
@@ -175,7 +175,7 @@ describe "Mutations::ArrayFilter" do
       end
     end
 
-    filtered, errors = f.filter([["h", "e", {}], ["l"], [], [""]])
+    _filtered, errors = f.filter([["h", "e", {}], ["l"], [], [""]])
     assert_equal [[nil, nil, :string], nil, nil, [:empty]], errors.symbolic
     assert_equal [[nil, nil, "Array[2] isn't a string"], nil, nil, ["Array[0] can't be blank"]], errors.message
     assert_equal ["Array[2] isn't a string", "Array[0] can't be blank"], errors.message_list

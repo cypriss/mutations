@@ -16,7 +16,7 @@ describe "Mutations::BooleanFilter" do
   it "considers non-booleans to be invalid" do
     f = Mutations::BooleanFilter.new
     [[true], {:a => "1"}, Object.new].each do |thing|
-      filtered, errors = f.filter(thing)
+      _filtered, errors = f.filter(thing)
       assert_equal :boolean, errors
     end
   end
@@ -46,7 +46,7 @@ describe "Mutations::BooleanFilter" do
   
   it "considers empty strings to be empty" do
     f = Mutations::BooleanFilter.new
-    filtered, errors = f.filter("")
+    _filtered, errors = f.filter("")
     assert_equal :empty, errors
   end
 

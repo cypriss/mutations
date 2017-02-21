@@ -24,7 +24,7 @@ module Mutations
       @current_inputs = @required_inputs
 
       if block_given?
-        instance_eval &block
+        instance_eval(&block)
       end
     end
 
@@ -41,12 +41,12 @@ module Mutations
 
     def required(&block)
       @current_inputs = @required_inputs
-      instance_eval &block
+      instance_eval(&block)
     end
 
     def optional(&block)
       @current_inputs = @optional_inputs
-      instance_eval &block
+      instance_eval(&block)
     end
 
     def required_keys

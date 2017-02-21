@@ -34,7 +34,7 @@ describe "Command" do
 
     it "should throw an exception with run!" do
       assert_raises Mutations::ValidationException do
-        result = SimpleCommand.run!(:name => "John", :email => "john@gmail.com", :amount => "bob")
+        SimpleCommand.run!(:name => "John", :email => "john@gmail.com", :amount => "bob")
       end
     end
 
@@ -89,15 +89,15 @@ describe "Command" do
 
     it "shouldn't accept non-hashes" do
       assert_raises ArgumentError do
-        outcome = SimpleCommand.run(nil)
+        SimpleCommand.run(nil)
       end
 
       assert_raises ArgumentError do
-        outcome = SimpleCommand.run(1)
+        SimpleCommand.run(1)
       end
 
       assert_raises ArgumentError do
-        outcome = SimpleCommand.run({:name => "John"}, 1)
+        SimpleCommand.run({:name => "John"}, 1)
       end
     end
 
