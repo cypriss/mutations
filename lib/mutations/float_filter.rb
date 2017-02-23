@@ -21,7 +21,7 @@ module Mutations
       if !data.is_a?(Float)
         if data.is_a?(String) && data =~ /^[-+]?\d*\.?\d+/
           data = data.to_f
-        elsif data.is_a?(Fixnum)
+        elsif data.is_a?(Integer)
           data = data.to_f
         else
           return [data, :float]

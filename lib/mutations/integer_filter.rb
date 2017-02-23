@@ -23,8 +23,8 @@ module Mutations
       # Now check if it's empty:
       return [data, :empty] if data == ""
 
-      # Ensure it's the correct data type (Fixnum)
-      if !data.is_a?(Fixnum)
+      # Ensure it's the correct data type (Integer)
+      if !data.is_a?(Integer)
         if data.is_a?(String) && data =~ /^-?\d/
           data = data.to_i
         else
