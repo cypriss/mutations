@@ -191,7 +191,7 @@ describe "Command" do
   end
 
   describe "MultiErrorCommand" do
-    class ErrorfulCommand < Mutations::Command
+    class MultiErrorCommand < Mutations::Command
 
       required { string :name }
       optional { string :email }
@@ -208,7 +208,7 @@ describe "Command" do
     end
 
     it "should let you merge errors" do
-      outcome = ErrorfulCommand.run(:name => "John", :email => "john@gmail.com")
+      outcome = MultiErrorCommand.run(:name => "John", :email => "john@gmail.com")
 
       assert !outcome.success?
       assert_nil outcome.result
