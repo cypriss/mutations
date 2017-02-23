@@ -164,7 +164,7 @@ describe "Command" do
 
       assert !outcome.success?
       assert_nil outcome.result
-      assert :is_a_bob, outcome.errors.symbolic[:bob]
+      assert_equal :is_a_bob, outcome.errors.symbolic[:bob]
     end
   end
 
@@ -186,7 +186,7 @@ describe "Command" do
 
       assert !outcome.success?
       assert_nil outcome.result
-      assert :is_a_bob, outcome.errors[:people].symbolic[:bob]
+      assert_equal :is_a_bob, outcome.errors[:people].symbolic[:bob]
     end
   end
 
@@ -212,8 +212,8 @@ describe "Command" do
 
       assert !outcome.success?
       assert_nil outcome.result
-      assert :is_short, outcome.errors.symbolic[:bob]
-      assert :is_fat, outcome.errors.symbolic[:sally]
+      assert_equal :is_short, outcome.errors.symbolic[:bob]
+      assert_equal :is_fat, outcome.errors.symbolic[:sally]
     end
   end
 
