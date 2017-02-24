@@ -1,3 +1,7 @@
+0.8.1
+-----------
+ - Ruby 2.4 support added
+
 0.8.0
 -----------
  - Add Time filter: ```time :start_time```
