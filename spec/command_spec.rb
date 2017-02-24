@@ -264,4 +264,31 @@ describe "Command" do
     end
   end
 
+  describe "OptionalCallableDefaultsCommand" do
+    class OptionalCallableDefaultsCommand < Mutations::Command
+
+      optional do
+        date :created_at, default: -> { Time.now }
+      end
+
+      def execute
+        created_at
+      end
+    end
+
+    it "should return the input default when not defined" do
+      time = Time.now
+      Time.stub :now, time do
+        input = {}
+        assert_equal time, OptionalCallableDefaultsCommand.run!(input)
+      end
+    end
+
+    it "should return the input passed when defined" do
+      created_at = Date.parse("2009-09-03")
+      input = { "created_at" => created_at }
+      assert_equal created_at, OptionalCallableDefaultsCommand.run!(input)
+    end
+  end
+
 end

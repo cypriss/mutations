@@ -6,7 +6,8 @@ module Mutations
         keys = self.input_filters.send("#{meth}_keys")
         keys.each do |key|
           define_method(key) do
-            @inputs[key]
+            v = @inputs[key]
+            v.respond_to?(:call) ? v.call : v
           end
 
           define_method("#{key}_present?") do
