@@ -264,4 +264,33 @@ describe "Command" do
     end
   end
 
+  describe "Ommit creating convenience functions for reserved variable names" do
+    class ReservedVariableNamesCommand < Mutations::Command
+      required do
+        # Reserved names
+        string :execute
+        integer :run
+
+        # Free name
+        string :email
+      end
+
+      def execute
+        if !self.respond_to?("execute_present?") and !self.respond_to?("run_present?")
+          if self.respond_to?("email_present?")
+            if inputs.include?(:execute) and inputs.include?(:run) and inputs.include?(:email)
+              return true
+            end
+          end
+        end
+
+        return false
+      end
+    end
+
+    it "should not generate convenience functions for reserved names" do
+      assert_equal true, ReservedVariableNamesCommand.run!(:execute => "execute", :run => 3, :email => "john@gmail.com")
+    end
+  end
+
 end

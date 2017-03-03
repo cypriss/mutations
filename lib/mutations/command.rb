@@ -2,9 +2,18 @@ module Mutations
   class Command
     class << self
       def create_attr_methods(meth, &block)
+        existing_keys = self.input_filters.send("#{meth}_keys")
+        disallowed_keys = instance_methods - existing_keys
+
+        # 1.8.7 returns a string array, symbolize it first
+        disallowed_keys.collect! {|key| key.to_sym }
+
         self.input_filters.send(meth, &block)
+
         keys = self.input_filters.send("#{meth}_keys")
         keys.each do |key|
+          next if disallowed_keys.include?(key)
+
           define_method(key) do
             @inputs[key]
           end
