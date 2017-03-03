@@ -53,7 +53,7 @@ module Mutations
       end
 
       # We have a winner, someone passed in the correct data type!
-      if data.is_a?(options[:class])
+      if data.is_a?(options[:class].to_s.constantize)
         return [data, :new_records] if !options[:new_records] && (data.respond_to?(:new_record?) && data.new_record?)
         return [data, nil]
       end
