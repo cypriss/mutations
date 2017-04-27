@@ -11,6 +11,7 @@ module Mutations
 
     @default_options = {
       :nils => false,            # true allows an explicit nil to be valid. Overrides any other options
+      :accept_any_key => false
     }
 
     attr_accessor :optional_inputs
@@ -85,6 +86,9 @@ module Mutations
       unless data.is_a?(HashWithIndifferentAccess)
         data = data.with_indifferent_access
       end
+      
+      # Skip later validations if hash should be accepted as is.
+      return [data, nil] if options[:accept_any_key]
 
       errors = ErrorHash.new
       filtered_data = HashWithIndifferentAccess.new
