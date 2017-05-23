@@ -113,16 +113,18 @@ module Mutations
             elsif !is_required && sub_error == :nils && filterer.discard_nils?
               data.delete(key)
             else
-              sub_error = ErrorAtom.new(key, sub_error) if sub_error.is_a?(Symbol)
+              error_key = filterer.options[:error_key] || key
+              sub_error = ErrorAtom.new(error_key, sub_error) if sub_error.is_a?(Symbol)
               errors[key] = sub_error
             end
           end
-          
+
           if !data.has_key?(key)
             if filterer.has_default?
               filtered_data[key] = filterer.default
             elsif is_required
-              errors[key] = ErrorAtom.new(key, :required)
+              error_key = filterer.options[:error_key] || key
+              errors[key] = ErrorAtom.new(error_key, :required)
             end
           end
         end

@@ -59,12 +59,12 @@ describe "Command" do
 
     it "should execute custom validate method during run" do
       outcome = SimpleCommand.run(:name => "JohnLong", :email => "xxxx")
-      
+
       assert !outcome.success?
       assert_nil outcome.result
       assert_equal :invalid, outcome.errors.symbolic[:email]
     end
-    
+
     it "should execute custom validate method only if regular validations succeed" do
       outcome = SimpleCommand.validate(:name => "JohnTooLong", :email => "xxxx")
 
@@ -165,6 +165,29 @@ describe "Command" do
       assert !outcome.success?
       assert_nil outcome.result
       assert_equal :is_a_bob, outcome.errors.symbolic[:bob]
+    end
+  end
+
+  describe "CustomErrorKeyCommand" do
+    class CustomErrorKeyCommand < Mutations::Command
+      required { string :name, error_key: :other_name }
+      optional { string :email, min_length: 4, error_key: :other_email }
+    end
+
+    it "should return the optional error key in the error message if required" do
+      outcome = CustomErrorKeyCommand.run
+
+      assert !outcome.success?
+      assert_equal :required, outcome.errors.symbolic[:name]
+      assert_equal "Other Name is required", outcome.errors.message[:name]
+    end
+
+    it "should return the optional error key in the error message if optional" do
+      outcome = CustomErrorKeyCommand.run(email: "foo")
+
+      assert !outcome.success?
+      assert_equal :min_length, outcome.errors.symbolic[:email]
+      assert_equal "Other Email is too short", outcome.errors.message[:email]
     end
   end
 
