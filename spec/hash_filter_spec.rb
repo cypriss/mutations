@@ -258,6 +258,13 @@ describe "Mutations::HashFilter" do
       _filtered, errors = hf.filter(:foo => "bar")
       assert_equal ({"foo" => :integer}), errors.symbolic
     end
-  end
 
+    it "should not discard hash if option accept_any_key is provided" do
+      hf = Mutations::HashFilter.new(accept_any_key: true)
+
+      filtered, errors = hf.filter(:foo => "bar", :foobar => { :bar => "foo" })
+      assert_equal nil, errors
+      assert_equal({"foo" => "bar", "foobar" => { "bar" => "foo" }}, filtered)
+    end
+  end
 end
