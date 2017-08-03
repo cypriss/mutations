@@ -63,7 +63,7 @@ describe "Mutations::FileFilter" do
   
   it "considers empty strings to be empty" do
     f = Mutations::FileFilter.new
-    filtered, errors = f.filter("")
+    _filtered, errors = f.filter("")
     assert_equal :empty, errors
   end
 

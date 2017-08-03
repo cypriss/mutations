@@ -19,14 +19,14 @@ describe "Mutations::IntegerFilter" do
   it "allows negative strings" do
     f = Mutations::IntegerFilter.new
     filtered, errors = f.filter("-3")
-    assert_equal -3, filtered
+    assert_equal(-3, filtered)
     assert_equal nil, errors
   end
 
   it "doesnt't allow other strings, nor does it allow random objects or symbols" do
     f = Mutations::IntegerFilter.new
     ["zero","a1", {}, [], Object.new, :d].each do |thing|
-      filtered, errors = f.filter(thing)
+      _filtered, errors = f.filter(thing)
       assert_equal :integer, errors
     end
   end
@@ -47,13 +47,13 @@ describe "Mutations::IntegerFilter" do
   
   it "considers empty strings to be empty" do
     f = Mutations::IntegerFilter.new
-    filtered, errors = f.filter("")
+    _filtered, errors = f.filter("")
     assert_equal :empty, errors
   end
 
   it "considers empty strings to be nil if empty_is_nil option is used" do
     f = Mutations::IntegerFilter.new(:empty_is_nil => true)
-    filtered, errors = f.filter("")
+    _filtered, errors = f.filter("")
     assert_equal :nils, errors
   end
 

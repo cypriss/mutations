@@ -33,7 +33,7 @@ describe "Mutations::FloatFilter" do
   it "allows negative strings" do
     f = Mutations::FloatFilter.new
     filtered, errors = f.filter("-.14")
-    assert_equal -0.14, filtered
+    assert_equal(-0.14, filtered)
     assert_equal nil, errors
   end
 
@@ -47,7 +47,7 @@ describe "Mutations::FloatFilter" do
   it "doesnt't allow other strings, nor does it allow random objects or symbols" do
     f = Mutations::FloatFilter.new
     ["zero","a1", {}, [], Object.new, :d].each do |thing|
-      filtered, errors = f.filter(thing)
+      _filtered, errors = f.filter(thing)
       assert_equal :float, errors
     end
   end
@@ -68,7 +68,7 @@ describe "Mutations::FloatFilter" do
 
   it "considers empty strings to be empty" do
     f = Mutations::FloatFilter.new
-    filtered, errors = f.filter("")
+    _filtered, errors = f.filter("")
     assert_equal :empty, errors
   end
 

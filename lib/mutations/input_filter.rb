@@ -1,9 +1,7 @@
 module Mutations
   class InputFilter
-    @default_options = {}
-
     def self.default_options
-      @default_options
+      @default_options ||= {}
     end
 
     attr_accessor :options

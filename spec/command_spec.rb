@@ -34,7 +34,7 @@ describe "Command" do
 
     it "should throw an exception with run!" do
       assert_raises Mutations::ValidationException do
-        result = SimpleCommand.run!(:name => "John", :email => "john@gmail.com", :amount => "bob")
+        SimpleCommand.run!(:name => "John", :email => "john@gmail.com", :amount => "bob")
       end
     end
 
@@ -59,12 +59,12 @@ describe "Command" do
 
     it "should execute custom validate method during run" do
       outcome = SimpleCommand.run(:name => "JohnLong", :email => "xxxx")
-      
+
       assert !outcome.success?
       assert_nil outcome.result
       assert_equal :invalid, outcome.errors.symbolic[:email]
     end
-    
+
     it "should execute custom validate method only if regular validations succeed" do
       outcome = SimpleCommand.validate(:name => "JohnTooLong", :email => "xxxx")
 
@@ -89,15 +89,15 @@ describe "Command" do
 
     it "shouldn't accept non-hashes" do
       assert_raises ArgumentError do
-        outcome = SimpleCommand.run(nil)
+        SimpleCommand.run(nil)
       end
 
       assert_raises ArgumentError do
-        outcome = SimpleCommand.run(1)
+        SimpleCommand.run(1)
       end
 
       assert_raises ArgumentError do
-        outcome = SimpleCommand.run({:name => "John"}, 1)
+        SimpleCommand.run({:name => "John"}, 1)
       end
     end
 
@@ -164,7 +164,30 @@ describe "Command" do
 
       assert !outcome.success?
       assert_nil outcome.result
-      assert :is_a_bob, outcome.errors.symbolic[:bob]
+      assert_equal :is_a_bob, outcome.errors.symbolic[:bob]
+    end
+  end
+
+  describe "CustomErrorKeyCommand" do
+    class CustomErrorKeyCommand < Mutations::Command
+      required { string :name, error_key: :other_name }
+      optional { string :email, min_length: 4, error_key: :other_email }
+    end
+
+    it "should return the optional error key in the error message if required" do
+      outcome = CustomErrorKeyCommand.run
+
+      assert !outcome.success?
+      assert_equal :required, outcome.errors.symbolic[:name]
+      assert_equal "Other Name is required", outcome.errors.message[:name]
+    end
+
+    it "should return the optional error key in the error message if optional" do
+      outcome = CustomErrorKeyCommand.run(email: "foo")
+
+      assert !outcome.success?
+      assert_equal :min_length, outcome.errors.symbolic[:email]
+      assert_equal "Other Email is too short", outcome.errors.message[:email]
     end
   end
 
@@ -186,12 +209,12 @@ describe "Command" do
 
       assert !outcome.success?
       assert_nil outcome.result
-      assert :is_a_bob, outcome.errors[:people].symbolic[:bob]
+      assert_equal :is_a_bob, outcome.errors[:people].symbolic[:bob]
     end
   end
 
   describe "MultiErrorCommand" do
-    class ErrorfulCommand < Mutations::Command
+    class MultiErrorCommand < Mutations::Command
 
       required { string :name }
       optional { string :email }
@@ -208,12 +231,12 @@ describe "Command" do
     end
 
     it "should let you merge errors" do
-      outcome = ErrorfulCommand.run(:name => "John", :email => "john@gmail.com")
+      outcome = MultiErrorCommand.run(:name => "John", :email => "john@gmail.com")
 
       assert !outcome.success?
       assert_nil outcome.result
-      assert :is_short, outcome.errors.symbolic[:bob]
-      assert :is_fat, outcome.errors.symbolic[:sally]
+      assert_equal :is_short, outcome.errors.symbolic[:bob]
+      assert_equal :is_fat, outcome.errors.symbolic[:sally]
     end
   end
 
