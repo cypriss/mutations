@@ -153,8 +153,8 @@ describe "Command" do
       optional { string :email }
 
       def execute
-        add_error("bob", :is_a_bob)
-
+        add_error(:bob, :is_a_bob)
+        add_error("jane", :is_a_jane)
         1
       end
     end
@@ -164,7 +164,9 @@ describe "Command" do
 
       assert !outcome.success?
       assert_nil outcome.result
+      assert_equal :is_a_bob, outcome.errors[:bob].symbolic
       assert_equal :is_a_bob, outcome.errors.symbolic[:bob]
+      assert_equal :is_a_jane, outcome.errors.symbolic["jane"]
     end
   end
 
