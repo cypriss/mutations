@@ -19,15 +19,19 @@ gemfile:
   - Gemfile.with_dry_monads_04
 matrix:
   exclude:
-  - rvm:
-    - 1.9.3
-    - jruby-1.7.26
-    - rbx-3
+  - rvm: 1.9.3
     gemfile: Gemfile.with_dry_monads_03
-  - rvm:
-    - 1.9.3
-    - jruby-1.7.26
-    - rbx-3
-    - 2.0.0
-    - 2.1.10
+  - rvm: jruby-1.7.26
+    gemfile: Gemfile.with_dry_monads_03
+  - rvm: rbx-3
+    gemfile: Gemfile.with_dry_monads_03
+  - rvm: 1.9.3
+    gemfile: Gemfile.with_dry_monads_04
+  - rvm: jruby-1.7.26
+    gemfile: Gemfile.with_dry_monads_04
+  - rvm: rbx-3
+    gemfile: Gemfile.with_dry_monads_04
+  - rvm: 2.0.0
+    gemfile: Gemfile.with_dry_monads_04
+  - rvm: 2.1.10
     gemfile: Gemfile.with_dry_monads_04
