@@ -30,9 +30,9 @@ module Mutations
     require 'dry/monads/either'
 
     module MonadicOutcome
-      def initialize(value, inputs: nil)
+      def initialize(value, options = {})
         super(value)
-        @inputs = inputs
+        @inputs = options[:inputs]
       end
       
       def result(*args)
