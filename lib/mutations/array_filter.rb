@@ -40,7 +40,23 @@ module Mutations
       @element_filter = ArrayFilter.new(nil, options, &block)
     end
 
+    def initialize_constants!
+      @initialize_constants ||= begin
+        if options[:class]
+          options[:class] = options[:class].constantize if options[:class].is_a?(String)
+        end
+
+        true
+      end
+
+      unless Mutations.cache_constants?
+        options[:class] = options[:class].to_s.constantize if options[:class]
+      end
+    end
+
     def filter(data)
+      initialize_constants!
+
       # Handle nil case
       if data.nil?
         return [nil, nil] if options[:nils]
@@ -86,10 +102,7 @@ module Mutations
         data, el_errors = @element_filter.filter(data)
         return [data, el_errors] if el_errors
       elsif options[:class]
-        class_const = options[:class]
-        class_const = class_const.constantize if class_const.is_a?(String)
-
-        if !data.is_a?(class_const)
+        if !data.is_a?(options[:class])
           return [data, :class]
         end
       end
