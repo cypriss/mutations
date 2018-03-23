@@ -87,7 +87,7 @@ describe "Command" do
       assert_equal ({:name => "John", :email => "bob@jones.com", :amount => 5}).stringify_keys, outcome.result
     end
 
-    it "shouldn't accept non-hashes" do
+    it "shouldn't accept objects that are not hashes or directly mappable to hashes" do
       assert_raises ArgumentError do
         SimpleCommand.run(nil)
       end
@@ -99,6 +99,19 @@ describe "Command" do
       assert_raises ArgumentError do
         SimpleCommand.run({:name => "John"}, 1)
       end
+    end
+
+    it 'should accept objects that are conceptually hashes' do
+      class CustomPersonHash
+        def to_hash
+          { name: 'John', email: 'john@example.com' }
+        end
+      end
+
+      outcome = SimpleCommand.run(CustomPersonHash.new)
+
+      assert outcome.success?
+      assert_equal ({ name: "John", email: "john@example.com" }).stringify_keys, outcome.result
     end
 
     it "should accept nothing at all" do
