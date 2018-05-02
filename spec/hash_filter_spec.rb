@@ -20,6 +20,18 @@ describe "Mutations::HashFilter" do
     assert_equal :hash, errors
   end
 
+  it "allows non-hashes that implement #to_hash" do
+    input = Object.new
+    def input.to_hash
+      {:foo => "bar"}
+    end
+    hf = Mutations::HashFilter.new do
+      string :foo
+    end
+    _filtered, errors = hf.filter(input)
+    assert_equal nil, errors
+  end
+
   it "allows wildcards in hashes" do
     hf = Mutations::HashFilter.new do
       string :*

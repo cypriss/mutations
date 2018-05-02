@@ -79,11 +79,11 @@ module Mutations
       end
 
       # Ensure it's a hash
-      return [data, :hash] unless data.is_a?(Hash)
+      return [data, :hash] unless data.respond_to?(:to_hash)
 
-      # We always want a hash with indiffernet access
+      # We always want a hash with indifferent access
       unless data.is_a?(HashWithIndifferentAccess)
-        data = data.with_indifferent_access
+        data = data.to_hash.with_indifferent_access
       end
 
       errors = ErrorHash.new
