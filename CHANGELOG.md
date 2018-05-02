@@ -1,3 +1,8 @@
+0.8.2
+-----------
+ - Add `:error_key` filter option to allow error messages to be customised. (#115, @mwhatters)
+ - Accept hash inputs that respond to `to_hash`. (#126, @antoniobg)
+
 0.8.1
 -----------
  - Ruby 2.4 support added
