@@ -10,7 +10,8 @@ module Mutations
     @default_options = {
       :nils => false,            # true allows an explicit nil to be valid. Overrides any other options
       :class => nil,             # A constant or string indicates that each element of the array needs to be one of these classes
-      :arrayize => false         # true will convert "hi" to ["hi"]. "" converts to []
+      :arrayize => false,        # true will convert "hi" to ["hi"]. "" converts to []
+      :min_length => nil         # Can be a number like 5, meaning 5 objects are required
     }
 
     def initialize(name, opts = {}, &block)
@@ -54,6 +55,8 @@ module Mutations
         errors = ErrorArray.new
         filtered_data = []
         found_error = false
+
+        return [data, :min_length] if options[:min_length] && data.length < options[:min_length]
         data.each_with_index do |el, i|
           el_filtered, el_error = filter_element(el)
           el_error = ErrorAtom.new(@name, el_error, :index => i) if el_error.is_a?(Symbol)
