@@ -60,6 +60,11 @@ describe "Mutations - errors" do
     assert_equal "Newsletter Subscription isn't a boolean", atom.message
   end
 
+  it "titleizes keys and keeps Id postfix" do
+    atom = Mutations::ErrorAtom.new(:newsletter_subscription_id, :boolean)
+    assert_equal "Newsletter Subscription ID isn't a boolean", atom.message
+  end
+
   describe "Bunch o errors" do
     before do
       @outcome = GivesErrors.run(:str1 => "", :str2 => "opt9", :int1 => "zero", :hash1 => {:bool1 => "bob"}, :arr1 => ["bob", 1, "sally"])
