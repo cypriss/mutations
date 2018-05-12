@@ -54,8 +54,14 @@ module Mutations
     end
 
     def titleize(key)
-      return "#{key.to_s.titleize} ID" if key.to_s.downcase.end_with?("_id")
-      key.to_s.titleize
+      key = key.to_s.downcase
+      if key == "id"
+        "ID"
+      elsif key.end_with?("_id")
+        "#{key.titleize} ID"
+      else
+        key.titleize
+      end
     end
   end
 
