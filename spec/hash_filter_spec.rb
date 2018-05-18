@@ -167,7 +167,7 @@ describe "Mutations::HashFilter" do
       assert_equal ({"foo" => "bar"}), filtered
       assert_equal nil, errors
     end
-    
+
     it "bar is optional -- discards empty if it needs to be stripped" do
       hf = Mutations::HashFilter.new do
         required do
@@ -182,7 +182,7 @@ describe "Mutations::HashFilter" do
       assert_equal ({"foo" => "bar"}), filtered
       assert_equal nil, errors
     end
-    
+
     it "bar is optional -- don't discard empty if it's spaces but stripping is off" do
       hf = Mutations::HashFilter.new do
         required do

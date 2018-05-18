@@ -1,10 +1,11 @@
 module Mutations
   class ModelFilter < InputFilter
     @default_options = {
-      :nils => false,        # true allows an explicit nil to be valid. Overrides any other options
-      :class => nil,         # default is the attribute name.to_s.camelize.constantize.  This overrides it with class or class.constantize
-      :builder => nil,       # Could be a class or a string which will be constantized. If present, and a hash is passed, then we use that to construct a model
-      :new_records => false, # If false, unsaved AR records are not valid. Things that don't respond to new_record? are valid.  true: anything is valid
+      :nils => false,         # true allows an explicit nil to be valid. Overrides any other options
+      :empty_is_nil => true, # if true, treat empty string as if it were nil
+      :class => nil,          # default is the attribute name.to_s.camelize.constantize.  This overrides it with class or class.constantize
+      :builder => nil,        # Could be a class or a string which will be constantized. If present, and a hash is passed, then we use that to construct a model
+      :new_records => false,  # If false, unsaved AR records are not valid. Things that don't respond to new_record? are valid.  true: anything is valid
     }
 
     def initialize(name, opts = {})
@@ -25,7 +26,7 @@ module Mutations
 
         true
       end
-      
+
       unless Mutations.cache_constants?
         options[:class] = options[:class].to_s.constantize if options[:class]
         options[:builder] = options[:builder].to_s.constantize if options[:builder]
@@ -34,6 +35,10 @@ module Mutations
 
     def filter(data)
       initialize_constants!
+
+      if data == "" && options[:empty_is_nil]
+        data = nil
+      end
 
       # Handle nil case
       if data.nil?

@@ -60,7 +60,15 @@ describe "Mutations::ModelFilter" do
     assert_equal nil, filtered
     assert_equal nil, errors
   end
-  
+
+  it 'treats empty as nil with the option empty' do
+    # This is useful for Graphql where every nil gets made into empty strings
+    f = Mutations::ModelFilter.new(:simple_model, nils: true, empty_is_nil: true)
+    filtered, errors = f.filter("")
+    assert_equal nil, filtered
+    assert_equal nil, errors
+  end
+
   it "will re-constantize if cache_constants is false" do
     was = Mutations.cache_constants?
     Mutations.cache_constants = false
@@ -69,16 +77,16 @@ describe "Mutations::ModelFilter" do
     filtered, errors = f.filter(m)
     assert_equal m, filtered
     assert_equal nil, errors
-    
+
     Object.send(:remove_const, 'SimpleModel')
-    
+
     class SimpleModel; end
-    
+
     m = SimpleModel.new
     filtered, errors = f.filter(m)
     assert_equal m, filtered
     assert_equal nil, errors
-    
+
     Mutations.cache_constants = was
   end
 
