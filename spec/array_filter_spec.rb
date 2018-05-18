@@ -189,4 +189,32 @@ describe "Mutations::ArrayFilter" do
     assert_equal [1,2,4,5], filtered
     assert_equal nil, errors
   end
+
+  it "considers long arrays to be valid" do
+    f = Mutations::ArrayFilter.new(:arr, :min_length => 2)
+    filtered, errors = f.filter([1, 2])
+    assert_equal [1, 2], filtered
+    assert_equal nil, errors
+  end
+
+  it "considers short arrays to be invalid" do
+    f = Mutations::ArrayFilter.new(:arr, :min_length => 2)
+    filtered, errors = f.filter([1])
+    assert_equal [1], filtered
+    assert_equal :min_length, errors
+  end
+
+  it "sets a max_length for the array of 20 with one element as valid" do
+    f = Mutations::ArrayFilter.new(:arr, :max_length => 20)
+    filtered, errors = f.filter([1])
+    assert_equal [1], filtered
+    assert_equal nil, errors
+  end
+  
+  it "sets a max_length for the array of 2 with 5 as invalid" do
+    f = Mutations::ArrayFilter.new(:arr, :max_length => 2)
+    filtered, errors = f.filter([1,2,3,4,5])
+    assert_equal [1,2,3,4,5], filtered
+    assert_equal :max_length, errors
+  end
 end
