@@ -1,4 +1,4 @@
 .rvmrc
 .ruby-version
 *.gem
-Gemfile.lock
+Gemfile*lock
