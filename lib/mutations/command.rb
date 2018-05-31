@@ -20,6 +20,21 @@ module Mutations
       end
       private :create_attr_methods
 
+      def shared_filter_for(filter_name)
+        shared_filters.fetch(filter_name.to_s)
+      rescue KeyError
+        raise SharedParamsNotFound, ":#{filter_name} not found in #{name}"
+      end
+
+      def shared_filters
+        @shared_filters ||= {}
+      end
+      private :shared_filters
+
+      def shared(filter_name, &filter)
+        shared_filters[filter_name.to_s] = filter
+      end
+
       def required(&block)
         create_attr_methods(:required, &block)
       end

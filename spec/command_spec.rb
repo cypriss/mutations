@@ -300,4 +300,39 @@ describe "Command" do
     end
   end
 
+  describe "FamilyCommand" do
+    class PersonCommand < Mutations::Command
+
+      shared :person_attributes do
+        string :name
+        integer :age
+      end
+
+      required do
+        use :person_attributes, from: PersonCommand
+      end
+    end
+
+    class FamilyCommand < Mutations::Command
+
+      required do
+        array :members do
+          hash do
+            use :person_attributes, from: PersonCommand
+          end
+        end
+      end
+
+      def execute
+        members.map(&:symbolize_keys)
+      end
+    end
+
+    it "should use filters from PersonCommand" do
+      input = { members: [{ name: "Intercomrade", age: 6 }] }
+      output = FamilyCommand.run!(members: [{ name: "Intercomrade", age: 6 }])
+      assert_equal(input[:members], output)
+    end
+  end
+
 end

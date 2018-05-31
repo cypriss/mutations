@@ -10,6 +10,10 @@ module Mutations
       self.options = (self.class.default_options || {}).merge(opts)
     end
 
+    def use(filter_name, from:)
+      instance_eval(&from.shared_filter_for(filter_name))
+    end
+
     # returns -> [sanitized data, error]
     # If an error is returned, then data will be nil
     def filter(data)
