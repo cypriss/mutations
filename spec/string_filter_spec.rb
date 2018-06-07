@@ -235,4 +235,17 @@ describe "Mutations::StringFilter" do
     assert_equal nil, errors
   end
 
+  it "removes characters of unicode format class" do
+    sf = Mutations::StringFilter.new(:allow_control_characters => false)
+    filtered, errors = sf.filter("\xEF\xBB\xBFfoo\u200B\u00ADbar")
+    assert_equal "foobar", filtered
+    assert_equal nil, errors
+  end
+
+  it "doesn't remove characters of unicode format class" do
+    sf = Mutations::StringFilter.new(:allow_control_characters => true)
+    filtered, errors = sf.filter("\xEF\xBB\xBFfoo\u200B\u00ADbar")
+    assert_equal "\xEF\xBB\xBFfoo\u200B\u00ADbar", filtered
+    assert_equal nil, errors
+  end
 end

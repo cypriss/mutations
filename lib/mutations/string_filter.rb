@@ -28,7 +28,10 @@ module Mutations
       return [data, :string] unless data.is_a?(String)
 
       # At this point, data is a string. Now remove unprintable characters from the string:
-      data = data.gsub(/[^[:print:]\t\r\n]+/, ' ') unless options[:allow_control_characters]
+      unless options[:allow_control_characters]
+        data = data.gsub(/[^[:print:]\t\r\n]+/, ' ')
+        data.gsub!(/\p{Format}/, '') # Ref: http://www.fileformat.info/info/unicode/category/Cf/list.htm
+      end
 
       # Transform it using strip:
       data = data.strip if options[:strip]
