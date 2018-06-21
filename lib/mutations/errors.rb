@@ -102,7 +102,7 @@ module Mutations
   #     state: ErrorAtom(:in)
   #   }
   # }
-  class ErrorHash < Hash
+  class ErrorHash < HashWithIndifferentAccess
 
     # Returns a nested HashWithIndifferentAccess where the values are symbols.  Eg:
     # {
