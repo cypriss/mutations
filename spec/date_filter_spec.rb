@@ -124,7 +124,7 @@ describe "Mutations::DateFilter" do
     assert_equal nil, filtered
     assert_equal :nils, errors
   end
-  
+
   it "considers empty strings to be empty" do
     f = Mutations::DateFilter.new
     filtered, errors = f.filter("")
@@ -136,6 +136,19 @@ describe "Mutations::DateFilter" do
     f = Mutations::DateFilter.new(:nils => true)
     filtered, errors = f.filter(nil)
 
+    assert_equal nil, filtered
+    assert_equal nil, errors
+  end
+
+  it "considers empty strings to be nil if empty_is_nil option is used" do
+    f = Mutations::DateFilter.new(:empty_is_nil => true)
+    _filtered, errors = f.filter("")
+    assert_equal :nils, errors
+  end
+
+  it "returns empty strings as nil if empty_is_nil option is used" do
+    f = Mutations::DateFilter.new(:empty_is_nil => true, :nils => true)
+    filtered, errors = f.filter("")
     assert_equal nil, filtered
     assert_equal nil, errors
   end
