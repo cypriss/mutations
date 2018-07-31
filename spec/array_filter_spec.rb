@@ -3,6 +3,8 @@ require 'stringio'
 
 describe "Mutations::ArrayFilter" do
 
+  class SimpleModel; end
+
   it "allows arrays" do
     f = Mutations::ArrayFilter.new(:arr)
     filtered, errors = f.filter([1])
@@ -216,5 +218,49 @@ describe "Mutations::ArrayFilter" do
     filtered, errors = f.filter([1,2,3,4,5])
     assert_equal [1,2,3,4,5], filtered
     assert_equal :max_length, errors
+  end
+
+  it "will not re-constantize if cache_constants is true" do
+    was = Mutations.cache_constants?
+    Mutations.cache_constants = true
+
+    f = Mutations::ArrayFilter.new(:simple_models, class: "SimpleModel")
+
+    m = SimpleModel.new
+    filtered, errors = f.filter([m])
+    assert_equal [m], filtered
+    assert_equal nil, errors
+
+    Object.send(:remove_const, 'SimpleModel')
+    class SimpleModel; end
+
+    m = SimpleModel.new
+    filtered, errors = f.filter([m])
+    assert_equal [m], filtered
+    assert_equal [:class], errors.symbolic
+
+    Mutations.cache_constants = was
+  end
+
+  it "will re-constantize if cache_constants is false" do
+    was = Mutations.cache_constants?
+    Mutations.cache_constants = false
+
+    f = Mutations::ArrayFilter.new(:simple_models, class: "SimpleModel")
+
+    m = SimpleModel.new
+    filtered, errors = f.filter([m])
+    assert_equal [m], filtered
+    assert_equal nil, errors
+
+    Object.send(:remove_const, 'SimpleModel')
+    class SimpleModel; end
+
+    m = SimpleModel.new
+    filtered, errors = f.filter([m])
+    assert_equal [m], filtered
+    assert_equal nil, errors
+
+    Mutations.cache_constants = was
   end
 end
