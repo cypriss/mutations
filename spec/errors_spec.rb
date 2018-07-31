@@ -55,21 +55,9 @@ describe "Mutations - errors" do
     assert o.errors[:arr1][2].is_a?(Mutations::ErrorAtom)
   end
 
-  describe "error messages" do
-    it "titleizes keys" do
-      atom = Mutations::ErrorAtom.new(:newsletter_subscription, :boolean)
-      assert_equal "Newsletter Subscription isn't a boolean", atom.message
-    end
-
-    it "titleizes _id postfix as ID" do
-      atom = Mutations::ErrorAtom.new(:newsletter_subscription_id, :boolean)
-      assert_equal "Newsletter Subscription ID isn't a boolean", atom.message
-    end
-
-    it "titleizes id as ID" do
-      atom = Mutations::ErrorAtom.new(:id, :boolean)
-      assert_equal "ID isn't a boolean", atom.message
-    end
+  it "titleizes keys" do
+    atom = Mutations::ErrorAtom.new(:newsletter_subscription, :boolean)
+    assert_equal "Newsletter Subscription isn't a boolean", atom.message
   end
 
   describe "Bunch o errors" do

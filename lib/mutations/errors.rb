@@ -47,20 +47,9 @@ module Mutations
     #  :index -- index of error if it's in an array
     def message(key, error_symbol, options = {})
       if options[:index]
-        "#{titleize(key || 'array')}[#{options[:index]}] #{MESSAGES[error_symbol]}"
+        "#{(key || 'array').to_s.titleize}[#{options[:index]}] #{MESSAGES[error_symbol]}"
       else
-        "#{titleize(key)} #{MESSAGES[error_symbol]}"
-      end
-    end
-
-    def titleize(key)
-      key = key.to_s.downcase
-      if key == "id"
-        "ID"
-      elsif key.end_with?("_id")
-        "#{key.titleize} ID"
-      else
-        key.titleize
+        "#{key.to_s.titleize} #{MESSAGES[error_symbol]}"
       end
     end
   end
