@@ -1,3 +1,9 @@
+0.8.3
+-----------
+ - Add `min_length` and `max_length` options to array filter (#128, @jwoertink)
+ - Add `empty_is_nil` option to date filter (#122, @jamesacarr)
+ - Respect `Mutations.cache_constants` in array filters (#125, @eugeneius)
+
 0.8.2
 -----------
  - Add `:error_key` filter option to allow error messages to be customised. (#115, @mwhatters)
