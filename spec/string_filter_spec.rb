@@ -59,6 +59,19 @@ describe "Mutations::StringFilter" do
     assert_equal nil, errors
   end
 
+  it "considers empty strings to be nil if empty_is_nil option is used" do
+    f = Mutations::StringFilter.new(:empty_is_nil => true)
+    _filtered, errors = f.filter("")
+    assert_equal :nils, errors
+  end
+
+  it "returns empty strings as nil if empty_is_nil option is used" do
+    f = Mutations::StringFilter.new(:empty_is_nil => true, :nils => true)
+    filtered, errors = f.filter("")
+    assert_equal nil, filtered
+    assert_equal nil, errors
+  end
+
   it "considers empty strings to be invalid" do
     sf = Mutations::StringFilter.new(:empty => false)
     filtered, errors = sf.filter("")
