@@ -149,7 +149,7 @@ Here, we pass two hashes to CreateComment. Even if the params[:comment] hash has
     ```ruby
     required do
       string :name, max_length: 10
-      string :state, in: %w(AL AK AR ... WY)
+      symbol :state, in: %i(AL AK AR ... WY)
       integer :age
       boolean :is_special, default: true
       model :account
