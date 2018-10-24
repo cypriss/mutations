@@ -4,6 +4,7 @@ module Mutations
       :strip => true,          # true calls data.strip if data is a string
       :strict => false,        # If false, then symbols, numbers, and booleans are converted to a string with to_s.
       :nils => false,          # true allows an explicit nil to be valid. Overrides any other options
+      :empty_is_nil => false,  # if true, treat empty string as if it were nil
       :empty => false,         # false disallows "".  true allows "" and overrides any other validations (b/c they couldn't be true if it's empty)
       :min_length => nil,      # Can be a number like 5, meaning that 5 codepoints are required
       :max_length => nil,      # Can be a number like 10, meaning that at most 10 codepoints are permitted
@@ -14,6 +15,9 @@ module Mutations
     }
 
     def filter(data)
+      if options[:empty_is_nil] && data == ""
+        data = nil
+      end
 
       # Handle nil case
       if data.nil?
