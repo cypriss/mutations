@@ -1,47 +1,41 @@
 require 'spec_helper'
 
-describe Mutations::SymbolFilter do
-  let(:options){ {} }
-  let(:outcome){ Mutations::SymbolFilter.new(options).filter(input) }
-  let(:result){ outcome[0] }
-  let(:errors){ outcome[1] }
+describe "Mutations::SymbolFilter" do
 
-  describe 'string input' do
-    let(:input){ 'foo' }
-
-    it{ assert_equal(result, :foo) }
-    it{ assert_nil(errors) }
+  it "allows strings" do
+    sf = Mutations::SymbolFilter.new
+    filtered, errors = sf.filter("hello")
+    assert_equal :hello, filtered
+    assert_equal nil, errors
   end
 
-  describe 'symbol input' do
-    let(:input){ :foo }
-
-    it{ assert_equal(result, :foo) }
-    it{ assert_nil(errors) }
+  it "allows symbols" do
+    sf = Mutations::SymbolFilter.new
+    filtered, errors = sf.filter(:hello)
+    assert_equal :hello, filtered
+    assert_equal nil, errors
   end
 
-  describe 'input not a symbol' do
-    let(:input){ 1 }
-
-    it{ assert_nil(result) }
-    it{ assert_equal(errors, :symbol) }
-  end
-
-  describe 'nil input' do
-    let(:input){ nil }
-
-    describe 'nils allowed' do
-      let(:options){ { nils: true } }
-
-      it{ assert_nil(result) }
-      it{ assert_nil(errors) }
-    end
-
-    describe 'nils not allowed' do
-      let(:options){ { nils: false } }
-
-      it{ assert_nil(result) }
-      it{ assert_equal(errors, :nils) }
+  it "doesn't allow non-symbols" do
+    sf = Mutations::SymbolFilter.new
+    [["foo"], {:a => "1"}, Object.new].each do |thing|
+      _filtered, errors = sf.filter(thing)
+      assert_equal :symbol, errors
     end
   end
+
+  it "considers nil to be invalid" do
+    sf = Mutations::SymbolFilter.new(:nils => false)
+    filtered, errors = sf.filter(nil)
+    assert_equal nil, filtered
+    assert_equal :nils, errors
+  end
+
+  it "considers nil to be valid" do
+    sf = Mutations::SymbolFilter.new(:nils => true)
+    filtered, errors = sf.filter(nil)
+    assert_equal nil, filtered
+    assert_equal nil, errors
+  end
+
 end
