@@ -2,7 +2,7 @@ language: ruby
 dist: trusty
 sudo: required
 before_install:
-  - gem install bundler # the default bundler version on travis is very old and causes 1.9.3 build issues
+  - gem install bundler || gem install bundler -v 1.17.3 # the default bundler version on travis is very old and causes 1.9.3 build issues
 rvm:
   - 1.9.3
   - jruby-1.7.26
