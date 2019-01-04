@@ -1,3 +1,9 @@
+0.9.0
+-----------
+ - Retain `_id` suffix in error keys (#129, @khalilovcmd)
+ - Add a symbol filter: `symbol :color, in: %i(red blue green)` (#119, @estraph)
+ - Add `empty_is_nil` option to string filter (#135, @skylerwshaw)
+
 0.8.3
 -----------
  - Add `min_length` and `max_length` options to array filter (#128, @jwoertink)
