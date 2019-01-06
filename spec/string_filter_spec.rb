@@ -172,7 +172,7 @@ describe "Mutations::StringFilter" do
 
   it "converts bigdecimals to strings" do
     sf = Mutations::StringFilter.new(:strict => false)
-    filtered, errors = sf.filter(BigDecimal.new("0.0001"))
+    filtered, errors = sf.filter(BigDecimal("0.0001"))
     assert_equal("0.1E-3", filtered.upcase)
     assert_equal nil, errors
   end
@@ -207,7 +207,7 @@ describe "Mutations::StringFilter" do
 
   it "disallows bigdecimals" do
     sf = Mutations::StringFilter.new(:strict => true)
-    big_decimal = BigDecimal.new("0.0001")
+    big_decimal = BigDecimal("0.0001")
     filtered, errors = sf.filter(big_decimal)
     assert_equal big_decimal, filtered
     assert_equal :string, errors
