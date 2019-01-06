@@ -155,7 +155,7 @@ describe "Mutations::ArrayFilter" do
 
     assert_equal nil, errors[0]
     assert_equal nil, errors[1]
-    assert_equal ({"bar"=>:required}), errors[2].symbolic
+    assert_equal({"bar"=>:required}, errors[2].symbolic)
   end
 
   it "lets you pass arrays of arrays" do

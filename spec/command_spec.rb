@@ -8,7 +8,7 @@ describe "Command" do
       outcome = SimpleCommand.run(:name => "John", :email => "john@gmail.com", :amount => 5)
 
       assert outcome.success?
-      assert_equal ({:name => "John", :email => "john@gmail.com", :amount => 5}).stringify_keys, outcome.result
+      assert_equal({:name => "John", :email => "john@gmail.com", :amount => 5}.stringify_keys, outcome.result)
       assert_equal nil, outcome.errors
     end
 
@@ -16,7 +16,7 @@ describe "Command" do
       outcome = SimpleCommand.run(:name => "John", :email => "john@gmail.com", :amount => 5, :buggers => true)
 
       assert outcome.success?
-      assert_equal ({:name => "John", :email => "john@gmail.com", :amount => 5}).stringify_keys, outcome.result
+      assert_equal({:name => "John", :email => "john@gmail.com", :amount => 5}.stringify_keys, outcome.result)
       assert_equal nil, outcome.errors
     end
 
@@ -29,7 +29,7 @@ describe "Command" do
 
     it "shouldn't throw an exception with run!" do
       result = SimpleCommand.run!(:name => "John", :email => "john@gmail.com", :amount => 5)
-      assert_equal ({:name => "John", :email => "john@gmail.com", :amount => 5}).stringify_keys, result
+      assert_equal({:name => "John", :email => "john@gmail.com", :amount => 5}.stringify_keys, result)
     end
 
     it "should throw an exception with run!" do
@@ -77,14 +77,14 @@ describe "Command" do
       outcome = SimpleCommand.run({:name => "John", :email => "john@gmail.com"}, {:email => "bob@jones.com", :amount => 5})
 
       assert outcome.success?
-      assert_equal ({:name => "John", :email => "bob@jones.com", :amount => 5}).stringify_keys, outcome.result
+      assert_equal({:name => "John", :email => "bob@jones.com", :amount => 5}.stringify_keys, outcome.result)
     end
 
     it "should merge hashes indifferently" do
       outcome = SimpleCommand.run({:name => "John", :email => "john@gmail.com"}, {"email" => "bob@jones.com", "amount" => 5})
 
       assert outcome.success?
-      assert_equal ({:name => "John", :email => "bob@jones.com", :amount => 5}).stringify_keys, outcome.result
+      assert_equal({:name => "John", :email => "bob@jones.com", :amount => 5}.stringify_keys, outcome.result)
     end
 
     it "shouldn't accept objects that are not hashes or directly mappable to hashes" do
@@ -111,7 +111,7 @@ describe "Command" do
       outcome = SimpleCommand.run(CustomPersonHash.new)
 
       assert outcome.success?
-      assert_equal ({ name: "John", email: "john@example.com" }).stringify_keys, outcome.result
+      assert_equal({ name: "John", email: "john@example.com" }.stringify_keys, outcome.result)
     end
 
     it "should accept nothing at all" do
@@ -120,7 +120,7 @@ describe "Command" do
 
     it "should return the filtered inputs in the outcome" do
       outcome = SimpleCommand.run(:name => " John ", :email => "john@gmail.com", :amount => "5")
-      assert_equal ({:name => "John", :email => "john@gmail.com", :amount => 5}).stringify_keys, outcome.inputs
+      assert_equal({:name => "John", :email => "john@gmail.com", :amount => 5}.stringify_keys, outcome.inputs)
     end
   end
 
@@ -137,7 +137,7 @@ describe "Command" do
 
     it "should define getter methods on params" do
       mutation = EigenCommand.run(:name => "John", :email => "john@gmail.com")
-      assert_equal ({:name => "John", :email => "john@gmail.com"}), mutation.result
+      assert_equal({:name => "John", :email => "john@gmail.com"}, mutation.result)
     end
   end
 
@@ -155,7 +155,7 @@ describe "Command" do
 
     it "should define setter methods on params" do
       mutation = MutatatedCommand.run(:name => "John", :email => "john@gmail.com")
-      assert_equal ({:name => "bob", :email => "bob@jones.com"}), mutation.result
+      assert_equal({:name => "bob", :email => "bob@jones.com"}, mutation.result)
     end
   end
 
