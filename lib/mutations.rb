@@ -21,6 +21,8 @@ require 'mutations/model_filter'
 require 'mutations/array_filter'
 require 'mutations/hash_filter'
 require 'mutations/symbol_filter'
+require 'mutations/uuid_filter'
+
 require 'mutations/outcome'
 require 'mutations/command'
 
