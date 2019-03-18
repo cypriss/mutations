@@ -16,7 +16,7 @@ module Mutations
       return [data, :empty] if data == ''
 
       if data.is_a?(String)
-        return [nil, :uuid] unless UUID.match?(data)
+        return [nil, :uuid] unless UUID.match(data)
       else
         return [nil, :uuid]
       end
