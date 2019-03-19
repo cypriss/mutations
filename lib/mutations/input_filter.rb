@@ -21,7 +21,11 @@ module Mutations
     end
 
     def default
-      options[:default]
+      if options[:default].is_a?(Proc)
+        options[:default].call
+      else
+        options[:default]
+      end
     end
 
     # Only relevant for optional params
