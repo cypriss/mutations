@@ -51,6 +51,10 @@ module Mutations
         end
       end
 
+      def input_descriptions
+        input_filters.input_descriptions if input_filters.respond_to?(:input_descriptions)
+      end
+
     end
 
     # Instance methods

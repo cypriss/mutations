@@ -5,6 +5,10 @@ module Mutations
         name = args[0]
         options = args[1] || {}
 
+        if described = current_input_description
+          @input_descriptions[name.to_sym] = described
+        end
+
         @current_inputs[name.to_sym] = type_class.new(options, &block)
       end
     end
@@ -16,10 +20,13 @@ module Mutations
     attr_accessor :optional_inputs
     attr_accessor :required_inputs
 
+    attr_accessor :input_descriptions, :input_description
+
     def initialize(opts = {}, &block)
       super(opts)
 
       @optional_inputs = {}
+      @input_descriptions = {}
       @required_inputs = {}
       @current_inputs = @required_inputs
 
@@ -37,6 +44,16 @@ module Mutations
         dupped.required_inputs[k] = v
       end
       dupped
+    end
+
+    def desc input_description
+      @input_description = input_description
+    end
+
+    def current_input_description
+      val = @input_description && @input_description.dup
+      @input_description = nil
+      val
     end
 
     def required(&block)
