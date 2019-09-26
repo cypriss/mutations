@@ -16,7 +16,7 @@ describe "Mutations::StringFilter" do
     assert_equal nil, errors
   end
 
-  it "allows fixnums" do
+  it "allows numbers" do
     sf = Mutations::StringFilter.new
     filtered, errors = sf.filter(1)
     assert_equal "1", filtered
