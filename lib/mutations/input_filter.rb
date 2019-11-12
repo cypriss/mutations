@@ -21,7 +21,7 @@ module Mutations
     end
 
     def default
-      options[:default]
+      options[:default].dup
     end
 
     # Only relevant for optional params
