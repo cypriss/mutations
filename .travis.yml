@@ -3,7 +3,6 @@ before_install:
   - gem install bundler || gem install bundler -v 1.17.3 # the default bundler version on travis is very old and causes 1.9.3 build issues
 rvm:
   - 1.9.3
-  - jruby-1.7.27
   - 2.0.0
   - 2.1.10
   - 2.2.10
@@ -12,4 +11,3 @@ rvm:
   - 2.5.3
   - 2.6.0
   - jruby-9.2.5.0
-  - rbx-3
