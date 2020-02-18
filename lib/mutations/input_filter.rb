@@ -21,6 +21,8 @@ module Mutations
     end
 
     def default
+      return options[:default] if options[:default].frozen?
+
       options[:default].dup
     end
 
