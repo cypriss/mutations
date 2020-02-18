@@ -1,6 +1,6 @@
 # Mutations
 
-[![Build Status](https://travis-ci.org/cypriss/mutations.svg)](https://travis-ci.org/cypriss/mutations)
+[![Build Status](https://travis-ci.org/cypriss/mutations.svg?branch=master)](https://travis-ci.org/cypriss/mutations)
 [![Code Climate](https://codeclimate.com/github/cypriss/mutations.svg)](https://codeclimate.com/github/cypriss/mutations)
 
 Compose your business logic into commands that sanitize and validate input. Write safe, reusable, and maintainable code for Ruby and Rails apps.
