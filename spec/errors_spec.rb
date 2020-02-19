@@ -97,7 +97,7 @@ describe "Mutations - errors" do
       expected = ["Str1 can't be blank", "Str2 isn't an option", "Int1 isn't an integer", "Bool1 isn't a boolean", "Bool2 is required", "Arr1[0] isn't an integer", "Arr1[2] isn't an integer"]
 
       assert_equal expected.size, @outcome.errors.message_list.size
-      expected.each { |e| assert @outcome.errors.message_list.include?(e) }
+      expected.each { |e| assert_includes @outcome.errors.message_list, e }
     end
   end
 
