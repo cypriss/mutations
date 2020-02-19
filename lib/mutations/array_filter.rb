@@ -1,8 +1,7 @@
 module Mutations
   class ArrayFilter < InputFilter
     def self.register_additional_filter(type_class, type_name)
-      define_method(type_name) do | *args, &block |
-        options = args[0] || {}
+      define_method(type_name) do |options = {}, &block|
         @element_filter = type_class.new(options, &block)
       end
     end

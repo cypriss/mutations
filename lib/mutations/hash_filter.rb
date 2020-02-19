@@ -1,10 +1,7 @@
 module Mutations
   class HashFilter < InputFilter
     def self.register_additional_filter(type_class, type_name)
-      define_method(type_name) do | *args, &block |
-        name = args[0]
-        options = args[1] || {}
-
+      define_method(type_name) do |name, options = {}, &block|
         @current_inputs[name.to_sym] = type_class.new(options, &block)
       end
     end
