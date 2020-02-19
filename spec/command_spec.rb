@@ -104,14 +104,14 @@ describe "Command" do
     it 'should accept objects that are conceptually hashes' do
       class CustomPersonHash
         def to_hash
-          { name: 'John', email: 'john@example.com' }
+          { :name => 'John', :email => 'john@example.com' }
         end
       end
 
       outcome = SimpleCommand.run(CustomPersonHash.new)
 
       assert outcome.success?
-      assert_equal({ name: "John", email: "john@example.com" }.stringify_keys, outcome.result)
+      assert_equal({ :name => "John", :email => "john@example.com" }.stringify_keys, outcome.result)
     end
 
     it "should accept nothing at all" do
@@ -183,8 +183,8 @@ describe "Command" do
 
   describe "CustomErrorKeyCommand" do
     class CustomErrorKeyCommand < Mutations::Command
-      required { string :name, error_key: :other_name }
-      optional { string :email, min_length: 4, error_key: :other_email }
+      required { string :name, :error_key => :other_name }
+      optional { string :email, :min_length => 4, :error_key => :other_email }
     end
 
     it "should return the optional error key in the error message if required" do
@@ -196,7 +196,7 @@ describe "Command" do
     end
 
     it "should return the optional error key in the error message if optional" do
-      outcome = CustomErrorKeyCommand.run(email: "foo")
+      outcome = CustomErrorKeyCommand.run(:email => "foo")
 
       assert !outcome.success?
       assert_equal :min_length, outcome.errors.symbolic[:email]

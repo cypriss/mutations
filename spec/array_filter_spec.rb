@@ -224,7 +224,7 @@ describe "Mutations::ArrayFilter" do
     was = Mutations.cache_constants?
     Mutations.cache_constants = true
 
-    f = Mutations::ArrayFilter.new(:simple_models, class: "SimpleModel")
+    f = Mutations::ArrayFilter.new(:simple_models, :class => "SimpleModel")
 
     m = SimpleModel.new
     filtered, errors = f.filter([m])
@@ -246,7 +246,7 @@ describe "Mutations::ArrayFilter" do
     was = Mutations.cache_constants?
     Mutations.cache_constants = false
 
-    f = Mutations::ArrayFilter.new(:simple_models, class: "SimpleModel")
+    f = Mutations::ArrayFilter.new(:simple_models, :class => "SimpleModel")
 
     m = SimpleModel.new
     filtered, errors = f.filter([m])
