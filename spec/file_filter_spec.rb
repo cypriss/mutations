@@ -8,16 +8,12 @@ describe "Mutations::FileFilter" do
     attr_accessor :content_type, :original_filename
   end
 
-  # NOTE: Ruby 1.8.7 doesn't have file.size. Mutations need file to respond to size.
-  # Therefore, in 1.8.7 File objects are invalid files.
-  if File.new("README.md").respond_to?(:size)
-    it "allows files - file class" do
-      file = File.new("README.md")
-      f = Mutations::FileFilter.new
-      filtered, errors = f.filter(file)
-      assert_equal file, filtered
-      assert_equal nil, errors
-    end
+  it "allows files - file class" do
+    file = File.new("README.md")
+    f = Mutations::FileFilter.new
+    filtered, errors = f.filter(file)
+    assert_equal file, filtered
+    assert_equal nil, errors
   end
 
   it "allows files - stringio class" do
@@ -32,7 +28,7 @@ describe "Mutations::FileFilter" do
     file = Tempfile.new("bob")
     f = Mutations::FileFilter.new
     filtered, errors = f.filter(file)
-    assert filtered.is_a?(Tempfile) # NOTE: 1.9.3 and 1.8.7 treat == and eql? differently
+    assert_equal file, filtered
     assert_equal nil, errors
   end
 

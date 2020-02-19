@@ -21,12 +21,8 @@ describe "Mutations::DateFilter" do
     time = Time.now
     f = Mutations::DateFilter.new
     filtered, errors = f.filter(time)
-    if time.respond_to?(:to_date) # 1.8.7 doesn't support to_date
-      assert_equal time.to_date, filtered
-      assert_equal nil, errors
-    else
-      assert_equal :date, errors
-    end
+    assert_equal time.to_date, filtered
+    assert_equal nil, errors
   end
 
   it "checks if the given date is after a certain date" do
