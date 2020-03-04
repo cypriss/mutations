@@ -106,6 +106,7 @@ module Mutations
     end
 
     # add_error("name", :too_short)
+    # add_error(:name, :too_short)
     # add_error("colors.foreground", :not_a_color) # => to create errors = {colors: {foreground: :not_a_color}}
     # or, supply a custom message:
     # add_error("name", :too_short, "The name 'blahblahblah' is too short!")
@@ -119,7 +120,7 @@ module Mutations
         inner = path.inject(errs) do |cur_errors,part|
           cur_errors[part.to_sym] ||= ErrorHash.new
         end
-        inner[last] = ErrorAtom.new(key, kind, :message => message)
+        inner[last.to_sym] = ErrorAtom.new(key, kind, :message => message)
       end
     end
 

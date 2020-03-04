@@ -72,6 +72,19 @@ describe "Mutations - errors" do
     end
   end
 
+  describe "errors as symbols remain symbols" do
+    class Foo < Mutations::Command
+      def execute
+        add_error(:foo, :bar, "baz")
+      end
+    end
+    let(:outcome){ Foo.run }
+
+    it{ assert_nil(outcome.errors["foo"]) }
+    it{ assert(outcome.errors[:foo]) }
+    it{ assert_equal(outcome.errors[:foo].message, "baz") }
+  end
+
   describe "Bunch o errors" do
     before do
       @outcome = GivesErrors.run(:str1 => "", :str2 => "opt9", :int1 => "zero", :hash1 => {:bool1 => "bob"}, :arr1 => ["bob", 1, "sally"])
