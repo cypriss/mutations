@@ -109,8 +109,16 @@ module Mutations
     # add_error("colors.foreground", :not_a_color) # => to create errors = {colors: {foreground: :not_a_color}}
     # or, supply a custom message:
     # add_error("name", :too_short, "The name 'blahblahblah' is too short!")
-    def add_error(key, kind, message = nil)
-      raise ArgumentError.new("Invalid kind") unless kind.is_a?(Symbol)
+    # or, supply an existing Mutations::ErrorHash or Mutations::ErrorArray:
+    # add_error("name", Mutations::ErrorArray.new([...]))
+    def add_error(key, error, message = nil)
+      if error.is_a? Symbol
+        error = ErrorAtom.new(key, error, message: message)
+      elsif error.is_a?(Mutations::ErrorAtom) || error.is_a?(Mutations::ErrorArray) || error.is_a?(Mutations::ErrorHash)
+
+      else
+        raise ArgumentError.new("Invalid error of kind #{error.class}")
+      end
 
       @errors ||= ErrorHash.new
       @errors.tap do |errs|
@@ -119,7 +127,7 @@ module Mutations
         inner = path.inject(errs) do |cur_errors,part|
           cur_errors[part.to_sym] ||= ErrorHash.new
         end
-        inner[last] = ErrorAtom.new(key, kind, :message => message)
+        inner[last] = error
       end
     end
 

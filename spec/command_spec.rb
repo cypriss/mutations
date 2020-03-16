@@ -253,6 +253,67 @@ describe "Command" do
     end
   end
 
+  describe "NestedErrorHashCommand" do
+    class NestedErrorHashCommand < Mutations::Command
+      required do
+        array :services do
+          model :object, class: Hash
+        end
+      end
+
+      def validate
+        service_errors = Mutations::ErrorHash.new
+        service_errors[:name] = Mutations::ErrorAtom.new(:name, :exists, message: "Service with name foo already exists")
+
+        add_error("services.foo", service_errors)
+      end
+    end
+
+    it "should let you add sub-mutation errors" do
+      outcome = NestedErrorHashCommand.run('services' => [
+          { 'name' => "foo" },
+      ])
+
+      assert !outcome.success?
+      assert_nil outcome.result
+      assert_equal({'services' => { 'foo' => { 'name' => :exists }}}, outcome.errors.symbolic)
+    end
+  end
+
+  describe "NestedErrorArrayCommand" do
+    class NestedErrorArrayCommand < Mutations::Command
+      required do
+        array :links do
+          hash do
+            required do
+              string :name
+            end
+          end
+        end
+      end
+
+      def validate
+        links_errors = Mutations::ErrorArray.new
+        links_errors << Mutations::ErrorAtom.new(:name, :not_found, message: "Link foo not found")
+        links_errors << Mutations::ErrorAtom.new(:name, :not_found, message: "Link bar not found")
+
+        add_error("links", links_errors)
+      end
+    end
+
+    it "should let you add sub-mutation errors" do
+      outcome = NestedErrorArrayCommand.run('links' => [
+          { 'name' => "foo" },
+          { 'name' => "bar" },
+      ])
+
+      assert !outcome.success?
+      assert_nil outcome.result
+      assert_equal({'links' => [:not_found, :not_found]}, outcome.errors.symbolic)
+      assert_equal({'links' => ["Link foo not found", "Link bar not found"]}, outcome.errors.message)
+    end
+  end
+
   describe "PresentCommand" do
     class PresentCommand < Mutations::Command
 
