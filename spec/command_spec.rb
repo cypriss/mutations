@@ -223,6 +223,7 @@ describe "Command" do
       assert !outcome.success?
       assert_nil outcome.result
       assert_equal :is_a_bob, outcome.errors[:people].symbolic[:bob]
+      assert_equal "Bob is invalid", outcome.errors[:people].message[:bob]
     end
   end
 

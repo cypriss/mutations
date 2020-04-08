@@ -119,7 +119,7 @@ module Mutations
         inner = path.inject(errs) do |cur_errors,part|
           cur_errors[part.to_sym] ||= ErrorHash.new
         end
-        inner[last] = ErrorAtom.new(key, kind, :message => message)
+        inner[last] = ErrorAtom.new(last.to_sym, kind, :message => message)
       end
     end
 
