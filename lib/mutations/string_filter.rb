@@ -11,7 +11,7 @@ module Mutations
       :matches => nil,         # Can be a regexp
       :in => nil,              # Can be an array like %w(red blue green)
       :discard_empty => false, # If the param is optional, discard_empty: true drops empty fields.
-      :allow_control_characters => false    # false removes unprintable characters from the string
+      :allow_control_characters => false    # false removes control characters from the string
     }
 
     def filter(data)
@@ -27,8 +27,8 @@ module Mutations
       # Now ensure it's a string:
       return [data, :string] unless data.is_a?(String)
 
-      # At this point, data is a string. Now remove unprintable characters from the string:
-      data = data.gsub(/[^[:print:]\t\r\n]+/, ' ') unless options[:allow_control_characters]
+      # At this point, data is a string. Now remove control characters from the string:
+      data = data.gsub(/((?=[[:cntrl:]])[^\t\r\n])+/, ' ') unless options[:allow_control_characters]
 
       # Transform it using strip:
       data = data.strip if options[:strip]
