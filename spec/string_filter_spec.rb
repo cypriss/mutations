@@ -93,6 +93,20 @@ describe "Mutations::StringFilter" do
     assert_equal :empty, errors
   end
 
+  it "considers stripped strings that are blank to be nil if empty_is_nil option is used" do
+    sf = Mutations::StringFilter.new(:strip => true, :empty_is_nil => true, :nils => true)
+    filtered, errors = sf.filter("   ")
+    assert_equal nil, filtered
+    assert_equal nil, errors
+  end
+
+  it "considers stripped strings that are blank to be invalid if empty_is_nil option is used" do
+    sf = Mutations::StringFilter.new(:strip => true, :empty_is_nil => true)
+    filtered, errors = sf.filter("   ")
+    assert_equal nil, filtered
+    assert_equal :nils, errors
+  end
+
   it "considers strings that contain only unprintable characters to be invalid" do
     sf = Mutations::StringFilter.new(:empty => false)
     filtered, errors = sf.filter("\u0000\u0000")
