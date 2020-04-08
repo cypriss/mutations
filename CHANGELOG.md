@@ -1,3 +1,9 @@
+0.9.1
+-----------
+ - Treat blank strings as nil when `strip` and `empty_is_nil` options are set (#148, @saverio-kantox)
+ - Don't use full key in nested error messages (#149, @eugeneius)
+ - Don't remove unknown characters in string filter (#150, @eugeneius)
+
 0.9.0
 -----------
  - Retain `_id` suffix in error keys (#129, @khalilovcmd)
