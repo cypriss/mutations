@@ -13,6 +13,15 @@ Or add it to your Gemfile:
 
     gem 'mutations'
 
+### Rails Generators (optional)
+
+To install Rails [mutation generators](https://github.com/robertsimoes/mutations_generator) add the following gem to your Gemfile as well:
+
+```
+	 gem 'mutations_generator'
+
+```
+
 ## Example
 
 ```ruby
