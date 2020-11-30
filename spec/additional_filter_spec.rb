@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe "Mutations::AdditionalFilter" do
+describe "Chickens::AdditionalFilter" do
 
   describe "Additional Filter" do
-    module Mutations
-      class SometestFilter < Mutations::AdditionalFilter
+    module Chickens
+      class SometestFilter < Chickens::AdditionalFilter
         @default_options = {
           :nils => false
         }
@@ -14,7 +14,7 @@ describe "Mutations::AdditionalFilter" do
         end
       end
 
-      class MultiWordTestFilter < Mutations::AdditionalFilter
+      class MultiWordTestFilter < Chickens::AdditionalFilter
         @default_options = {
           :nils => false
         }
@@ -25,7 +25,7 @@ describe "Mutations::AdditionalFilter" do
       end
     end
 
-    class TestCommandUsingAdditionalFilters < Mutations::Command
+    class TestCommandUsingAdditionalFilters < Chickens::Command
       required do
         sometest :first_name
         multi_word_test :last_name
@@ -42,7 +42,7 @@ describe "Mutations::AdditionalFilter" do
       assert_equal nil, outcome.errors
     end
 
-    class TestCommandUsingAdditionalFiltersInHashes < Mutations::Command
+    class TestCommandUsingAdditionalFiltersInHashes < Chickens::Command
       required do
         hash :a_hash do
           sometest :first_name
@@ -63,7 +63,7 @@ describe "Mutations::AdditionalFilter" do
       assert_equal nil, outcome.errors
     end
 
-    class TestCommandUsingAdditionalFiltersInArrays < Mutations::Command
+    class TestCommandUsingAdditionalFiltersInArrays < Chickens::Command
       required do
         array :an_array do
           sometest
@@ -84,8 +84,8 @@ describe "Mutations::AdditionalFilter" do
       assert_equal nil, outcome.errors
     end
 
-    module Mutations
-      class AdditionalWithBlockFilter < Mutations::AdditionalFilter
+    module Chickens
+      class AdditionalWithBlockFilter < Chickens::AdditionalFilter
 
         def initialize(opts={}, &block)
           super(opts)
@@ -109,7 +109,7 @@ describe "Mutations::AdditionalFilter" do
       end
     end
 
-    class TestCommandUsingBlockArgument < Mutations::Command
+    class TestCommandUsingBlockArgument < Chickens::Command
       required do
         additional_with_block :foo do
           should_be_called
@@ -125,7 +125,7 @@ describe "Mutations::AdditionalFilter" do
       assert_equal true, TestCommandUsingBlockArgument.run!(:foo => 'bar')
     end
 
-    class TestCommandUsingBlockArgumentInAnArray < Mutations::Command
+    class TestCommandUsingBlockArgumentInAnArray < Chickens::Command
       required do
         array :some_array do
           additional_with_block do

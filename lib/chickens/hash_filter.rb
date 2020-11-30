@@ -1,4 +1,4 @@
-module Mutations
+module Chickens
   class HashFilter < InputFilter
     def self.register_additional_filter(type_class, type_name)
       define_method(type_name) do |name, options = {}, &block|

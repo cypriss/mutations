@@ -1,11 +1,11 @@
-require './lib/mutations/version'
+require './lib/chickens/version'
 
 Gem::Specification.new do |s|
-  s.name = 'mutations'
-  s.version = Mutations::VERSION
+  s.name = 'chickens'
+  s.version = Chickens::VERSION
   s.author = 'Jonathan Novak'
   s.email = 'jnovak@gmail.com'
-  s.homepage = 'http://github.com/cypriss/mutations'
+  s.homepage = 'http://github.com/cypriss/chickens'
   s.summary = s.description = 'Compose your business logic into commands that sanitize and validate input.'
   s.licenses = %w[MIT]
 

@@ -1,4 +1,4 @@
-module Mutations
+module Chickens
   class InputFilter
     def self.default_options
       @default_options ||= {}

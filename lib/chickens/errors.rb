@@ -1,4 +1,4 @@
-module Mutations
+module Chickens
 
   # Offers a non-localized, english only, non configurable way to get error messages.  This probably isnt good enough for users as-is.
   class DefaultErrorMessageCreator
@@ -85,7 +85,7 @@ module Mutations
     end
 
     def message
-      @message ||= Mutations.error_message_creator.message(@key, @symbol, :index => @index)
+      @message ||= Chickens.error_message_creator.message(@key, @symbol, :index => @index)
     end
 
     def message_list

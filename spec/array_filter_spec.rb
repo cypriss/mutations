@@ -1,19 +1,19 @@
 require 'spec_helper'
 require 'stringio'
 
-describe "Mutations::ArrayFilter" do
+describe "Chickens::ArrayFilter" do
 
   class SimpleModel; end
 
   it "allows arrays" do
-    f = Mutations::ArrayFilter.new(:arr)
+    f = Chickens::ArrayFilter.new(:arr)
     filtered, errors = f.filter([1])
     assert_equal [1], filtered
     assert_equal nil, errors
   end
 
   it "considers non-arrays to be invalid" do
-    f = Mutations::ArrayFilter.new(:arr)
+    f = Chickens::ArrayFilter.new(:arr)
     ['hi', true, 1, {:a => "1"}, Object.new].each do |thing|
       _filtered, errors = f.filter(thing)
       assert_equal :array, errors
@@ -21,42 +21,42 @@ describe "Mutations::ArrayFilter" do
   end
 
   it "considers nil to be invalid" do
-    f = Mutations::ArrayFilter.new(:arr, :nils => false)
+    f = Chickens::ArrayFilter.new(:arr, :nils => false)
     filtered, errors = f.filter(nil)
     assert_equal nil, filtered
     assert_equal :nils, errors
   end
 
   it "considers nil to be valid" do
-    f = Mutations::ArrayFilter.new(:arr, :nils => true)
+    f = Chickens::ArrayFilter.new(:arr, :nils => true)
     _filtered, errors = f.filter(nil)
     _filtered, errors = f.filter(nil)
     assert_equal nil, errors
   end
 
   it "lets you specify a class, and has valid elements" do
-    f = Mutations::ArrayFilter.new(:arr, :class => Integer)
+    f = Chickens::ArrayFilter.new(:arr, :class => Integer)
     filtered, errors = f.filter([1,2,3])
     assert_equal nil, errors
     assert_equal [1,2,3], filtered
   end
 
   it "lets you specify a class as a string, and has valid elements" do
-    f = Mutations::ArrayFilter.new(:arr, :class => 'Integer')
+    f = Chickens::ArrayFilter.new(:arr, :class => 'Integer')
     filtered, errors = f.filter([1,2,3])
     assert_equal nil, errors
     assert_equal [1,2,3], filtered
   end
 
   it "lets you specify a class, and has invalid elements" do
-    f = Mutations::ArrayFilter.new(:arr, :class => Integer)
+    f = Chickens::ArrayFilter.new(:arr, :class => Integer)
     filtered, errors = f.filter([1, "bob"])
     assert_equal [nil, :class], errors.symbolic
     assert_equal [1,"bob"], filtered
   end
 
   it "lets you use a block to supply an element filter" do
-    f = Mutations::ArrayFilter.new(:arr) { string }
+    f = Chickens::ArrayFilter.new(:arr) { string }
 
     _filtered, errors = f.filter(["hi", {:stuff => "ok"}])
     assert_nil errors[0]
@@ -64,7 +64,7 @@ describe "Mutations::ArrayFilter" do
   end
 
   it "lets you array-ize everything" do
-    f = Mutations::ArrayFilter.new(:arr, :arrayize => true) { string }
+    f = Chickens::ArrayFilter.new(:arr, :arrayize => true) { string }
 
     filtered, errors = f.filter("foo")
     assert_equal ["foo"], filtered
@@ -72,7 +72,7 @@ describe "Mutations::ArrayFilter" do
   end
 
   it "lets you array-ize an empty string" do
-    f = Mutations::ArrayFilter.new(:arr, :arrayize => true) { string }
+    f = Chickens::ArrayFilter.new(:arr, :arrayize => true) { string }
 
     filtered, errors = f.filter("")
     assert_equal [], filtered
@@ -80,7 +80,7 @@ describe "Mutations::ArrayFilter" do
   end
 
   it "lets you pass integers in arrays" do
-    f = Mutations::ArrayFilter.new(:arr) { integer :min => 4 }
+    f = Chickens::ArrayFilter.new(:arr) { integer :min => 4 }
 
     filtered, errors = f.filter([5,6,1,"bob"])
     assert_equal [5,6,1,"bob"], filtered
@@ -88,7 +88,7 @@ describe "Mutations::ArrayFilter" do
   end
 
   it "lets you pass floats in arrays" do
-    f = Mutations::ArrayFilter.new(:float) { float :min => 4.0 }
+    f = Chickens::ArrayFilter.new(:float) { float :min => 4.0 }
 
     filtered, errors = f.filter([5.0,6.0,1.0,"bob"])
     assert_equal [5.0,6.0,1.0,"bob"], filtered
@@ -96,7 +96,7 @@ describe "Mutations::ArrayFilter" do
   end
 
   it "lets you pass ducks in arrays" do
-    f = Mutations::ArrayFilter.new(:arr) { duck(:methods  => :length) }
+    f = Chickens::ArrayFilter.new(:arr) { duck(:methods  => :length) }
 
     filtered, errors = f.filter(["hi", [1], true])
     assert_equal ["hi", [1], true], filtered
@@ -104,7 +104,7 @@ describe "Mutations::ArrayFilter" do
   end
 
   it "lets you pass dates in arrays" do
-    f = Mutations::ArrayFilter.new(:arr) {date(:format => "%Y-%m-%d")}
+    f = Chickens::ArrayFilter.new(:arr) {date(:format => "%Y-%m-%d")}
 
     filtered, errors = f.filter(["2000-1-1", Date.new(2000, 1, 1), "2000-20-1"])
     assert_equal ["2000-1-1", Date.new(2000, 1, 1), "2000-20-1"], filtered
@@ -113,7 +113,7 @@ describe "Mutations::ArrayFilter" do
 
   it "lets you pass files in arrays" do
     sio = StringIO.new("bob")
-    f = Mutations::ArrayFilter.new(:arr) { file }
+    f = Chickens::ArrayFilter.new(:arr) { file }
 
     filtered, errors = f.filter([sio, "bob"])
     assert_equal [sio, "bob"], filtered
@@ -121,7 +121,7 @@ describe "Mutations::ArrayFilter" do
   end
 
   it "lets you pass booleans in arrays" do
-    f = Mutations::ArrayFilter.new(:arr) { boolean }
+    f = Chickens::ArrayFilter.new(:arr) { boolean }
 
     filtered, errors = f.filter([true, false, "1"])
     assert_equal [true, false, true], filtered
@@ -129,7 +129,7 @@ describe "Mutations::ArrayFilter" do
   end
 
   it "lets you pass model in arrays" do
-    f = Mutations::ArrayFilter.new(:arr) { model :string }
+    f = Chickens::ArrayFilter.new(:arr) { model :string }
 
     filtered, errors = f.filter(["hey"])
     assert_equal ["hey"], filtered
@@ -137,7 +137,7 @@ describe "Mutations::ArrayFilter" do
   end
 
   it "lets you pass hashes in arrays" do
-    f = Mutations::ArrayFilter.new(:arr) do
+    f = Chickens::ArrayFilter.new(:arr) do
       hash do
         required do
           string :foo
@@ -159,7 +159,7 @@ describe "Mutations::ArrayFilter" do
   end
 
   it "lets you pass arrays of arrays" do
-    f = Mutations::ArrayFilter.new(:arr) do
+    f = Chickens::ArrayFilter.new(:arr) do
       array do
         string
       end
@@ -171,7 +171,7 @@ describe "Mutations::ArrayFilter" do
   end
 
   it "handles errors for arrays of arrays" do
-    f = Mutations::ArrayFilter.new(:arr) do
+    f = Chickens::ArrayFilter.new(:arr) do
       array do
         string
       end
@@ -184,7 +184,7 @@ describe "Mutations::ArrayFilter" do
   end
 
   it "strips invalid elements" do
-    f = Mutations::ArrayFilter.new(:arr) do
+    f = Chickens::ArrayFilter.new(:arr) do
       integer :discard_invalid => true
     end
     filtered, errors = f.filter([1, "2", "three", "4", 5, [6]])
@@ -193,38 +193,38 @@ describe "Mutations::ArrayFilter" do
   end
 
   it "considers long arrays to be valid" do
-    f = Mutations::ArrayFilter.new(:arr, :min_length => 2)
+    f = Chickens::ArrayFilter.new(:arr, :min_length => 2)
     filtered, errors = f.filter([1, 2])
     assert_equal [1, 2], filtered
     assert_equal nil, errors
   end
 
   it "considers short arrays to be invalid" do
-    f = Mutations::ArrayFilter.new(:arr, :min_length => 2)
+    f = Chickens::ArrayFilter.new(:arr, :min_length => 2)
     filtered, errors = f.filter([1])
     assert_equal [1], filtered
     assert_equal :min_length, errors
   end
 
   it "sets a max_length for the array of 20 with one element as valid" do
-    f = Mutations::ArrayFilter.new(:arr, :max_length => 20)
+    f = Chickens::ArrayFilter.new(:arr, :max_length => 20)
     filtered, errors = f.filter([1])
     assert_equal [1], filtered
     assert_equal nil, errors
   end
   
   it "sets a max_length for the array of 2 with 5 as invalid" do
-    f = Mutations::ArrayFilter.new(:arr, :max_length => 2)
+    f = Chickens::ArrayFilter.new(:arr, :max_length => 2)
     filtered, errors = f.filter([1,2,3,4,5])
     assert_equal [1,2,3,4,5], filtered
     assert_equal :max_length, errors
   end
 
   it "will not re-constantize if cache_constants is true" do
-    was = Mutations.cache_constants?
-    Mutations.cache_constants = true
+    was = Chickens.cache_constants?
+    Chickens.cache_constants = true
 
-    f = Mutations::ArrayFilter.new(:simple_models, :class => "SimpleModel")
+    f = Chickens::ArrayFilter.new(:simple_models, :class => "SimpleModel")
 
     m = SimpleModel.new
     filtered, errors = f.filter([m])
@@ -239,14 +239,14 @@ describe "Mutations::ArrayFilter" do
     assert_equal [m], filtered
     assert_equal [:class], errors.symbolic
 
-    Mutations.cache_constants = was
+    Chickens.cache_constants = was
   end
 
   it "will re-constantize if cache_constants is false" do
-    was = Mutations.cache_constants?
-    Mutations.cache_constants = false
+    was = Chickens.cache_constants?
+    Chickens.cache_constants = false
 
-    f = Mutations::ArrayFilter.new(:simple_models, :class => "SimpleModel")
+    f = Chickens::ArrayFilter.new(:simple_models, :class => "SimpleModel")
 
     m = SimpleModel.new
     filtered, errors = f.filter([m])
@@ -261,6 +261,6 @@ describe "Mutations::ArrayFilter" do
     assert_equal [m], filtered
     assert_equal nil, errors
 
-    Mutations.cache_constants = was
+    Chickens.cache_constants = was
   end
 end

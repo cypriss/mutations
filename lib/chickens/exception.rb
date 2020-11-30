@@ -1,4 +1,4 @@
-module Mutations
+module Chickens
   class ValidationException < ::StandardError
     attr_accessor :errors
 

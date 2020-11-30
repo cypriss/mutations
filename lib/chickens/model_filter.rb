@@ -1,4 +1,4 @@
-module Mutations
+module Chickens
   class ModelFilter < InputFilter
     @default_options = {
       :nils => false,        # true allows an explicit nil to be valid. Overrides any other options
@@ -26,7 +26,7 @@ module Mutations
         true
       end
       
-      unless Mutations.cache_constants?
+      unless Chickens.cache_constants?
         options[:class] = options[:class].to_s.constantize if options[:class]
         options[:builder] = options[:builder].to_s.constantize if options[:builder]
       end

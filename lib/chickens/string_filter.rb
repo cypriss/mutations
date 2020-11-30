@@ -1,4 +1,4 @@
-module Mutations
+module Chickens
   class StringFilter < AdditionalFilter
     @default_options = {
       :strip => true,          # true calls data.strip if data is a string

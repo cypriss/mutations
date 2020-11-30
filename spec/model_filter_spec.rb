@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Mutations::ModelFilter" do
+describe "Chickens::ModelFilter" do
 
   class SimpleModel; end
   class AlwaysNew
@@ -16,7 +16,7 @@ describe "Mutations::ModelFilter" do
   end
 
   it "allows models" do
-    f = Mutations::ModelFilter.new(:simple_model)
+    f = Chickens::ModelFilter.new(:simple_model)
     m = SimpleModel.new
     filtered, errors = f.filter(m)
     assert_equal m, filtered
@@ -27,44 +27,44 @@ describe "Mutations::ModelFilter" do
   # end
 
   it "raises an exception during filtering if constantization fails" do
-    f = Mutations::ModelFilter.new(:complex_model)
+    f = Chickens::ModelFilter.new(:complex_model)
     assert_raises NameError do
       f.filter(nil)
     end
   end
 
   it "raises an exception during filtering if constantization of class fails" do
-    f = Mutations::ModelFilter.new(:simple_model, :class => "ComplexModel")
+    f = Chickens::ModelFilter.new(:simple_model, :class => "ComplexModel")
     assert_raises NameError do
       f.filter(nil)
     end
   end
 
   it "raises an exception during filtering if constantization of builder fails" do
-    f = Mutations::ModelFilter.new(:simple_model, :builder => "ComplexModel")
+    f = Chickens::ModelFilter.new(:simple_model, :builder => "ComplexModel")
     assert_raises NameError do
       f.filter(nil)
     end
   end
 
   it "considers nil to be invalid" do
-    f = Mutations::ModelFilter.new(:simple_model, :nils => false)
+    f = Chickens::ModelFilter.new(:simple_model, :nils => false)
     filtered, errors = f.filter(nil)
     assert_equal nil, filtered
     assert_equal :nils, errors
   end
 
   it "considers nil to be valid" do
-    f = Mutations::ModelFilter.new(:simple_model, :nils => true)
+    f = Chickens::ModelFilter.new(:simple_model, :nils => true)
     filtered, errors = f.filter(nil)
     assert_equal nil, filtered
     assert_equal nil, errors
   end
 
   it "will not re-constantize if cache_constants is true" do
-    was = Mutations.cache_constants?
-    Mutations.cache_constants = true
-    f = Mutations::ModelFilter.new(:simple_model)
+    was = Chickens.cache_constants?
+    Chickens.cache_constants = true
+    f = Chickens::ModelFilter.new(:simple_model)
     m = SimpleModel.new
     filtered, errors = f.filter(m)
     assert_equal m, filtered
@@ -79,13 +79,13 @@ describe "Mutations::ModelFilter" do
     assert_equal m, filtered
     assert_equal :model, errors
 
-    Mutations.cache_constants = was
+    Chickens.cache_constants = was
   end
   
   it "will re-constantize if cache_constants is false" do
-    was = Mutations.cache_constants?
-    Mutations.cache_constants = false
-    f = Mutations::ModelFilter.new(:simple_model)
+    was = Chickens.cache_constants?
+    Chickens.cache_constants = false
+    f = Chickens::ModelFilter.new(:simple_model)
     m = SimpleModel.new
     filtered, errors = f.filter(m)
     assert_equal m, filtered
@@ -100,7 +100,7 @@ describe "Mutations::ModelFilter" do
     assert_equal m, filtered
     assert_equal nil, errors
     
-    Mutations.cache_constants = was
+    Chickens.cache_constants = was
   end
 
   # it "allows you to override class with a constant and succeed" do

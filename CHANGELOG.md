@@ -1,3 +1,7 @@
+1.0.0
+-----------
+ - Renamed to Chickens
+
 0.9.1
 -----------
  - Treat blank strings as nil when `strip` and `empty_is_nil` options are set (#148, @saverio-kantox)
@@ -14,7 +18,7 @@
 -----------
  - Add `min_length` and `max_length` options to array filter (#128, @jwoertink)
  - Add `empty_is_nil` option to date filter (#122, @jamesacarr)
- - Respect `Mutations.cache_constants` in array filters (#125, @eugeneius)
+ - Respect `Chickens.cache_constants` in array filters (#125, @eugeneius)
 
 0.8.2
 -----------
@@ -60,7 +64,7 @@
 - Add pluggable filters.
 - Add ruby 1.8.7 support [#19]
 - Add a date filter: ```date :start_date``` (/via @eliank and @geronimo)
-- ```Mutations.cache_constants = false``` if you want to work in Rails dev mode which redefines constants. [#23]
+- ```Chickens.cache_constants = false``` if you want to work in Rails dev mode which redefines constants. [#23]
 
 0.5.12
 -----------

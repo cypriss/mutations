@@ -1,23 +1,23 @@
-# Mutations
+# Chickens (formerly the misleadingly named Mutations gem)
 
-[![Build Status](https://travis-ci.org/cypriss/mutations.svg?branch=master)](https://travis-ci.org/cypriss/mutations)
-[![Code Climate](https://codeclimate.com/github/cypriss/mutations.svg)](https://codeclimate.com/github/cypriss/mutations)
+[![Build Status](https://travis-ci.org/jkogara/chickens.svg?branch=master)](https://travis-ci.org/cypriss/chickens)
+[![Code Climate](https://codeclimate.com/github/jkogara/chickens.svg)](https://codeclimate.com/github/cypriss/chickens)
 
 Compose your business logic into commands that sanitize and validate input. Write safe, reusable, and maintainable code for Ruby and Rails apps.
 
 ## Installation
 
-    gem install mutations
+    gem install chickens
 
 Or add it to your Gemfile:
 
-    gem 'mutations'
+    gem 'chickens'
 
 ## Example
 
 ```ruby
 # Define a command that signs up a user.
-class UserSignup < Mutations::Command
+class UserSignup < Chickens::Command
 
   # These inputs are required
   required do
@@ -62,32 +62,32 @@ Some things to note about the example:
 * This code is completely re-usable in other contexts (need an API?)
 * The inputs to this 'function' are documented by default -- the bare minimum to use it (name and email) are documented, as are 'extras' (newsletter_subscribe)
 
-## Why is it called 'mutations'?
+## Why is it called 'chickens'?
 
 Imagine you had a folder in your Rails project:
 
-    app/mutations
+    app/commands
 
 And inside, you had a library of business operations that you can do against your datastore:
 
-    app/mutations/users/signup.rb
-    app/mutations/users/login.rb
-    app/mutations/users/update_profile.rb
-    app/mutations/users/change_password.rb
+    app/commands/users/signup.rb
+    app/commands/users/login.rb
+    app/commands/users/update_profile.rb
+    app/commands/users/change_password.rb
     ...
-    app/mutations/articles/create.rb
-    app/mutations/articles/update.rb
-    app/mutations/articles/publish.rb
-    app/mutations/articles/comment.rb
+    app/commands/articles/create.rb
+    app/commands/articles/update.rb
+    app/commands/articles/publish.rb
+    app/commands/articles/comment.rb
     ...
-    app/mutations/ideas/upsert.rb
+    app/commands/ideas/upsert.rb
     ...
 
-Each of these _mutations_ takes your application from one state to the next.
+Each of these _commands_ takes your application from one state to the next.
 
 That being said, you can create commands for things that don't mutate your database.
 
-## How do I call mutations?
+## How do I call chickens?
 
 You have two choices. Given a mutation UserSignup, you can do this:
 
@@ -103,18 +103,18 @@ end
 Or, you can do this:
 
 ```ruby
-user = UserSignup.run!(params) # returns the result of execute, or raises Mutations::ValidationException
+user = UserSignup.run!(params) Chickens
 ```
 
-## What can I pass to mutations?
+## What can I pass to chickens?
 
-Mutations only accept hashes as arguments to #run and #run!
+Chickens only accept hashes as arguments to #run and #run!
 
 That being said, you can pass multiple hashes to run, and they are merged together. Later hashes take precedence. This give you safety in situations where you want to pass unsafe user inputs and safe server inputs into a single mutation. For instance:
 
 ```ruby
 # A user comments on an article
-class CreateComment < Mutations::Command
+class CreateComment < Chickens::Command
   required do
     model :user
     model :article
@@ -134,12 +134,12 @@ end
 
 Here, we pass two hashes to CreateComment. Even if the params[:comment] hash has a user or article field, they're overwritten by the second hash. (Also note: even if they weren't, they couldn't be of the correct data type in this particular case.)
 
-## How do I define mutations?
+## How do I define chickens?
 
-1. Subclass Mutations::Command
+1. Subclass Chickens::Command
 
     ```ruby
-    class YourMutation < Mutations::Command
+    class YourCommand < Chickens::Command
       # ...
     end
     ```
@@ -178,7 +178,7 @@ Here, we pass two hashes to CreateComment. Even if the params[:comment] hash has
     end
     ```
 
-See a full list of options [here](https://github.com/cypriss/mutations/wiki/Filtering-Input).
+See a full list of options [here](https://github.com/cypriss/chickens/wiki/Filtering-Input).
 
 ## How do I write an execute method?
 
@@ -220,7 +220,7 @@ outcome.result # => "WIN!"
 
 ## What about validation errors?
 
-If things don't pan out, you'll get back an Mutations::ErrorHash object that maps invalid inputs to either symbols or messages. Example:
+If things don't pan out, you'll get back an Chickens::ErrorHash object that maps invalid inputs to either symbols or messages. Example:
 
 ```ruby
 # Didn't pass required field 'email', and newsletter_subscribe is the wrong format:
@@ -266,7 +266,7 @@ outcome.errors.symbolic # => {password_confirmation: :doesnt_match}
 outcome.errors.message # => {password_confirmation: "Your passwords don't match"}
 ```
 
-If you want to tie the validation messages into your I18n system, you'll need to [write a custom error message generator](https://github.com/cypriss/mutations/wiki/Custom-Error-Messages).
+If you want to tie the validation messages into your I18n system, you'll need to [write a custom error message generator](https://github.com/cypriss/chickens/wiki/Custom-Error-Messages).
 
 ## FAQs
 
@@ -276,14 +276,14 @@ Rails comes with an awesome default stack, and a lot of standard practices that 
 
 That being said, there's a whole slew of patterns that are available to experienced developers. As your Rails app grows in size and complexity, my experience has been that some of these patterns can help your app immensely.
 
-### How do I share code between mutations?
+### How do I share code between commands?
 
-Write some modules that you include into multiple mutations.
+Write some modules that you include into multiple chickens.
 
-### Can I subclass my mutations?
+### Can I subclass my commands?
 
 Yes, but I don't think it's a very good idea. Better to compose.
 
 ### Can I use this with Rails forms helpers?
 
-Somewhat. Any form can submit to your server, and mutations will happily accept that input. However, if there are errors, there's no built-in way to bake the errors into the HTML with Rails form tag helpers. Right now this is really designed to support a JSON API.  You'd probably have to write an adapter of some kind.
+Somewhat. Any form can submit to your server, and chickens will happily accept that input. However, if there are errors, there's no built-in way to bake the errors into the HTML with Rails form tag helpers. Right now this is really designed to support a JSON API.  You'd probably have to write an adapter of some kind.

@@ -33,7 +33,7 @@ describe "Command" do
     end
 
     it "should throw an exception with run!" do
-      assert_raises Mutations::ValidationException do
+      assert_raises Chickens::ValidationException do
         SimpleCommand.run!(:name => "John", :email => "john@gmail.com", :amount => "bob")
       end
     end
@@ -125,7 +125,7 @@ describe "Command" do
   end
 
   describe "EigenCommand" do
-    class EigenCommand < Mutations::Command
+    class EigenCommand < Chickens::Command
 
       required { string :name }
       optional { string :email }
@@ -142,7 +142,7 @@ describe "Command" do
   end
 
   describe "MutatatedCommand" do
-    class MutatatedCommand < Mutations::Command
+    class MutatatedCommand < Chickens::Command
 
       required { string :name }
       optional { string :email }
@@ -160,7 +160,7 @@ describe "Command" do
   end
 
   describe "ErrorfulCommand" do
-    class ErrorfulCommand < Mutations::Command
+    class ErrorfulCommand < Chickens::Command
 
       required { string :name }
       optional { string :email }
@@ -182,7 +182,7 @@ describe "Command" do
   end
 
   describe "CustomErrorKeyCommand" do
-    class CustomErrorKeyCommand < Mutations::Command
+    class CustomErrorKeyCommand < Chickens::Command
       required { string :name, :error_key => :other_name }
       optional { string :email, :min_length => 4, :error_key => :other_email }
     end
@@ -205,7 +205,7 @@ describe "Command" do
   end
 
   describe "NestingErrorfulCommand" do
-    class NestingErrorfulCommand < Mutations::Command
+    class NestingErrorfulCommand < Chickens::Command
 
       required { string :name }
       optional { string :email }
@@ -228,15 +228,15 @@ describe "Command" do
   end
 
   describe "MultiErrorCommand" do
-    class MultiErrorCommand < Mutations::Command
+    class MultiErrorCommand < Chickens::Command
 
       required { string :name }
       optional { string :email }
 
       def execute
-        moar_errors = Mutations::ErrorHash.new
-        moar_errors[:bob] = Mutations::ErrorAtom.new(:bob, :is_short)
-        moar_errors[:sally] = Mutations::ErrorAtom.new(:sally, :is_fat)
+        moar_errors = Chickens::ErrorHash.new
+        moar_errors[:bob] = Chickens::ErrorAtom.new(:bob, :is_short)
+        moar_errors[:sally] = Chickens::ErrorAtom.new(:sally, :is_fat)
 
         merge_errors(moar_errors)
 
@@ -255,7 +255,7 @@ describe "Command" do
   end
 
   describe "PresentCommand" do
-    class PresentCommand < Mutations::Command
+    class PresentCommand < Chickens::Command
 
       optional do
         string :email
@@ -284,7 +284,7 @@ describe "Command" do
   end
 
   describe "RawInputsCommand" do
-    class RawInputsCommand < Mutations::Command
+    class RawInputsCommand < Chickens::Command
 
       required do
         string :name

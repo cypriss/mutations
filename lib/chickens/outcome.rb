@@ -1,4 +1,4 @@
-module Mutations
+module Chickens
   class Outcome
     attr_reader :result, :errors, :inputs
 

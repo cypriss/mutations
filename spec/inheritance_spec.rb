@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'simple_command'
 
-describe 'Mutations - inheritance' do
+describe 'Chickens - inheritance' do
 
   class SimpleInherited < SimpleCommand
 

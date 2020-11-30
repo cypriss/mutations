@@ -1,4 +1,4 @@
-module Mutations
+module Chickens
   class Command
     class << self
       def create_attr_methods(meth, &block)

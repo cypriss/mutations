@@ -1,9 +1,9 @@
 require 'spec_helper'
 require 'simple_command'
 
-describe 'Mutations - defaults' do
+describe 'Chickens - defaults' do
 
-  class DefaultCommand < Mutations::Command
+  class DefaultCommand < Chickens::Command
     required do
       string :name, :default => "Bob Jones"
     end

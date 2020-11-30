@@ -1,4 +1,4 @@
-module Mutations
+module Chickens
   class ArrayFilter < InputFilter
     def self.register_additional_filter(type_class, type_name)
       define_method(type_name) do |options = {}, &block|
@@ -48,7 +48,7 @@ module Mutations
         true
       end
 
-      unless Mutations.cache_constants?
+      unless Chickens.cache_constants?
         options[:class] = options[:class].to_s.constantize if options[:class]
       end
     end

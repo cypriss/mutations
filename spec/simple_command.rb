@@ -1,4 +1,4 @@
-class SimpleCommand < Mutations::Command
+class SimpleCommand < Chickens::Command
 
   required do
     string :name, :max_length => 10

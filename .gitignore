@@ -4,3 +4,4 @@
 Gemfile.lock
 .bundle
 vendor/bundle
+.idea
