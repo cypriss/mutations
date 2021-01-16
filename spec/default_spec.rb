@@ -30,4 +30,26 @@ describe 'Mutations - defaults' do
     assert_equal false, outcome.success?
   end
 
+  class DefaultCommandWithValueMutation < Mutations::Command
+    required do
+      string :name
+      array :names, class: String, default: []
+    end
+
+    def execute
+      names << name
+      inputs
+    end
+  end
+
+  it "should not leak values between calls of the command" do
+    outcome = DefaultCommandWithValueMutation.run(name: "Mary")
+    assert_equal true, outcome.success?
+    assert_equal({"name" => "Mary", "names" => ["Mary"]}, outcome.result)
+
+    outcome = DefaultCommandWithValueMutation.run(name: "Joe")
+    assert_equal true, outcome.success?
+    assert_equal({"name" => "Joe", "names" => ["Joe"]}, outcome.result)
+  end
+
 end
