@@ -268,6 +268,56 @@ outcome.errors.message # => {password_confirmation: "Your passwords don't match"
 
 If you want to tie the validation messages into your I18n system, you'll need to [write a custom error message generator](https://github.com/cypriss/mutations/wiki/Custom-Error-Messages).
 
+### Optional fields
+
+By default optional fields with `nil` values are discarded.
+
+```ruby
+class UserSignup < Mutations::Command
+
+  ...
+
+  optional do
+    ...
+    string :city
+  end
+
+  ...
+end
+```
+
+With this handy behavior, it means, the outcome returns a `success` with no validation errors.
+
+```ruby
+outcome = UserSignup.run(name: "John Doe", email: "john@doe.com", city: nil)
+outcome.success?
+=> true
+```
+
+Next, specifically for string type fields, there is an option to allow empty strings, `""`, for optional fields.
+
+```ruby
+class UserSignup < Mutations::Command
+
+  ...
+
+  optional do
+    ...
+    string :city, discard_empty: true
+  end
+
+  ...
+end
+```
+
+With `discard_empty`, optional fields with empty strings are discarded as well, returning outcome with `success`.
+
+```ruby
+outcome = UserSignup.run(name: "John Doe", email: "john@doe.com", city: "")
+outcome.success?
+=> true
+```
+
 ## FAQs
 
 ### Is this better than the 'Rails Way'?
