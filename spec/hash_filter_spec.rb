@@ -112,12 +112,14 @@ describe "Mutations::HashFilter" do
 
   describe "with raise_on_empty_hash_filter=true" do
     it "raises for empty hash definition" do
-      old_value = Mutations.raise_on_empty_hash_filter
-      Mutations.raise_on_empty_hash_filter = true
+      begin
+        old_value = Mutations.raise_on_empty_hash_filter
+        Mutations.raise_on_empty_hash_filter = true
 
-      assert_raises(ArgumentError) { Mutations::HashFilter.new }
-    ensure
-      Mutations.raise_on_empty_hash_filter = old_value
+        assert_raises(ArgumentError) { Mutations::HashFilter.new }
+      ensure
+        Mutations.raise_on_empty_hash_filter = old_value
+      end
     end
   end
 
