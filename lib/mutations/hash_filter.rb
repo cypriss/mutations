@@ -23,6 +23,10 @@ module Mutations
       @required_inputs = {}
       @current_inputs = @required_inputs
 
+      if Mutations.raise_on_empty_hash_filter && !block_given?
+        raise ArgumentError.new("Hash parameter can't be created without passing the block")
+      end
+
       if block_given?
         instance_eval(&block)
       end
