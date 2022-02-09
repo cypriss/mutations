@@ -1,9 +1,10 @@
 module Mutations
   class FloatFilter < AdditionalFilter
     @default_options = {
-      :nils => false,       # true allows an explicit nil to be valid. Overrides any other options
-      :min => nil,          # lowest value, inclusive
-      :max => nil           # highest value, inclusive
+      :nils => false,          # true allows an explicit nil to be valid. Overrides any other options,
+      :empty_is_nil => false,  # if true, treat empty string as if it were nil
+      :min => nil,             # lowest value, inclusive
+      :max => nil              # highest value, inclusive
     }
 
     def filter(data)
@@ -15,7 +16,13 @@ module Mutations
       end
       
       # Now check if it's empty:
-      return [data, :empty] if data == ""
+      if data == ""
+        if options[:empty_is_nil]
+          return [nil, (:nils unless options[:nils])]
+        else
+          return [data, :empty]
+        end
+      end
 
       # Ensure it's the correct data type (Float)
       if !data.is_a?(Float)
