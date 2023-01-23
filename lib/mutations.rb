@@ -41,7 +41,16 @@ module Mutations
     def cache_constants?
       @cache_constants
     end
+
+    def raise_on_empty_hash_filter=(val)
+      @raise_on_empty_hash_filter = val
+    end
+
+    def raise_on_empty_hash_filter
+      @raise_on_empty_hash_filter
+    end
   end
 end
 
 Mutations.cache_constants = true
+Mutations.raise_on_empty_hash_filter = false
