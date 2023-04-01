@@ -21,7 +21,9 @@ module Mutations
     end
 
     def default
-      options[:default]
+      return options[:default] if options[:default].frozen?
+
+      options[:default].dup
     end
 
     # Only relevant for optional params
