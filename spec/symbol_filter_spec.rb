@@ -6,14 +6,14 @@ describe "Mutations::SymbolFilter" do
     sf = Mutations::SymbolFilter.new
     filtered, errors = sf.filter("hello")
     assert_equal :hello, filtered
-    assert_equal nil, errors
+    assert_nil errors
   end
 
   it "allows symbols" do
     sf = Mutations::SymbolFilter.new
     filtered, errors = sf.filter(:hello)
     assert_equal :hello, filtered
-    assert_equal nil, errors
+    assert_nil errors
   end
 
   it "doesn't allow non-symbols" do
@@ -27,15 +27,15 @@ describe "Mutations::SymbolFilter" do
   it "considers nil to be invalid" do
     sf = Mutations::SymbolFilter.new(:nils => false)
     filtered, errors = sf.filter(nil)
-    assert_equal nil, filtered
+    assert_nil filtered
     assert_equal :nils, errors
   end
 
   it "considers nil to be valid" do
     sf = Mutations::SymbolFilter.new(:nils => true)
     filtered, errors = sf.filter(nil)
-    assert_equal nil, filtered
-    assert_equal nil, errors
+    assert_nil filtered
+    assert_nil errors
   end
 
   it "considers non-inclusion to be invalid" do
@@ -49,7 +49,7 @@ describe "Mutations::SymbolFilter" do
     sf = Mutations::SymbolFilter.new(:in => [:red, :blue, :green])
     filtered, errors = sf.filter(:red)
     assert_equal :red, filtered
-    assert_equal nil, errors
+    assert_nil errors
   end
 
 end

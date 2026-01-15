@@ -7,7 +7,7 @@ describe "Mutations::TimeFilter" do
     f = Mutations::TimeFilter.new
     filtered, errors = f.filter(time)
     assert_equal time, filtered
-    assert_equal nil, errors
+    assert_nil errors
   end
 
   it "takes a Date object and converts it to a time" do
@@ -15,7 +15,7 @@ describe "Mutations::TimeFilter" do
     f = Mutations::TimeFilter.new
     filtered, errors = f.filter(date)
     assert_equal date.to_time, filtered
-    assert_equal nil, errors
+    assert_nil errors
   end
 
   it "takes a DateTime object and converts it to a time" do
@@ -23,7 +23,7 @@ describe "Mutations::TimeFilter" do
     f = Mutations::TimeFilter.new
     filtered, errors = f.filter(date)
     assert_equal date.to_time, filtered
-    assert_equal nil, errors
+    assert_nil errors
   end
 
   it "checks if the given time is after a certain time" do
@@ -31,14 +31,14 @@ describe "Mutations::TimeFilter" do
     f = Mutations::TimeFilter.new(:after => time - 1)
     filtered, errors = f.filter(time)
     assert_equal time, filtered
-    assert_equal nil, errors
+    assert_nil errors
   end
 
   it "gives errors when the given time is before the after time" do
     time = Time.now
     f = Mutations::TimeFilter.new(:after => time + 1)
     filtered, errors = f.filter(time)
-    assert_equal nil, filtered
+    assert_nil filtered
     assert_equal :after, errors
   end
 
@@ -47,14 +47,14 @@ describe "Mutations::TimeFilter" do
     f = Mutations::TimeFilter.new(:before => time + 1)
     filtered, errors = f.filter(time)
     assert_equal time, filtered
-    assert_equal nil, errors
+    assert_nil errors
   end
 
   it "gives errors when the given time is after the before time" do
     time = Time.now
     f = Mutations::TimeFilter.new(:before => time - 1)
     filtered, errors = f.filter(time)
-    assert_equal nil, filtered
+    assert_nil filtered
     assert_equal :before, errors
   end
 
@@ -63,7 +63,7 @@ describe "Mutations::TimeFilter" do
     f = Mutations::TimeFilter.new(:after => time - 1, :before => time + 1)
     filtered, errors = f.filter(time)
     assert_equal time, filtered
-    assert_equal nil, errors
+    assert_nil errors
   end
 
   it "should be able to parse a D-M-Y string to a time" do
@@ -72,7 +72,7 @@ describe "Mutations::TimeFilter" do
     f = Mutations::TimeFilter.new
     filtered, errors = f.filter(date_string)
     assert_equal date.to_time, filtered
-    assert_equal nil, errors
+    assert_nil errors
   end
 
   it "should be able to parse a Y-M-D string to a time" do
@@ -81,7 +81,7 @@ describe "Mutations::TimeFilter" do
     f = Mutations::TimeFilter.new
     filtered, errors = f.filter(date_string)
     assert_equal date.to_time, filtered
-    assert_equal nil, errors
+    assert_nil errors
   end
 
   it "should be able to handle time formatting" do
@@ -90,27 +90,27 @@ describe "Mutations::TimeFilter" do
     f = Mutations::TimeFilter.new(:format => '%Y-%m-%d %H:%M:%S')
     filtered, errors = f.filter(time_string)
     assert_equal time, filtered
-    assert_equal nil, errors
+    assert_nil errors
 
     time_string = "1, 2, 2000, 121314"
     f = Mutations::TimeFilter.new(:format => '%m, %d, %Y, %H%M%S')
     filtered, errors = f.filter(time_string)
     assert_equal time, filtered
-    assert_equal nil, errors
+    assert_nil errors
   end
 
   it "considers nil to be invalid" do
     f = Mutations::TimeFilter.new
     filtered, errors = f.filter(nil)
-    assert_equal nil, filtered
+    assert_nil filtered
     assert_equal :nils, errors
   end
 
   it "allows the use of nil when specified" do
     f = Mutations::TimeFilter.new(:nils => true)
     filtered, errors = f.filter(nil)
-    assert_equal nil, filtered
-    assert_equal nil, errors
+    assert_nil filtered
+    assert_nil errors
   end
 
   it "considers empty strings to be empty" do
@@ -124,7 +124,7 @@ describe "Mutations::TimeFilter" do
     invalid_time_string = "1, 20, 2013 25:13"
     f = Mutations::TimeFilter.new
     filtered, errors = f.filter(invalid_time_string)
-    assert_equal nil, filtered
+    assert_nil filtered
     assert_equal :time, errors
   end
 end

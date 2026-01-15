@@ -20,7 +20,7 @@ describe "Mutations::ModelFilter" do
     m = SimpleModel.new
     filtered, errors = f.filter(m)
     assert_equal m, filtered
-    assert_equal nil, errors
+    assert_nil errors
   end
 
   # it "disallows different types of models" do
@@ -50,15 +50,15 @@ describe "Mutations::ModelFilter" do
   it "considers nil to be invalid" do
     f = Mutations::ModelFilter.new(:simple_model, :nils => false)
     filtered, errors = f.filter(nil)
-    assert_equal nil, filtered
+    assert_nil filtered
     assert_equal :nils, errors
   end
 
   it "considers nil to be valid" do
     f = Mutations::ModelFilter.new(:simple_model, :nils => true)
     filtered, errors = f.filter(nil)
-    assert_equal nil, filtered
-    assert_equal nil, errors
+    assert_nil filtered
+    assert_nil errors
   end
 
   it "will not re-constantize if cache_constants is true" do
@@ -68,7 +68,7 @@ describe "Mutations::ModelFilter" do
     m = SimpleModel.new
     filtered, errors = f.filter(m)
     assert_equal m, filtered
-    assert_equal nil, errors
+    assert_nil errors
 
     Object.send(:remove_const, 'SimpleModel')
 
@@ -89,7 +89,7 @@ describe "Mutations::ModelFilter" do
     m = SimpleModel.new
     filtered, errors = f.filter(m)
     assert_equal m, filtered
-    assert_equal nil, errors
+    assert_nil errors
     
     Object.send(:remove_const, 'SimpleModel')
     
@@ -98,7 +98,7 @@ describe "Mutations::ModelFilter" do
     m = SimpleModel.new
     filtered, errors = f.filter(m)
     assert_equal m, filtered
-    assert_equal nil, errors
+    assert_nil errors
     
     Mutations.cache_constants = was
   end
