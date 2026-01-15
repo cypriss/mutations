@@ -39,7 +39,7 @@ describe "Mutations::AdditionalFilter" do
     it "should recognize additional filters" do
       outcome = TestCommandUsingAdditionalFilters.run(:first_name => "John", :last_name => "Doe")
       assert outcome.success?
-      assert_equal nil, outcome.errors
+      assert_nil outcome.errors
     end
 
     class TestCommandUsingAdditionalFiltersInHashes < Mutations::Command
@@ -60,7 +60,7 @@ describe "Mutations::AdditionalFilter" do
       )
 
       assert outcome.success?
-      assert_equal nil, outcome.errors
+      assert_nil outcome.errors
     end
 
     class TestCommandUsingAdditionalFiltersInArrays < Mutations::Command
@@ -81,7 +81,7 @@ describe "Mutations::AdditionalFilter" do
       )
 
       assert outcome.success?
-      assert_equal nil, outcome.errors
+      assert_nil outcome.errors
     end
 
     module Mutations

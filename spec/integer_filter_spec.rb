@@ -6,21 +6,21 @@ describe "Mutations::IntegerFilter" do
     f = Mutations::IntegerFilter.new
     filtered, errors = f.filter(3)
     assert_equal 3, filtered
-    assert_equal nil, errors
+    assert_nil errors
   end
 
   it "allows strings that start with a digit" do
     f = Mutations::IntegerFilter.new
     filtered, errors = f.filter("3")
     assert_equal 3, filtered
-    assert_equal nil, errors
+    assert_nil errors
   end
 
   it "allows negative strings" do
     f = Mutations::IntegerFilter.new
     filtered, errors = f.filter("-3")
     assert_equal(-3, filtered)
-    assert_equal nil, errors
+    assert_nil errors
   end
 
   it "doesnt't allow other strings, nor does it allow random objects or symbols" do
@@ -34,15 +34,15 @@ describe "Mutations::IntegerFilter" do
   it "considers nil to be invalid" do
     f = Mutations::IntegerFilter.new(:nils => false)
     filtered, errors = f.filter(nil)
-    assert_equal nil, filtered
+    assert_nil filtered
     assert_equal :nils, errors
   end
 
   it "considers nil to be valid" do
     f = Mutations::IntegerFilter.new(:nils => true)
     filtered, errors = f.filter(nil)
-    assert_equal nil, filtered
-    assert_equal nil, errors
+    assert_nil filtered
+    assert_nil errors
   end
   
   it "considers empty strings to be empty" do
@@ -60,8 +60,8 @@ describe "Mutations::IntegerFilter" do
   it "returns empty strings as nil if empty_is_nil option is used" do
     f = Mutations::IntegerFilter.new(:empty_is_nil => true, :nils => true)
     filtered, errors = f.filter("")
-    assert_equal nil, filtered
-    assert_equal nil, errors
+    assert_nil filtered
+    assert_nil errors
   end
 
   it "considers low numbers invalid" do
@@ -75,7 +75,7 @@ describe "Mutations::IntegerFilter" do
     f = Mutations::IntegerFilter.new(:min => 10)
     filtered, errors = f.filter(31)
     assert_equal 31, filtered
-    assert_equal nil, errors
+    assert_nil errors
   end
 
   it "considers high numbers invalid" do
@@ -89,7 +89,7 @@ describe "Mutations::IntegerFilter" do
     f = Mutations::IntegerFilter.new(:max => 10)
     filtered, errors = f.filter(3)
     assert_equal 3, filtered
-    assert_equal nil, errors
+    assert_nil errors
   end
 
   it "considers not matching numbers to be invalid" do

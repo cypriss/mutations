@@ -6,11 +6,11 @@ describe "Mutations::BooleanFilter" do
     f = Mutations::BooleanFilter.new
     filtered, errors = f.filter(true)
     assert_equal true, filtered
-    assert_equal nil, errors
+    assert_nil errors
 
     filtered, errors = f.filter(false)
     assert_equal false, filtered
-    assert_equal nil, errors
+    assert_nil errors
   end
 
   it "considers non-booleans to be invalid" do
@@ -24,15 +24,15 @@ describe "Mutations::BooleanFilter" do
   it "considers nil to be invalid" do
     f = Mutations::BooleanFilter.new(:nils => false)
     filtered, errors = f.filter(nil)
-    assert_equal nil, filtered
+    assert_nil filtered
     assert_equal :nils, errors
   end
 
   it "considers nil to be valid" do
     f = Mutations::BooleanFilter.new(:nils => true)
     filtered, errors = f.filter(nil)
-    assert_equal nil, filtered
-    assert_equal nil, errors
+    assert_nil filtered
+    assert_nil errors
   end
 
   it "considers certain strings to be valid booleans" do
@@ -40,7 +40,7 @@ describe "Mutations::BooleanFilter" do
     [["true", true], ["TRUE", true], ["TrUe", true], ["1", true], ["false", false], ["FALSE", false], ["FalSe", false], ["0", false], [0, false], [1, true]].each do |(str, v)|
       filtered, errors = f.filter(str)
       assert_equal v, filtered
-      assert_equal nil, errors
+      assert_nil errors
     end
   end
   

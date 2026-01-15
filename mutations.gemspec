@@ -14,6 +14,6 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
 
   s.add_dependency "activesupport"
-  s.add_development_dependency 'minitest', '~> 4'
+  s.add_development_dependency 'minitest'
   s.add_development_dependency 'rake'
 end

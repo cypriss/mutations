@@ -9,7 +9,7 @@ describe "Command" do
 
       assert outcome.success?
       assert_equal({:name => "John", :email => "john@gmail.com", :amount => 5}.stringify_keys, outcome.result)
-      assert_equal nil, outcome.errors
+      assert_nil outcome.errors
     end
 
     it "should filter out spurious params" do
@@ -17,7 +17,7 @@ describe "Command" do
 
       assert outcome.success?
       assert_equal({:name => "John", :email => "john@gmail.com", :amount => 5}.stringify_keys, outcome.result)
-      assert_equal nil, outcome.errors
+      assert_nil outcome.errors
     end
 
     it "should discover errors in inputs" do
@@ -70,7 +70,7 @@ describe "Command" do
 
       assert !outcome.success?
       assert_equal :max_length, outcome.errors.symbolic[:name]
-      assert_equal nil, outcome.errors.symbolic[:email]
+      assert_nil outcome.errors.symbolic[:email]
     end
 
     it "should merge multiple hashes" do
