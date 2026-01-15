@@ -14,6 +14,9 @@ module Mutations
       :allow_control_characters => false    # false removes control characters from the string
     }
 
+    CONTROL_CHARS = ((0..31).map(&:chr) - ["\r", "\n", "\t"]).join.freeze
+    REPLACE = (" " * CONTROL_CHARS.bytesize).freeze
+
     def filter(data)
       # Handle nil case
       if data.nil?
@@ -28,7 +31,7 @@ module Mutations
       return [data, :string] unless data.is_a?(String)
 
       # At this point, data is a string. Now remove control characters from the string:
-      data = data.gsub(/((?=[[:cntrl:]])[^\t\r\n])+/, ' ') unless options[:allow_control_characters]
+      data = data.tr_s(CONTROL_CHARS, REPLACE) unless options[:allow_control_characters]
 
       # Transform it using strip:
       data = data.strip if options[:strip]
