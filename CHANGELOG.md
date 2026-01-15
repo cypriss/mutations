@@ -1,3 +1,7 @@
+0.9.2
+-----------
+ - Optimize control char stripping (#167, @byroot)
+
 0.9.1
 -----------
  - Treat blank strings as nil when `strip` and `empty_is_nil` options are set (#148, @saverio-kantox)
