@@ -72,6 +72,19 @@ describe "Mutations::FloatFilter" do
     assert_equal :empty, errors
   end
 
+  it "considers empty strings to be nil if empty_is_nil option is used" do
+    f = Mutations::FloatFilter.new(:empty_is_nil => true)
+    _filtered, errors = f.filter("")
+    assert_equal :nils, errors
+  end
+
+  it "returns empty strings as nil if empty_is_nil option is used" do
+    f = Mutations::FloatFilter.new(:empty_is_nil => true, :nils => true)
+    filtered, errors = f.filter("")
+    assert_equal nil, filtered
+    assert_equal nil, errors
+  end
+
   it "considers low numbers invalid" do
     f = Mutations::FloatFilter.new(:min => 10)
     filtered, errors = f.filter(3)
