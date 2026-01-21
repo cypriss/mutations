@@ -26,8 +26,12 @@ module Mutations
 
       # Ensure it's the correct data type (Integer)
       if !data.is_a?(Integer)
-        if data.is_a?(String) && data =~ /^-?\d/
-          data = data.to_i
+        if data.is_a?(String)
+          begin
+            data = Integer(data)
+          rescue ArgumentError
+            return [data, :integer]
+          end
         else
           return [data, :integer]
         end
