@@ -105,6 +105,24 @@ describe "Mutations::HashFilter" do
     assert_equal({"baz" => :integer}, errors.symbolic)
   end
 
+  it "allows empty hash definitions" do
+    Mutations::HashFilter.new
+    # the fact that we're here means it didn't raise
+  end
+
+  describe "with raise_on_empty_hash_filter=true" do
+    it "raises for empty hash definition" do
+      begin
+        old_value = Mutations.raise_on_empty_hash_filter
+        Mutations.raise_on_empty_hash_filter = true
+
+        assert_raises(ArgumentError) { Mutations::HashFilter.new }
+      ensure
+        Mutations.raise_on_empty_hash_filter = old_value
+      end
+    end
+  end
+
   describe "optional params and nils" do
     it "bar is optional -- it works if not passed" do
       hf = Mutations::HashFilter.new do
@@ -167,7 +185,7 @@ describe "Mutations::HashFilter" do
       assert_equal({"foo" => "bar"}, filtered)
       assert_nil errors
     end
-    
+
     it "bar is optional -- discards empty if it needs to be stripped" do
       hf = Mutations::HashFilter.new do
         required do
@@ -182,7 +200,7 @@ describe "Mutations::HashFilter" do
       assert_equal({"foo" => "bar"}, filtered)
       assert_nil errors
     end
-    
+
     it "bar is optional -- don't discard empty if it's spaces but stripping is off" do
       hf = Mutations::HashFilter.new do
         required do
