@@ -249,7 +249,7 @@ outcome.errors.symbolic # => {password_confirmation: :doesnt_match}
 outcome.errors.message # => {password_confirmation: "Your passwords don't match"}
 ```
 
-Alternatively you can also add these validations in the execute method:
+Alternatively you can also add these validations in the execute method. You need to add the `return` like in the example below to return from the execute method and stop its execution. 
 
 ```ruby
 #...
@@ -264,6 +264,30 @@ end
 # That error would show up in the errors hash:
 outcome.errors.symbolic # => {password_confirmation: :doesnt_match}
 outcome.errors.message # => {password_confirmation: "Your passwords don't match"}
+```
+
+If you are using the bang when calling the mutation it raises a `Mutations::ValidationException` no matter if the error was added during validation or execution.
+
+```ruby
+UserSignup.run!(params) # raises Mutations::ValidationException
+```
+
+If you are adding a validation to a helper method which gets called from the execute method it won't halt the execute method. In this case the error will show up in the Mutations::ErrorHash but the whole code in the execution method will be executed.
+
+```ruby
+#...
+def execute
+  confirm_password
+  do_something # will be executed even if confirm_password validation fails
+end
+# ...
+
+def confirm_password
+  if password != password_confirmation
+    add_error(:password_confirmation, :doesnt_match, "Your passwords don't match")
+  end
+end
+
 ```
 
 If you want to tie the validation messages into your I18n system, you'll need to [write a custom error message generator](https://github.com/cypriss/mutations/wiki/Custom-Error-Messages).
@@ -287,3 +311,7 @@ Yes, but I don't think it's a very good idea. Better to compose.
 ### Can I use this with Rails forms helpers?
 
 Somewhat. Any form can submit to your server, and mutations will happily accept that input. However, if there are errors, there's no built-in way to bake the errors into the HTML with Rails form tag helpers. Right now this is really designed to support a JSON API.  You'd probably have to write an adapter of some kind.
+
+### Can I use ActiveRecord::Transactions with mutations?
+
+Yes. To rollback a transaction within the execute method you need to raise an unhandled error. Be aware that the `add_error` validation within the execute method does not raise an unhandled error.
